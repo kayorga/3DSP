@@ -16,7 +16,7 @@ namespace TestsubjektV1
             //TODO
         }
 
-        public override bool update()
+        public override bool update(Camera camera)
         {
             //TODO
             return true;

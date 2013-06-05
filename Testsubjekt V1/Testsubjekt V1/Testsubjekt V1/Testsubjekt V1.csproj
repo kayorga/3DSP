@@ -119,6 +119,7 @@
     <Compile Include="GameObjects\Character.cs" />
     <Compile Include="GameObjects\Mission.cs" />
     <Compile Include="GameObjects\Mod.cs" />
+    <Compile Include="ModelObject.cs" />
     <Compile Include="GameObjects\NPC.cs" />
     <Compile Include="GameObjects\Player.cs" />
     <Compile Include="GameObjects\Type1Mission.cs" />

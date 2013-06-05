@@ -9,19 +9,24 @@ namespace TestsubjektV1
 {
     abstract class Character
     {
-        Model model;
-        Vector3 position;
-        Vector3 direction;
-        float speed;
-        int level;
-        int maxHealth;
-        int health;
+        protected ModelObject model;
+        protected Vector3 position;
+        protected Vector3 direction;
+        protected float speed;
+        protected int level;
+        protected int maxHealth;
+        protected int health;
 
-        public abstract bool update();
+        public abstract bool update(Camera camera);
 
-        public virtual void draw()
+        public Vector3 Position
         {
-            //TODO
+            get { return position; }
+        }
+
+        public virtual void draw(Camera camera)
+        {
+            model.Draw(camera);
         }
     }
 }

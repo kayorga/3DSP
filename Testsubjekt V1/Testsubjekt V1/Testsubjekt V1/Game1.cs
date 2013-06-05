@@ -22,6 +22,9 @@ namespace TestsubjektV1
         GameData data;
         GameScreen screen;
 
+        Camera camera;
+        Character player;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -37,6 +40,10 @@ namespace TestsubjektV1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
+            camera = new Camera(GraphicsDevice.Viewport.AspectRatio);
+            player = new Player(new ModelObject(Content, "cube_rounded"));
+
             base.Initialize();
         }
 
@@ -71,6 +78,10 @@ namespace TestsubjektV1
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Exit();
+            camera.Update(gameTime, player.Position);
+            player.update(camera);
 
             // TODO: Add your update logic here
 
@@ -84,6 +95,7 @@ namespace TestsubjektV1
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            player.draw(camera);
 
             // TODO: Add your drawing code here
 

@@ -4,3 +4,12 @@ D:\Studium\Semester\13 SS\3D Game Project\3DSP\Testsubjekt V1\Testsubjekt V1\Tes
 D:\Studium\Semester\13 SS\3D Game Project\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\bin\x86\Debug\Testsubjekt V1.pdb
 D:\Studium\Semester\13 SS\3D Game Project\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\obj\x86\Debug\Testsubjekt V1.exe
 D:\Studium\Semester\13 SS\3D Game Project\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\obj\x86\Debug\Testsubjekt V1.pdb
+C:\Users\Florian\Documents\Studium\GIT\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\bin\x86\Debug\Testsubjekt V1.exe
+C:\Users\Florian\Documents\Studium\GIT\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\bin\x86\Debug\Testsubjekt V1.pdb
+C:\Users\Florian\Documents\Studium\GIT\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Florian\Documents\Studium\GIT\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Florian\Documents\Studium\GIT\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\obj\x86\Debug\Testsubjekt V1.exe
+C:\Users\Florian\Documents\Studium\GIT\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\obj\x86\Debug\Testsubjekt V1.pdb
+C:\Users\Florian\Documents\Studium\GIT\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\bin\x86\Debug\Content\cube_rounded.xnb
+C:\Users\Florian\Documents\Studium\GIT\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\bin\x86\Debug\Content\cube.xnb
+C:\Users\Florian\Documents\Studium\GIT\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\bin\x86\Debug\Content\cube_0.xnb
