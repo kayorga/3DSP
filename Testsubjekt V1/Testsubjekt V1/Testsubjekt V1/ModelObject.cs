@@ -25,9 +25,9 @@ namespace TestsubjektV1
         /// <summary>
         /// Scaling factor applied to all 3 axis
         /// </summary>
-        public float Scaling
+        public Vector3 Scaling
         { get { return scaling; } set { scaling = value; } }
-        private float scaling = 1.0f;
+        private Vector3 scaling = new Vector3(1.0f, 1.0f, 1.0f);
 
         /// <summary>
         /// creates a modelobject by loading a specified model from the content manager

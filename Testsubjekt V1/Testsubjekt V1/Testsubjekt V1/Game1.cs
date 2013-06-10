@@ -19,6 +19,7 @@ namespace TestsubjektV1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        World world;
         GameData data;
         GameScreen screen;
 
@@ -42,7 +43,8 @@ namespace TestsubjektV1
             // TODO: Add your initialization logic here
 
             camera = new Camera(GraphicsDevice.Viewport.AspectRatio);
-            player = new Player(new ModelObject(Content, "cube_rounded"));
+            player = new Player(Content);
+            world = new World(Content);
 
             base.Initialize();
         }
@@ -95,6 +97,8 @@ namespace TestsubjektV1
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            world.draw(camera);
             player.draw(camera);
 
             // TODO: Add your drawing code here
