@@ -140,6 +140,7 @@ namespace TestsubjektV1
             // mouse movement
             int deltaX = Mouse.GetState().X - lastMouseX;
             int deltaY = Mouse.GetState().Y - lastMouseY;
+            Mouse.SetPosition(512, 384);
             phi += deltaX * rotationSpeed;
             theta -= deltaY * rotationSpeed;
             if (theta > MathHelper.Pi) theta = MathHelper.Pi;

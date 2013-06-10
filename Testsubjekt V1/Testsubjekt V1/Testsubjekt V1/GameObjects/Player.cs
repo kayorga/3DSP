@@ -13,16 +13,16 @@ namespace TestsubjektV1
     {
         int exp;
         Weapon weapon;
-        protected int lastMouseX = 0; // last x position of the mouse
-        protected float phi = 0.0f;//MathHelper.Pi;
+        //protected int lastMouseX = 0; // last x position of the mouse
+        //protected float phi = 0.0f;//MathHelper.Pi;
 
-        public Player(/*BulletCollection bullets, World world,*/ ModelObject model)
+        public Player(/*BulletCollection bullets, World world,*/ContentManager Content)
             : base()
         {
-            this.model= model;
+            this.model= new ModelObject(Content.Load<Model>("cube_rounded"));
             this.position=new Vector3(0,0,0);
             this.direction=new Vector3(1,0,0);
-            this.speed=0.3f;
+            this.speed=0.2f;
             this.level=1;
             this.maxHealth=100;
             this.health=100;
@@ -40,7 +40,7 @@ namespace TestsubjektV1
         public override bool update(Camera camera)
         {
             this.direction = camera.Direction;
-            Vector3 sideVec = Vector3.Cross(camera.Direction, camera.UpDirection);
+            /*Vector3 sideVec = Vector3.Cross(camera.Direction, camera.UpDirection);
             Vector3 front = Vector3.Cross(camera.UpDirection, sideVec);
             
             float forward = (Keyboard.GetState().IsKeyDown(Keys.W) ? 1.0f : 0.0f) + (Keyboard.GetState().IsKeyDown(Keys.Up) ? 1.0f : 0.0f) -
@@ -56,10 +56,21 @@ namespace TestsubjektV1
 
             int deltaX = Mouse.GetState().X - lastMouseX;
             phi -= deltaX * 0.01f;
-            lastMouseX = Mouse.GetState().X;
+            lastMouseX = Mouse.GetState().X;*/
 
-            model.Rotation = new Vector3(0, phi, 0);
+            //model.Rotation = new Vector3(0, phi, 0);
 
+            Vector3 front = new Vector3(camera.Direction.X, 0, camera.Direction.Z);
+            float forward = (Keyboard.GetState().IsKeyDown(Keys.W) ? 1.0f : 0.0f) + (Keyboard.GetState().IsKeyDown(Keys.Up) ? 1.0f : 0.0f) -
+                            (Keyboard.GetState().IsKeyDown(Keys.S) ? 1.0f : 0.0f) - (Keyboard.GetState().IsKeyDown(Keys.Down) ? 1.0f : 0.0f);
+
+
+            this.position += forward * speed * front;
+            Vector3 sideVec = Vector3.Cross(front, new Vector3(0,1,0));
+            float side = (Keyboard.GetState().IsKeyDown(Keys.D) ? 1.0f : 0.0f) + (Keyboard.GetState().IsKeyDown(Keys.Right) ? 1.0f : 0.0f) -
+                         (Keyboard.GetState().IsKeyDown(Keys.A) ? 1.0f : 0.0f) - (Keyboard.GetState().IsKeyDown(Keys.Left) ? 1.0f : 0.0f);
+
+            this.position += side * speed * sideVec;
             model.Position = this.position;
 
             return true;

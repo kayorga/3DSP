@@ -13,3 +13,7 @@ C:\Users\Florian\Documents\Studium\GIT\3DSP\Testsubjekt V1\Testsubjekt V1\Testsu
 C:\Users\Florian\Documents\Studium\GIT\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\bin\x86\Debug\Content\cube_rounded.xnb
 C:\Users\Florian\Documents\Studium\GIT\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\bin\x86\Debug\Content\cube.xnb
 C:\Users\Florian\Documents\Studium\GIT\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\bin\x86\Debug\Content\cube_0.xnb
+D:\Studium\Semester\13 SS\3D Game Project\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\bin\x86\Debug\Content\cube_rounded.xnb
+D:\Studium\Semester\13 SS\3D Game Project\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\bin\x86\Debug\Content\cube.xnb
+D:\Studium\Semester\13 SS\3D Game Project\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\bin\x86\Debug\Content\cube_0.xnb
+D:\Studium\Semester\13 SS\3D Game Project\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1\bin\x86\Debug\Content\map0.map
