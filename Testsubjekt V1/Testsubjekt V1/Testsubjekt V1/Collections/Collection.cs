@@ -7,7 +7,7 @@ namespace TestsubjektV1
 {
     abstract class Collection<T>
     {
-        private List<T> _content;
+        internal List<T> _content;
         public Collection(int cap)
         {
             _content = new List<T>(cap);

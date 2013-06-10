@@ -8,5 +8,11 @@ namespace TestsubjektV1
     class Bullet
     {
         public Bullet() { }
+
+        internal bool update()
+        {
+            return true;
+            //false wenn getroffen oder distanz überschritten
+        }
     }
 }

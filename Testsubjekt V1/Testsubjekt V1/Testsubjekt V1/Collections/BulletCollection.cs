@@ -7,25 +7,43 @@ namespace TestsubjektV1
 {
     class BulletCollection : Collection<Bullet>
     {
+        
+
+
         public BulletCollection(NPCCollection npcs, Player player, World world)
             : base(Constants.CAP_BULLETS)
         {
-            //TODO
+            
         }
 
         public void update()
         {
-            //TODO
+            for (int i = 0; i < Constants.CAP_BULLETS; i++)
+            {
+                Bullet b = _content[i];
+                if (b != null)
+
+                    if (!b.update())
+                        b = null;
+            }  
         }
 
         public override void clear()
         {
-            //TODO
+            for (int i = 0; i < Constants.CAP_BULLETS; i++)
+            {
+                _content[i] = null;
+            }
         }
 
         public override void generate()
         {
-            //TODO
+            for (int i = 0; i < Constants.CAP_BULLETS; i++)
+            {
+                Bullet b = _content[i];
+                if (b == null)
+                    b = new Bullet();
+            }  
         }
     }
 }
