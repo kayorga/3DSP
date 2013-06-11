@@ -9,15 +9,16 @@ namespace TestsubjektV1
 {
     abstract class Character
     {
-        protected ModelObject model;
-        protected Vector3 position;
-        protected Vector3 direction;
-        protected float speed;
-        protected int level;
-        protected int maxHealth;
-        protected int health;
+        internal ModelObject model;
+        internal Vector3 position;
+        internal Vector3 direction;
+        internal float speed;
+        internal int level;
+        internal int maxHealth;
+        internal int health;
+        public int lv { get { return level; } }
 
-        public abstract bool update(Camera camera);
+        public abstract bool update(BulletCollection bullets, Camera camera);
 
         public Vector3 Position
         {

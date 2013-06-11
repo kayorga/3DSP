@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 
 namespace TestsubjektV1
 {
@@ -20,9 +22,19 @@ namespace TestsubjektV1
             //TODO
         }
 
-        public void update(BulletCollection bullets)
+        public void update(BulletCollection bullets, Vector3 position, Vector3 direction)
         {
-            //TODO
+            if (ammo < maxAmmo && recharge <= 0)
+            {
+                ammo++;
+                recharge = maxRechrg;
+            }
+
+            if (cooldown <= 0 && (Keyboard.GetState().IsKeyDown(Keys.Space) || Mouse.GetState().LeftButton == ButtonState.Pressed))
+            {
+                cooldown = maxCooldn;
+                bullets.generate(true, position + direction, direction, 0.8f, 80);
+            }
         }
     }
 }

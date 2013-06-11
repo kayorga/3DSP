@@ -43,8 +43,9 @@ namespace TestsubjektV1
             // TODO: Add your initialization logic here
 
             camera = new Camera(GraphicsDevice.Viewport.AspectRatio);
-            player = new Player(Content);
             world = new World(Content);
+            data = new GameData(Content);
+            screen = new TitleScreen();
 
             base.Initialize();
         }
@@ -82,8 +83,14 @@ namespace TestsubjektV1
                 this.Exit();
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            camera.Update(gameTime, player.Position);
-            player.update(camera);
+
+            camera.Update(gameTime, data.player.Position);
+            switch (screen.update())
+            {
+                case 0: break;
+                case 4: screen = new ActionScreen(data, camera, world); break;
+                default: break;
+            }
 
             // TODO: Add your update logic here
 
@@ -98,8 +105,7 @@ namespace TestsubjektV1
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            world.draw(camera);
-            player.draw(camera);
+            screen.draw();
 
             // TODO: Add your drawing code here
 

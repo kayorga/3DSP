@@ -13,7 +13,7 @@ namespace TestsubjektV1
             _content = new List<T>(cap);
         }
         public abstract void clear();
-        public abstract void generate();
+
         public T this[int i]
         {
             get

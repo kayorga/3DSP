@@ -14,11 +14,12 @@ namespace TestsubjektV1
         public const int CAP_NPCS = 10;
 
         //Screen return commands
+        public const int CMD_EXIT = -1;
         public const int CMD_NONE = 0;
         public const int CMD_LOAD1 = 1;
         public const int CMD_LOAD2 = 2;
         public const int CMD_LOAD3 = 3;
-        public const int CMD_EXIT = -1;
+        public const int CMD_NEW = 4;
 
         //Map sizes
         public const int MAP_SIZE = 15;

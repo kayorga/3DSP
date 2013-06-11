@@ -26,6 +26,7 @@ namespace TestsubjektV1
             this.level=1;
             this.maxHealth=100;
             this.health=100;
+            weapon = new Weapon();
         }
 
         public int ground
@@ -37,8 +38,10 @@ namespace TestsubjektV1
             }
         }
 
-        public override bool update(Camera camera)
+        public override bool update(BulletCollection bullets, Camera camera)
         {
+            if (health <= 0) return false;
+
             this.direction = camera.Direction;
             /*Vector3 sideVec = Vector3.Cross(camera.Direction, camera.UpDirection);
             Vector3 front = Vector3.Cross(camera.UpDirection, sideVec);
@@ -73,6 +76,7 @@ namespace TestsubjektV1
             this.position += side * speed * sideVec;
             model.Position = this.position;
 
+            weapon.update(bullets, position, direction);
             return true;
         }
 

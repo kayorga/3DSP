@@ -7,20 +7,36 @@ namespace TestsubjektV1
 {
     class ActionScreen : GameScreen
     {
-        public ActionScreen(GameData data, Camera camera)
+        GameData data;
+        Camera camera;
+        World world;
+
+        public ActionScreen(GameData gameData, Camera cam, World w)
         {
-            //TODO
+            data = gameData;
+            camera = cam;
+            world = w;
         }
 
         public override int update()
         {
             //TODO
+
+            data.player.update(data.bullets, camera);
+            data.bullets.update();
+            data.missions.update(data.player.level);
+            data.npcs.update();
+
             return Constants.CMD_NONE;
         }
 
         public override void draw()
         {
             //TODO
+            world.draw(camera);
+            data.player.draw(camera);
+            data.npcs.draw(camera);
+            data.bullets.draw(camera);
         }
     }
 }

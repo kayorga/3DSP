@@ -8,7 +8,7 @@ namespace TestsubjektV1
     class NPCCollection : Collection<NPC>
     {
         int level;
-        public NPCCollection(BulletCollection bullets, Mission activeMission, Player player, World world)
+        public NPCCollection()
             : base(Constants.CAP_NPCS)
         {
             //TODO
@@ -24,7 +24,12 @@ namespace TestsubjektV1
             //TODO
         }
 
-        public override void generate()
+        public void generate()
+        {
+            //TODO
+        }
+
+        public void draw(Camera camera)
         {
             //TODO
         }

@@ -17,7 +17,7 @@ namespace TestsubjektV1
         public override int update()
         {
             //TODO
-            return Constants.CMD_NONE;
+            return Constants.CMD_NEW;
         }
 
         public void newGame()
