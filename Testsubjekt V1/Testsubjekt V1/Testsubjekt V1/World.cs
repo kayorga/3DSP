@@ -42,6 +42,11 @@ namespace TestsubjektV1
             setup(0);
         }
 
+        public char[][] MapData
+        {
+            get { return mapData; }
+        }
+
         private void generateGround()
         {
             for (int i = 0; i < Constants.MAP_SIZE; i++)

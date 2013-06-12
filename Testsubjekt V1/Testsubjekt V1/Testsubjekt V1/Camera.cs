@@ -103,7 +103,10 @@ namespace TestsubjektV1
         protected int lastMouseX = 0; // last x position of the mouse
         protected int lastMouseY = 0; // last y position of the mouse
 
-
+        public float Phi
+        {
+            get { return phi; }
+        }
         /// <summary>
         /// Updates the Camera 
         /// </summary>

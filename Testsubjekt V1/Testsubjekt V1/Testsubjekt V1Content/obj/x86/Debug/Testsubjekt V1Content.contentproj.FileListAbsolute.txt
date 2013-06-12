@@ -1,2 +1,3 @@
 D:\Studium\Semester\13 SS\3D Game Project\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1Content\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\Florian\Documents\Studium\GIT\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1Content\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Florian\Documents\Studium\GIT\new Project\3DSP\Testsubjekt V1\Testsubjekt V1\Testsubjekt V1Content\obj\x86\Debug\ResolveAssemblyReference.cache

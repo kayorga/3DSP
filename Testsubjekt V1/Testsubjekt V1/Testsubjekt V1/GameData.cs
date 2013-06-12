@@ -15,9 +15,9 @@ namespace TestsubjektV1
         public ModCollection mods;
         public NPCCollection npcs;
 
-        public GameData(ContentManager Content)
+        public GameData(ContentManager Content, World world)
         {
-            player = new Player(Content);
+            player = new Player(world, Content);
             missions = new MissionCollection();
             mods = new ModCollection();
             npcs = new NPCCollection();
