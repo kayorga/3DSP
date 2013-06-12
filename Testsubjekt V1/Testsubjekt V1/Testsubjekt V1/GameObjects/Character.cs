@@ -12,6 +12,7 @@ namespace TestsubjektV1
         internal ModelObject model;
         internal Vector3 position;
         internal Vector3 direction;
+        internal World world;
         internal float speed;
         internal int level;
         internal int maxHealth;
