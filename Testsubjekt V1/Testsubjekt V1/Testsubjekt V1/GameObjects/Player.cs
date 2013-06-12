@@ -81,7 +81,11 @@ namespace TestsubjektV1
             int x2 = (int)Math.Round(-1 * this.position.X + Constants.MAP_SIZE) / 2;
             int z1 = (int)Math.Round(-1 * this.position.Z + Constants.MAP_SIZE-1) / 2;
             int z2 = (int)Math.Round(-1 * this.position.Z + Constants.MAP_SIZE) / 2;
-            if ((world.MapData[x1][z1] == '1') || (world.MapData[x2][z2] == '1')) this.position = this.model.Position;
+            if ((world.MapData[x1][z1] == '1') || (world.MapData[x2][z2] == '1') || (world.MapData[x2][z1] == '1') || (world.MapData[x1][z2] == '1'))
+            {
+                this.position = this.model.Position;
+                this.model.Position = this.position;
+            }
             else model.Position = this.position;
 
             weapon.update(bullets, position, direction);
