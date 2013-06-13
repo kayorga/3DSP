@@ -38,13 +38,14 @@ namespace TestsubjektV1
 
             groundOb = Content.Load<Model>("cube_rounded");
             wallOb = Content.Load<Model>("cube_rounded");
+            mapID = 0;
             loadMap(Content, mapID);
-            setup(0);
+            setup();
         }
 
-        public char[][] MapData
+        public int[][] MoveData
         {
-            get { return mapData; }
+            get { return moveData; }
         }
 
         private void generateGround()
@@ -60,7 +61,7 @@ namespace TestsubjektV1
             }
         }
 
-        public void setup(int id)
+        public void setup()
         {
             generateGround();
 
@@ -70,11 +71,18 @@ namespace TestsubjektV1
                 {
                     switch (mapData[i][j])
                     {
-                        case '0': mapObjects[i][j] = null; break;
+                        case '0':
+                            mapObjects[i][j] = null;
+                            moveData[i][j] = 0; break;
                         case '1': 
                             mapObjects[i][j] = new ModelObject(wallOb);
                             mapObjects[i][j].Scaling = new Vector3(2.0f, 1.5f, 2.0f);
                             mapObjects[i][j].Position = new Vector3(i * -2.0f + Constants.MAP_SIZE - 1, 0.25f, -2.0f * j + Constants.MAP_SIZE - 1);
+                            moveData[i][j] = 1;
+                            break;
+                        case '-':
+                            mapObjects[i][j] = null;
+                            moveData[i][j] = 1;
                             break;
                     }
                 }
@@ -121,6 +129,7 @@ namespace TestsubjektV1
             {
                 for (int j = 0; j < Constants.MAP_SIZE; ++j)
                 {
+                    if (mapData[i][j] == '-') continue;
                     ModelObject g = ground[i][j];
                     if (g != null) g.Draw(camera);
                     ModelObject m = mapObjects[i][j];

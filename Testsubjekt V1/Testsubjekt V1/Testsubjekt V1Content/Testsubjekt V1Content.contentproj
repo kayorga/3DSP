@@ -57,6 +57,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="map1.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>map1</Name>
+    </None>
     <None Include="map0.map">
       <Name>map0</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
