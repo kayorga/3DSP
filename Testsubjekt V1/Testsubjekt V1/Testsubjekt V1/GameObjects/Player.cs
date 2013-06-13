@@ -66,16 +66,15 @@ namespace TestsubjektV1
 
             Vector3 front = new Vector3(camera.Direction.X, 0, camera.Direction.Z);
             front.Normalize();
-            float forward = (Keyboard.GetState().IsKeyDown(Keys.W) ? 1.0f : 0.0f) + (Keyboard.GetState().IsKeyDown(Keys.Up) ? 1.0f : 0.0f) -
-                            (Keyboard.GetState().IsKeyDown(Keys.S) ? 1.0f : 0.0f) - (Keyboard.GetState().IsKeyDown(Keys.Down) ? 1.0f : 0.0f);
+            float forward = (Keyboard.GetState().IsKeyDown(Keys.W) ? 1.0f : 0.0f) - (Keyboard.GetState().IsKeyDown(Keys.S) ? 1.0f : 0.0f);
 
-
-            this.position += forward * speed * front;
             Vector3 sideVec = Vector3.Cross(front, new Vector3(0,1,0));
-            float side = (Keyboard.GetState().IsKeyDown(Keys.D) ? 1.0f : 0.0f) + (Keyboard.GetState().IsKeyDown(Keys.Right) ? 1.0f : 0.0f) -
-                         (Keyboard.GetState().IsKeyDown(Keys.A) ? 1.0f : 0.0f) - (Keyboard.GetState().IsKeyDown(Keys.Left) ? 1.0f : 0.0f);
+            float side = (Keyboard.GetState().IsKeyDown(Keys.D) ? 1.0f : 0.0f) - (Keyboard.GetState().IsKeyDown(Keys.A) ? 1.0f : 0.0f);
 
-            this.position += side * speed * sideVec;
+            Vector3 move = front * forward + sideVec * side;
+            if (move != Vector3.Zero) move.Normalize();
+
+            this.position +=  speed * move;
 
             int x1 = (int)Math.Round(-1 * this.position.X + Constants.MAP_SIZE-1) / 2;
             int x2 = (int)Math.Round(-1 * this.position.X + Constants.MAP_SIZE) / 2;
