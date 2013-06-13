@@ -41,7 +41,7 @@ namespace TestsubjektV1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            Mouse.SetPosition(512, 384);
             camera = new Camera(GraphicsDevice.Viewport.AspectRatio);
             world = new World(Content);
             data = new GameData(Content, world);

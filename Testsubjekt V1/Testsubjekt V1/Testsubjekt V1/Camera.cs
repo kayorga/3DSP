@@ -14,7 +14,7 @@ namespace TestsubjektV1
         protected Matrix projectionMatrix;
         protected Matrix viewMatrix = Matrix.Identity;
         // vectors
-        protected Vector3 viewDirection = new Vector3(1, 0, 0);
+        protected Vector3 viewDirection = new Vector3(0, -0.7f, -0.5f);
         protected Vector3 position = new Vector3(0, 10, 0);
         protected Vector3 upVec;
         // projection properties
@@ -98,10 +98,10 @@ namespace TestsubjektV1
         protected float rotationSpeed = 0.01f;
 
         // some intern controlling variables
-        protected float phi = 0.0f;
-        protected float theta = 0.0f;
-        protected int lastMouseX = 0; // last x position of the mouse
-        protected int lastMouseY = 0; // last y position of the mouse
+        protected float phi = .5f*MathHelper.Pi;
+        protected float theta = -.75f*MathHelper.Pi;
+        protected int lastMouseX = 511; // last x position of the mouse
+        protected int lastMouseY = 383; // last y position of the mouse
 
         public float Phi
         {

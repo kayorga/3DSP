@@ -62,7 +62,7 @@ namespace TestsubjektV1
             phi -= deltaX * 0.01f;
             lastMouseX = Mouse.GetState().X;*/
 
-            model.Rotation = new Vector3(0, -camera.Phi, 0);
+            model.Rotation = new Vector3(0, -camera.Phi,0);
 
             Vector3 front = new Vector3(camera.Direction.X, 0, camera.Direction.Z);
             front.Normalize();
