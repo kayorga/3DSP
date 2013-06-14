@@ -36,8 +36,8 @@ namespace TestsubjektV1
                 ground[i] = new ModelObject[SIZE];
             }
 
-            groundOb = Content.Load<Model>("cube_rounded");
-            wallOb = Content.Load<Model>("cube_rounded");
+            groundOb = Content.Load<Model>("Models\\grass");
+            wallOb = Content.Load<Model>("Models\\stone");
             mapID = 0;
             loadMap(Content, mapID);
             setup();
@@ -55,8 +55,8 @@ namespace TestsubjektV1
                 for (int j = 0; j < Constants.MAP_SIZE; j++)
                 {
                     ground[i][j] = new ModelObject(groundOb);
-                    ground[i][j].Position = new Vector3(i * -2.0f + Constants.MAP_SIZE - 1, -0.75f, -2.0f * j + Constants.MAP_SIZE - 1);
-                    ground[i][j].Scaling = new Vector3(2.0f, .5f, 2.0f);
+                    ground[i][j].Position = new Vector3(i * -2.0f + Constants.MAP_SIZE - 1, -0.5f, -2.0f * j + Constants.MAP_SIZE - 1);
+                    ground[i][j].Scaling = new Vector3(2.0f, 1, 2.0f);
                 }
             }
         }

@@ -19,10 +19,10 @@ namespace TestsubjektV1
                 _content.Add(new Bullet(Content));
         }
 
-        public void update()
+        public void update(World world)
         {
             for (int i = 0; i < Constants.CAP_BULLETS; i++)
-                _content[i].update();
+                _content[i].update(world);
         }
 
         public void draw(Camera camera)

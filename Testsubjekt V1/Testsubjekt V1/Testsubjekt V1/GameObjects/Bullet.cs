@@ -18,6 +18,7 @@ namespace TestsubjektV1
         float distance;
         float maxDist;
         ModelObject bulletOb;
+        World world;
 
         public Bullet(ContentManager Content)
         {
@@ -38,12 +39,12 @@ namespace TestsubjektV1
             fromPlayer = fromP;
             position = pos;
             direction = dir;
-            speed = spd;
+            speed = spd*.5f;
             distance = 0;
             maxDist = mdist;
         }
 
-        public void update()
+        public void update(World world)
         {
             if (!active) return;
             position += speed * direction;
@@ -51,7 +52,7 @@ namespace TestsubjektV1
 
             bulletOb.Position = position;
 
-            if (collision() || distance > maxDist)
+            if (collision(world) || distance > maxDist)
             {
                 active = false;
                 return;
@@ -61,8 +62,12 @@ namespace TestsubjektV1
             //false wenn getroffen oder distanz überschritten
         }
 
-        private bool collision() 
+        private bool collision(World world) 
         {
+            int xtile = (int)Math.Round(position.X) / 2 + (Constants.MAP_SIZE - 1) / 2;
+            int ztile = -(int)Math.Round(position.Z) / 2 + (Constants.MAP_SIZE - 1) / 2;
+            if (world.MoveData[xtile][ztile] == 1)
+                return true;
             return false;
         }
 

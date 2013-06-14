@@ -23,7 +23,7 @@ namespace TestsubjektV1
             //TODO
 
             data.player.update(data.bullets, camera);
-            data.bullets.update();
+            data.bullets.update(world);
             data.missions.update(data.player.level);
             data.npcs.update();
 

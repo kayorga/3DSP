@@ -39,7 +39,7 @@ namespace TestsubjektV1
             if (cooldown <= 0 && (Keyboard.GetState().IsKeyDown(Keys.Space) || Mouse.GetState().LeftButton == ButtonState.Pressed) && ammo > 0)
             {
                 cooldown = maxCooldn;
-                bullets.generate(true, position + direction, direction, 1, 10);
+                bullets.generate(true, position + direction*.5f, direction, 1, 10);
                 ammo--;
             }
 

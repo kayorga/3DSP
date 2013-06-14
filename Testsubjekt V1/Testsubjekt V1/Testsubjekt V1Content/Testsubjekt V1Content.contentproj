@@ -85,6 +85,10 @@
       <ProcessorParameters_RotationZ>180</ProcessorParameters_RotationZ>
       <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
     </Compile>
+    <None Include="map1.map">
+      <Name>map1</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\grass-texture-0.jpg">
