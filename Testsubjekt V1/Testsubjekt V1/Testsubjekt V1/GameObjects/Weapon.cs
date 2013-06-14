@@ -20,6 +20,12 @@ namespace TestsubjektV1
         public Weapon()
         {
             //TODO
+            maxAmmo = 3;
+            ammo = 3;
+            maxRechrg = 40;
+            recharge = 0;
+            maxCooldn = 10;
+            cooldown = 0;
         }
 
         public void update(BulletCollection bullets, Vector3 position, Vector3 direction)
@@ -30,11 +36,15 @@ namespace TestsubjektV1
                 recharge = maxRechrg;
             }
 
-            if (cooldown <= 0 && (Keyboard.GetState().IsKeyDown(Keys.Space) || Mouse.GetState().LeftButton == ButtonState.Pressed))
+            if (cooldown <= 0 && (Keyboard.GetState().IsKeyDown(Keys.Space) || Mouse.GetState().LeftButton == ButtonState.Pressed) && ammo > 0)
             {
                 cooldown = maxCooldn;
-                bullets.generate(true, position + direction, direction, 0.8f, 80);
+                bullets.generate(true, position + direction, direction, 1, 10);
+                ammo--;
             }
+
+            cooldown = Math.Max(cooldown - 1, 0);
+            recharge = Math.Max(recharge - 1, 0);
         }
     }
 }

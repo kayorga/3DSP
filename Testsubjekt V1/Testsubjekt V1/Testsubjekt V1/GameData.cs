@@ -21,7 +21,7 @@ namespace TestsubjektV1
             missions = new MissionCollection();
             mods = new ModCollection();
             npcs = new NPCCollection();
-            bullets = new BulletCollection();
+            bullets = new BulletCollection(Content);
         }
     }
 }

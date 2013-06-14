@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace TestsubjektV1
 {
@@ -15,8 +17,9 @@ namespace TestsubjektV1
         float speed;
         float distance;
         float maxDist;
+        ModelObject bulletOb;
 
-        public Bullet()
+        public Bullet(ContentManager Content)
         {
             active = false;
             fromPlayer = false;
@@ -25,6 +28,8 @@ namespace TestsubjektV1
             speed = 0;
             distance = 0;
             maxDist = 0;
+
+            bulletOb = new ModelObject(Content.Load<Model>("cube_rounded"));
         }
 
         public void setup(bool fromP, Vector3 pos, Vector3 dir, float spd, float mdist)
@@ -44,6 +49,8 @@ namespace TestsubjektV1
             position += speed * direction;
             distance += speed;
 
+            bulletOb.Position = position;
+
             if (collision() || distance > maxDist)
             {
                 active = false;
@@ -62,6 +69,7 @@ namespace TestsubjektV1
         public void draw(Camera camera)
         {
             if (!active) return;
+            bulletOb.Draw(camera);
         }
     }
 }

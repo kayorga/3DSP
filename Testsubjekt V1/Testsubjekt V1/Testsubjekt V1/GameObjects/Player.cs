@@ -113,7 +113,7 @@ namespace TestsubjektV1
             //this.position += speed * move;
             //model.Position = position;
 
-            weapon.update(bullets, position, direction);
+            weapon.update(bullets, position, front);
             return true;
         }
 

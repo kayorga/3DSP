@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 namespace TestsubjektV1
 {
@@ -11,11 +12,11 @@ namespace TestsubjektV1
         
 
 
-        public BulletCollection()
+        public BulletCollection(ContentManager Content)
             : base(Constants.CAP_BULLETS)
         {
             for (int i = 0; i < Constants.CAP_BULLETS; ++i)
-                _content.Add(new Bullet());
+                _content.Add(new Bullet(Content));
         }
 
         public void update()
@@ -42,7 +43,10 @@ namespace TestsubjektV1
             {
                 Bullet b = _content[i];
                 if (!b.active)
+                {
                     b.setup(fromP, pos, dir, spd, mdist);
+                    break;
+                }
             }  
         }
     }
