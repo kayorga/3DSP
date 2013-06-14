@@ -57,10 +57,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="map1.map">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>map1</Name>
-    </None>
     <None Include="map0.map">
       <Name>map0</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -69,21 +65,37 @@
       <Name>grass</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\T.fbx">
-      <Name>T</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_RotationX>-90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationZ>180</ProcessorParameters_RotationZ>
+      <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
     </Compile>
     <Compile Include="Models\T2.fbx">
       <Name>T2</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_RotationX>-90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationZ>200</ProcessorParameters_RotationZ>
+      <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\stone.fbx">
+      <Name>stone</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_RotationX>-90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationZ>180</ProcessorParameters_RotationZ>
+      <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\grass-texture-0.jpg">
       <Name>grass-texture-0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\stones.jpg">
+      <Name>stones</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
