@@ -37,14 +37,14 @@ namespace TestsubjektV1
                 b.active = false;
         }
 
-        public void generate(bool fromP, Vector3 pos, Vector3 dir, float spd, float mdist)
+        public void generate(bool fromP, Vector3 pos, Vector3 dir, float spd, float mdist, int str)
         {
             for (int i = 0; i < Constants.CAP_BULLETS; i++)
             {
                 Bullet b = _content[i];
                 if (!b.active)
                 {
-                    b.setup(fromP, pos, dir, spd, mdist);
+                    b.setup(fromP, pos, dir, spd, mdist, str);
                     break;
                 }
             }  

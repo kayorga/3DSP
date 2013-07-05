@@ -19,6 +19,7 @@ namespace TestsubjektV1
         float maxDist;
         ModelObject bulletOb;
         World world;
+        int strength;
 
         public Bullet(ContentManager Content)
         {
@@ -29,11 +30,12 @@ namespace TestsubjektV1
             speed = 0;
             distance = 0;
             maxDist = 0;
+            strength = 1;
 
             bulletOb = new ModelObject(Content.Load<Model>("cube_rounded"));
         }
 
-        public void setup(bool fromP, Vector3 pos, Vector3 dir, float spd, float mdist)
+        public void setup(bool fromP, Vector3 pos, Vector3 dir, float spd, float mdist, int str)
         {
             active = true;
             fromPlayer = fromP;
@@ -42,6 +44,7 @@ namespace TestsubjektV1
             speed = spd*.5f;
             distance = 0;
             maxDist = mdist;
+            strength = str;
         }
 
         public void update(World world)
