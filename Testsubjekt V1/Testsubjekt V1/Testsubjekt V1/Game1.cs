@@ -30,6 +30,8 @@ namespace TestsubjektV1
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferHeight = 768;
+            graphics.PreferredBackBufferWidth = 1024;
         }
 
         /// <summary>
@@ -41,6 +43,7 @@ namespace TestsubjektV1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
             camera = new Camera(GraphicsDevice.Viewport.AspectRatio);
             world = new World(Content);
             data = new GameData(Content, world);
@@ -88,6 +91,8 @@ namespace TestsubjektV1
                 case 0: break;
                 case Constants.CMD_NEW: screen = new ActionScreen(data, camera, world); break;
                 case Constants.CMD_PAUSE: screen = new PauseScreen(Content, GraphicsDevice, data, world, camera); break;
+                case Constants.CMD_JOURNAL: screen = new BriefingScreen(Content, GraphicsDevice, data, world, camera); break;
+                case Constants.CMD_MOD: screen = new ModificationScreen(Content, GraphicsDevice, data, world, camera); break;
                 default: break;
             }
 
@@ -102,7 +107,7 @@ namespace TestsubjektV1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.DarkSlateBlue);
             screen.draw();
 
             // TODO: Add your drawing code here

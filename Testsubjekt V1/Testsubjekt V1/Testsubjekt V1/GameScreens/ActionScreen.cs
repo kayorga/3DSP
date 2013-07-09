@@ -33,6 +33,12 @@ namespace TestsubjektV1
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 return Constants.CMD_PAUSE;
 
+            if (Keyboard.GetState().IsKeyDown(Keys.J))
+                return Constants.CMD_JOURNAL;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.M))
+                return Constants.CMD_MOD;
+
             return Constants.CMD_NONE;
         }
 

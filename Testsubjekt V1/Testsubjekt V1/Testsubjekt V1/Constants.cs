@@ -21,6 +21,8 @@ namespace TestsubjektV1
         public const int CMD_LOAD3 = 3;
         public const int CMD_NEW = 4;
         public const int CMD_PAUSE = 5;
+        public const int CMD_JOURNAL = 6;
+        public const int CMD_MOD = 7;
 
         //Map sizes
         public const int MAP_SIZE = 15;

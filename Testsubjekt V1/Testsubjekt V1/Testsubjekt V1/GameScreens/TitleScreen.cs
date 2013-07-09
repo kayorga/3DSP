@@ -29,9 +29,9 @@ namespace TestsubjektV1
         {
             //Mouse.SetPosition(512, 384);
             menuFont1 = content.Load<SpriteFont>("Fonts/MenuFont1");
-            newGameRectangle = new Rectangle(254, 100, 296, 45);
-            loadRectangle = new Rectangle(294, 200, 224, 45);
-            exitRectangle = new Rectangle(313, 300, 197, 45);
+            newGameRectangle = new Rectangle(358, 290, 286, 45);
+            loadRectangle = new Rectangle(402, 390, 214, 45);
+            exitRectangle = new Rectangle(409, 490, 187, 45);
             graphicsDevice = gD;
             spriteBatch = new SpriteBatch(graphicsDevice);
             contentManager = content;
@@ -83,12 +83,12 @@ namespace TestsubjektV1
         {
             spriteBatch.Begin();
 
-            spriteBatch.DrawString(menuFont1, "Start New Game", new Vector2(250, 100),
-                                   (newGameRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y)) ? Color.White : Color.Orange);
-            spriteBatch.DrawString(menuFont1, "Load Game", new Vector2(294, 200),
-                                   (loadRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y)) ? Color.White : Color.Orange);
-            spriteBatch.DrawString(menuFont1, "Exit Game", new Vector2(313, 300),
-                                   (exitRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y)) ? Color.White : Color.Orange);
+            spriteBatch.DrawString(menuFont1, "Start New Game", new Vector2(375, 295),
+                                   (newGameRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y)) ? Color.Orange : Color.LemonChiffon);
+            spriteBatch.DrawString(menuFont1, "Load Game", new Vector2(415, 395),
+                                   (loadRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y)) ? Color.Orange : Color.LemonChiffon);
+            spriteBatch.DrawString(menuFont1, "Exit Game", new Vector2(424, 495),
+                                   (exitRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y)) ? Color.Orange : Color.LemonChiffon);
 
             spriteBatch.End();
         }
