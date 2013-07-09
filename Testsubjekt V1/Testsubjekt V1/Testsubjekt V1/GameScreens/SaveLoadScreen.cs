@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace TestsubjektV1
 {
@@ -16,7 +17,7 @@ namespace TestsubjektV1
             //TODO
         }
 
-        public override int update()
+        public override int update(GameTime gameTime)
         {
             //TODO
             return Constants.CMD_NONE;

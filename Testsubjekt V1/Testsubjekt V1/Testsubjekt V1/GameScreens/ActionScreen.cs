@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 
 namespace TestsubjektV1
 {
@@ -13,19 +15,23 @@ namespace TestsubjektV1
 
         public ActionScreen(GameData gameData, Camera cam, World w)
         {
+            Mouse.SetPosition(512, 384);
             data = gameData;
             camera = cam;
             world = w;
         }
 
-        public override int update()
+        public override int update(GameTime gameTime)
         {
             //TODO
-
+            camera.Update(gameTime, data.player.Position);
             data.player.update(data.bullets, camera);
             data.bullets.update(world);
             data.missions.update(data.player.level);
             data.npcs.update();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.P))
+                return Constants.CMD_PAUSE;
 
             return Constants.CMD_NONE;
         }

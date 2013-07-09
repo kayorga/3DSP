@@ -20,6 +20,7 @@ namespace TestsubjektV1
         public const int CMD_LOAD2 = 2;
         public const int CMD_LOAD3 = 3;
         public const int CMD_NEW = 4;
+        public const int CMD_PAUSE = 5;
 
         //Map sizes
         public const int MAP_SIZE = 15;

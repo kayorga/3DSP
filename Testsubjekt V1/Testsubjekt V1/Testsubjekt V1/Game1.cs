@@ -41,11 +41,10 @@ namespace TestsubjektV1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            Mouse.SetPosition(512, 384);
             camera = new Camera(GraphicsDevice.Viewport.AspectRatio);
             world = new World(Content);
             data = new GameData(Content, world);
-            screen = new TitleScreen();
+            screen = new TitleScreen(Content, GraphicsDevice);
 
             base.Initialize();
         }
@@ -83,12 +82,12 @@ namespace TestsubjektV1
                 this.Exit();
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            camera.Update(gameTime, data.player.Position);
-            switch (screen.update())
+            switch (screen.update(gameTime))
             {
+                case Constants.CMD_EXIT: Exit(); break;
                 case 0: break;
-                case 4: screen = new ActionScreen(data, camera, world); break;
+                case Constants.CMD_NEW: screen = new ActionScreen(data, camera, world); break;
+                case Constants.CMD_PAUSE: screen = new PauseScreen(Content, GraphicsDevice, data, world, camera); break;
                 default: break;
             }
 
@@ -104,11 +103,14 @@ namespace TestsubjektV1
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             screen.draw();
 
             // TODO: Add your drawing code here
-
+            // reset render states that were manipulated from the sprite batch
+            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             base.Draw(gameTime);
         }
     }
