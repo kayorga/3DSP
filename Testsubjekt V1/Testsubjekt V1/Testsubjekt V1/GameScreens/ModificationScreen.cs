@@ -12,13 +12,14 @@ namespace TestsubjektV1
     class ModificationScreen : GameScreen
     {
         int index;
-        private SpriteFont menuFont1;
+        private SpriteFont modFont;
         private Rectangle loadRectangle;
         private Rectangle exitRectangle;
         private Rectangle interfaceRectangle;
         private Rectangle frameRectangle;
         private Rectangle startRectangle;
         private Rectangle activeModRectangle;
+        private Rectangle activeModTextRectangle;
         private Rectangle slot1Rectangle;
         private Rectangle slot2Rectangle;
         private Rectangle slot3Rectangle;
@@ -77,7 +78,7 @@ namespace TestsubjektV1
             world = w;
             camera = cam;
             lastMouseState = ButtonState.Released;
-            menuFont1 = content.Load<SpriteFont>("Fonts/MenuFont1");
+            modFont = content.Load<SpriteFont>("Fonts/ModFont");
             loadRectangle = new Rectangle(294, 200, 224, 45);
             exitRectangle = new Rectangle(891, 78, 63, 55);
             graphicsDevice = gD;
@@ -99,7 +100,8 @@ namespace TestsubjektV1
             slot2Rectangle = new Rectangle(307, 334, 105, 105);
             slot3Rectangle = new Rectangle(174, 466, 105, 105);
             slot4Rectangle = new Rectangle(307, 466, 105, 105);
-            activeModRectangle=new Rectangle(220,175,144,144);
+            activeModRectangle=new Rectangle(264,186,60,60);
+            activeModTextRectangle = new Rectangle(234, 258, 117, 49);
             dragDropRectangle = new Rectangle(174, 334, 40, 40);
             #region Inventory Rectangles
             inventoryRectangle[0] = new Rectangle[5];
@@ -344,6 +346,7 @@ namespace TestsubjektV1
             //Draw Menu
             drawItems();
             spriteBatch.Draw(frame, frameRectangle, Color.White);
+            drawActiveMod();
 
             //Draw DragDrop
             if (dragDropActive)
@@ -379,16 +382,33 @@ namespace TestsubjektV1
                     spriteBatch.Draw(inventoryItems[i][j].icon, inventoryRectangle[i][j], Color.White);
                 }
 
-            if (activeMod < 21)
-            {
-                spriteBatch.Draw(inventoryItems[(activeMod - 1) % 4][(activeMod-1)/4].icon, activeModRectangle, Color.White);
-            }
-            
-            
             spriteBatch.Draw(slot1Item.icon, slot1Rectangle, Color.White);
             spriteBatch.Draw(slot2Item.icon, slot2Rectangle, Color.White);
             spriteBatch.Draw(slot3Item.icon, slot3Rectangle, Color.White);
             spriteBatch.Draw(slot4Item.icon, slot4Rectangle, Color.White);
+        }
+
+        private void drawActiveMod()
+        {
+            String modDescription = "";
+            Texture2D icon = i_mod_nil;
+            if (activeMod < 21)
+            {
+                modDescription = inventoryItems[(activeMod - 1) % 4][(activeMod - 1) / 4].modification.getLabel();
+                icon = inventoryItems[(activeMod - 1) % 4][(activeMod - 1) / 4].icon;
+            }
+            else switch (activeMod)
+                {
+                    case 21: modDescription = slot1Item.modification.getLabel(); icon = slot1Item.icon; break;
+                    case 22: modDescription = slot2Item.modification.getLabel(); icon = slot2Item.icon; break;
+                    case 23: modDescription = slot3Item.modification.getLabel(); icon = slot3Item.icon; break;
+                    case 24: modDescription = slot4Item.modification.getLabel(); icon = slot4Item.icon; break;
+                    default: break;
+                }
+            spriteBatch.DrawString(modFont, modDescription, new Vector2(activeModTextRectangle.X, activeModTextRectangle.Y), Color.LemonChiffon);
+            spriteBatch.Draw(icon, activeModRectangle, Color.White);
+
+
         }
     }
 }
