@@ -120,7 +120,6 @@ namespace TestsubjektV1
                     inventoryItems[i][j] = new ModItem(data.mods[i+j*4]);
                 }
             #endregion
-
         }
 
         private void onInventoryClick()

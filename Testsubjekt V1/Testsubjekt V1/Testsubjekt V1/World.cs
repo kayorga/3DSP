@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
+using Testsubjekt_V1;
 
 namespace TestsubjektV1
 {
@@ -16,6 +17,8 @@ namespace TestsubjektV1
         ModelObject[][] mapObjects;
         ModelObject[][] ground;
         int mapID;
+        public int[] player_start;
+        public NPCSpawner[] spawners;
 
         Model groundOb;
         Model wallOb;
@@ -27,6 +30,12 @@ namespace TestsubjektV1
             mapObjects = new ModelObject[SIZE][];
             moveData = new int[SIZE][];
             ground = new ModelObject[SIZE][];
+            player_start = new int[2];
+
+            for (int i = 0; i < 4; ++i)
+            {
+                spawners[i] = new NPCSpawner();
+            }
 
             for (int i = 0; i < SIZE; ++i)
             {
@@ -46,6 +55,12 @@ namespace TestsubjektV1
         public int[][] MoveData
         {
             get { return moveData; }
+        }
+
+        public void update(NPCCollection npcs, Player p)
+        {
+            foreach (NPCSpawner spawner in spawners)
+                spawner.update(npcs, p);
         }
 
         private void generateGround()
@@ -84,6 +99,18 @@ namespace TestsubjektV1
                             mapObjects[i][j] = null;
                             moveData[i][j] = 1;
                             break;
+                        case 'x':
+                            player_start[0] = i;
+                            player_start[1] = j;
+                            break;
+                        case 'A':
+                            spawners[0].setPos(i, j); break;
+                        case 'B':
+                            spawners[1].setPos(i, j); break;
+                        case 'C':
+                            spawners[1].setPos(i, j); break;
+                        case 'D':
+                            spawners[1].setPos(i, j); break;
                     }
                 }
             }

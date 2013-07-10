@@ -22,14 +22,15 @@ namespace TestsubjektV1
             : base()
         {
             this.model= new ModelObject(Content.Load<Model>("cube_rounded"));
-            this.position=new Vector3(0,0,0);
+            xtile = world.player_start[0];
+            ztile = world.player_start[1];
+            this.position = new Vector3(Constants.MAP_SIZE -2 * xtile - 1, 0, Constants.MAP_SIZE - 2 * ztile - 1);
             this.direction=new Vector3(1,0,0);
             this.speed=0.2f;
             this.level=1;
             this.maxHealth=100;
             this.health=100;
-            xtile = (Constants.MAP_SIZE - 1) / 2;
-            ztile = xtile;
+            
             weapon = new Weapon();
             this.world = world;
         }

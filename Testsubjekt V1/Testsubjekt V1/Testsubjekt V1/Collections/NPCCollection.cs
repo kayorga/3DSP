@@ -20,6 +20,8 @@ namespace TestsubjektV1
             //TODO
             for (int i = 0; i < Constants.CAP_NPCS; i++)
                 _content.Add(new NPC(world));
+
+            //model0 = new ModelObject("cube");
         }
 
         public void update(BulletCollection bullets, Camera camera, Player p, Mission m)

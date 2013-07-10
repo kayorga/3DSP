@@ -7,6 +7,8 @@ namespace TestsubjektV1
 {
     class Type1Mission : Mission
     {
+        private int[] kinds;
+
         public Type1Mission()
         {
             //TODO

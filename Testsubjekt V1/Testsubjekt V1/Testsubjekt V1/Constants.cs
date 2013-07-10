@@ -34,7 +34,15 @@ namespace TestsubjektV1
         public const int MOD_RCG = 4;
         public const int MOD_ACP = 5;
 
+        //NPC Spawn rates
+        public const int SPAWN_INFINITE = 0;
+        public const int SPAWN_ONCE = 1;
+
+        //NPC kinds
+        public const int NPC_NONE = 0;
+        public const int NPC_CUBE = 1;
+
         //Map sizes
-        public const int MAP_SIZE = 15;
+        public const int MAP_SIZE = 25;
     }
 }
