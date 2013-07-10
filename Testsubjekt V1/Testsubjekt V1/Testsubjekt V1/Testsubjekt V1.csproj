@@ -112,7 +112,7 @@
     <Compile Include="Collections\Collection.cs" />
     <Compile Include="Collections\MissionCollection.cs" />
     <Compile Include="Collections\ModCollection.cs" />
-    <Compile Include="Collections\NPCCollectioncs.cs" />
+    <Compile Include="Collections\NPCCollection.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="GameData.cs" />
     <Compile Include="GameObjects\Bullet.cs" />

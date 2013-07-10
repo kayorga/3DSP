@@ -9,29 +9,63 @@ namespace TestsubjektV1
     {
         public int type;
         //types:
+        //-1 undef
         //0 element
         //1 bullet type
         //2 strength
         //3 speed
-        //4 cooldown
-        //5 recharge
-        //6 ammo cap
+        //4 recharge
+        //5 ammo cap
 
         public int value;
         //values type 0:
         //0 plasma
         //1 wave
 
-        public Mod(int t, int v)
+        public Mod(int t, int v = 0)
+        {
+            setup(t, v);
+        }
+
+        public void setup(int t, int v = 0)
         {
             type = t;
             value = v;
         }
 
-        public void upgrade(int level)
-        {
-            if (type == 0) return;
+        public string getLabel() {
+            switch (type)
+            {
+                case 0: return "Element " + getElementLabel();
+                case 1: return getTypeLabel();
+                case 2: return "Strength Lv" + value;
+                case 3: return "Speed Lv" + value;
+                case 4: return "Recharge Lv" + value;
+                case 5: return "Ammo Lv" + value;
+                default: return "UNDEF";
+            }
+        }
 
+        private string getElementLabel()
+        {
+            switch (value)
+            {
+                case 0: return "Plasma ";
+                case 1: return "Photon ";
+                case 2: return "Phazon ";
+                default: return "";
+            }
+        }
+
+        private string getTypeLabel()
+        {
+            switch (value)
+            {
+                case 0: return "Charge";
+                case 1: return "Blast";
+                case 2: return "Cannon";
+                default: return "Beam";
+            }
         }
     }
 }

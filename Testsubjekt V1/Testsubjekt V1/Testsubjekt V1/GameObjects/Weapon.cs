@@ -19,7 +19,7 @@ namespace TestsubjektV1
 
         int mod_elm;
         int mod_typ;
-        int mod_spd;
+        float mod_spd;
         int mod_cdn;
         int mod_rcg;
         int mod_str;
@@ -86,12 +86,19 @@ namespace TestsubjektV1
             switch (m.type)
             {
                 case 0: mod_elm  = m.value; break;
-                case 1: mod_typ  = m.value; break;
-                case 2: mod_str += m.value; break;
-                case 3: mod_spd += m.value; break;
-                case 4: mod_cdn += m.value; break;
-                case 5: mod_rcg += m.value; break;
-                case 6: mod_acp += m.value; break;
+                case 1:
+                    {
+                        mod_typ = m.value;
+                        switch (m.value)
+                        {
+                            default: mod_cdn = 0; break;
+                        }
+                        break;
+                    }
+                case 2: mod_str += m.value * 2; break;
+                case 3: mod_spd += m.value * .1f; break;
+                case 4: mod_rcg += m.value * 4; break;
+                case 5: mod_acp += m.value * 2; break;
             }
         }
     }

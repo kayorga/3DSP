@@ -12,6 +12,7 @@ namespace TestsubjektV1
         public const int MAX_LEVEL = 20;
         public const int CAP_BULLETS = 20;
         public const int CAP_NPCS = 10;
+        public const int CAP_MODS = 20;
 
         //Screen return commands
         public const int CMD_EXIT = -1;
@@ -23,6 +24,15 @@ namespace TestsubjektV1
         public const int CMD_PAUSE = 5;
         public const int CMD_JOURNAL = 6;
         public const int CMD_MOD = 7;
+
+        //Mod types
+        public const int MOD_NIL = -1;
+        public const int MOD_ELM = 0;
+        public const int MOD_TYP = 1;
+        public const int MOD_STR = 2;
+        public const int MOD_SPD = 3;
+        public const int MOD_RCG = 4;
+        public const int MOD_ACP = 5;
 
         //Map sizes
         public const int MAP_SIZE = 15;

@@ -7,6 +7,10 @@ namespace TestsubjektV1
 {
     abstract class Mission
     {
+        public int target;
+        public int actCount;
+        private int count;
+        
         public abstract bool isType1();
 
         public abstract bool update();

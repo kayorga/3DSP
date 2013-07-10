@@ -24,10 +24,21 @@ namespace TestsubjektV1
         private Rectangle slot3Rectangle;
         private Rectangle slot4Rectangle;
         private Rectangle[][] inventoryRectangle=new Rectangle[4][];
+        private ModItem[][] inventoryItems = new ModItem[4][];
+        private ModItem slot1Item;
+        private ModItem slot2Item;
+        private ModItem slot3Item;
+        private ModItem slot4Item;
 
         private Texture2D cursor;
         private Texture2D userInterface;
         private Texture2D frame;
+        private Texture2D i_mod_nil;
+        private Texture2D i_mod_str;
+        private Texture2D i_mod_spd;
+        private Texture2D i_mod_rcg;
+        private Texture2D i_mod_acp;
+
 
         private SpriteBatch spriteBatch;
         private ContentManager contentManager;
@@ -43,7 +54,7 @@ namespace TestsubjektV1
 
         public class ModItem
         {
-            private Mod modification;
+            public Mod modification;
             private Rectangle clickPosition;
             private Rectangle imagePosition;
             private Rectangle textPosition;
@@ -72,6 +83,12 @@ namespace TestsubjektV1
             cursor = content.Load<Texture2D>("cursor");
             userInterface = content.Load<Texture2D>("mod_interface");
             frame = content.Load<Texture2D>("briefing_frame");
+            i_mod_nil = content.Load<Texture2D>("Icons/mod_nil");
+            i_mod_str = content.Load<Texture2D>("Icons/mod_str");
+            i_mod_spd = content.Load<Texture2D>("Icons/mod_spd");
+            i_mod_rcg = content.Load<Texture2D>("Icons/mod_rcg");
+            i_mod_acp = content.Load<Texture2D>("Icons/mod_acp");
+
             interfaceRectangle = new Rectangle(0, 0, 1024, 768);
             frameRectangle = new Rectangle(174, 334, 105, 105);
             startRectangle = new Rectangle(196, 583, 190, 67);
@@ -79,6 +96,7 @@ namespace TestsubjektV1
             slot2Rectangle = new Rectangle(307, 334, 105, 105);
             slot3Rectangle = new Rectangle(174, 466, 105, 105);
             slot4Rectangle = new Rectangle(307, 466, 105, 105);
+            activeModRectangle=new Rectangle(220,175,144,144);
             #region Inventory Rectangles
             inventoryRectangle[0] = new Rectangle[5];
             inventoryRectangle[1] = new Rectangle[5];
@@ -90,6 +108,19 @@ namespace TestsubjektV1
                     inventoryRectangle[i][j]=new Rectangle(559+i*87, 217+j*86, 68, 68);
                 }
             #endregion
+
+            #region build modlist
+            inventoryItems[0] = new ModItem[5];
+            inventoryItems[1] = new ModItem[5];
+            inventoryItems[2] = new ModItem[5];
+            inventoryItems[3] = new ModItem[5];
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 5; j++)
+                {
+                    inventoryItems[i][j] = new ModItem(data.mods[i+j*4]);
+                }
+            #endregion
+
         }
 
         private void onInventoryClick()
@@ -101,7 +132,7 @@ namespace TestsubjektV1
                         &&lastMouseState==ButtonState.Released)
                     {
                         frameRectangle = new Rectangle(559 + i * 87, 217 + j * 86, 68, 68);
-                        activeMod = (i + 1) * (j + 1);
+                        activeMod = (i + 1)+j*4;
                     }
                 }
         }
@@ -204,7 +235,8 @@ namespace TestsubjektV1
             //Draw Interface
             drawInterface();
             //Draw Menu
-            drawMenu();
+            drawItems();
+            spriteBatch.Draw(frame, frameRectangle, Color.White);
 
             //Draw Cursor
             spriteBatch.Draw(cursor, new Rectangle(Mouse.GetState().X, Mouse.GetState().Y, 38, 50), Color.White);
@@ -216,16 +248,44 @@ namespace TestsubjektV1
         {
 
             spriteBatch.Draw(userInterface, interfaceRectangle, Color.White);
-            spriteBatch.Draw(frame, frameRectangle, Color.White);
-
+            
         }
 
-        private void drawMenu()
+        private void drawItems()
         {
+            Texture2D icon=i_mod_nil;
+            for(int i = 0; i<4; i++)
+                for (int j = 0; j < 5; j++)
+                {
+                    switch (inventoryItems[i][j].modification.type)
+                    {
+                        case Constants.MOD_NIL: icon = i_mod_nil; break;
+                        case Constants.MOD_ELM: icon = i_mod_nil; break;
+                        case Constants.MOD_TYP: icon = i_mod_nil; break;
+                        case Constants.MOD_STR: icon = i_mod_str; break;
+                        case Constants.MOD_SPD: icon = i_mod_spd; break;
+                        case Constants.MOD_RCG: icon = i_mod_rcg; break;
+                        case Constants.MOD_ACP: icon = i_mod_acp; break;
+                        default: icon = i_mod_nil; break;
+                    }
+                    spriteBatch.Draw(icon, inventoryRectangle[i][j], Color.White);
+                }
 
-            //spriteBatch.DrawString(menuFont1, "Resume Game", new Vector2(280, 100),
-            //                     (resumeRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y)) ? Color.Orange : Color.LemonChiffon);
-
+            if (activeMod < 21)
+            {
+                switch (inventoryItems[(activeMod - 1) % 4][(activeMod-1)/4].modification.type)
+                {
+                    case Constants.MOD_NIL: icon = i_mod_nil; break;
+                    case Constants.MOD_ELM: icon = i_mod_nil; break;
+                    case Constants.MOD_TYP: icon = i_mod_nil; break;
+                    case Constants.MOD_STR: icon = i_mod_str; break;
+                    case Constants.MOD_SPD: icon = i_mod_spd; break;
+                    case Constants.MOD_RCG: icon = i_mod_rcg; break;
+                    case Constants.MOD_ACP: icon = i_mod_acp; break;
+                    default: icon = i_mod_nil; break;
+                }
+            }
+            spriteBatch.Draw(icon, activeModRectangle, Color.White);
         }
     }
 }

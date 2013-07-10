@@ -28,7 +28,7 @@ namespace TestsubjektV1
             data.player.update(data.bullets, camera);
             data.bullets.update(world);
             data.missions.update(data.player.level);
-            data.npcs.update();
+            data.npcs.update(data.bullets, camera, data.player, data.missions.activeMission);
 
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 return Constants.CMD_PAUSE;
