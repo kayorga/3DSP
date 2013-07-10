@@ -89,7 +89,7 @@ namespace TestsubjektV1
             {
                 case Constants.CMD_EXIT: Exit(); break;
                 case Constants.CMD_NONE: break;
-                case Constants.CMD_NEW: screen = new ActionScreen(data, camera, world); break;
+                case Constants.CMD_NEW: screen = new ActionScreen(Content, GraphicsDevice, data, camera, world); break;
                 case Constants.CMD_PAUSE: screen = new PauseScreen(Content, GraphicsDevice, data, world, camera); break;
                 case Constants.CMD_JOURNAL: screen = new BriefingScreen(Content, GraphicsDevice, data, world, camera); break;
                 case Constants.CMD_MOD: screen = new ModificationScreen(Content, GraphicsDevice, data, world, camera); break;
