@@ -7,6 +7,7 @@ namespace TestsubjektV1
 {
     class ModCollection : Collection<Mod>
     {
+        private int z;
         private int[] count;
         public ModCollection()
             : base(Constants.CAP_MODS)
@@ -19,7 +20,7 @@ namespace TestsubjektV1
 
             count = new int[4];
             count.Initialize();
-
+            z = 0;
             generate(1);
             generate(1);
             generate(1);
@@ -59,13 +60,13 @@ namespace TestsubjektV1
                 {
                     if (_content[i].type == Constants.MOD_NIL)
                     {
-                        count[ntype - 2]++;
-                        _content[i].setup(ntype, level);
+                        count[types[ntype - 2]]++;
+                        _content[i].setup(types[ntype-2]+2, level);
                         break;
                     }
                 }
             }
-            _content.OrderBy(x => x.type).ThenBy(x => x.value);
+            _content.OrderBy(x => x.type);
         }
     }
 }
