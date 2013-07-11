@@ -32,6 +32,8 @@ namespace TestsubjektV1
             ground = new ModelObject[SIZE][];
             player_start = new int[2];
 
+            spawners = new NPCSpawner[4];
+
             for (int i = 0; i < 4; ++i)
             {
                 spawners[i] = new NPCSpawner();
@@ -102,15 +104,29 @@ namespace TestsubjektV1
                         case 'x':
                             player_start[0] = i;
                             player_start[1] = j;
+                            mapObjects[i][j] = null;
+                            moveData[i][j] = 0;
                             break;
                         case 'A':
-                            spawners[0].setPos(i, j); break;
+                            spawners[0].setPos(i, j);
+                            mapObjects[i][j] = null;
+                            moveData[i][j] = 0;
+                            break;
                         case 'B':
-                            spawners[1].setPos(i, j); break;
+                            spawners[1].setPos(i, j);
+                            mapObjects[i][j] = null;
+                            moveData[i][j] = 0;
+                            break;
                         case 'C':
-                            spawners[1].setPos(i, j); break;
+                            spawners[1].setPos(i, j);
+                            mapObjects[i][j] = null;
+                            moveData[i][j] = 0;
+                            break;
                         case 'D':
-                            spawners[1].setPos(i, j); break;
+                            spawners[1].setPos(i, j);
+                            mapObjects[i][j] = null;
+                            moveData[i][j] = 0;
+                            break;
                     }
                 }
             }

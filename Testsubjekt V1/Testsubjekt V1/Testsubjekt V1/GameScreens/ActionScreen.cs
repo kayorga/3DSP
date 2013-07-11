@@ -4,21 +4,36 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 namespace TestsubjektV1
 {
+
+
     class ActionScreen : GameScreen
     {
         GameData data;
         Camera camera;
         World world;
+        private Texture2D hud;
+        private Rectangle hudRectangle;
+        private SpriteBatch spriteBatch;
+        private GraphicsDevice graphicsDevice;
+        private ContentManager contentManager;
 
-        public ActionScreen(GameData gameData, Camera cam, World w)
+        public ActionScreen(ContentManager content, GraphicsDevice gD, GameData gameData, Camera cam, World w)
         {
             Mouse.SetPosition(512, 384);
             data = gameData;
             camera = cam;
             world = w;
+            contentManager = content;
+            graphicsDevice = gD;
+
+            hud = content.Load<Texture2D>("hud");
+            hudRectangle = new Rectangle(0, 0, 1024, 768);
+            spriteBatch = new SpriteBatch(graphicsDevice);
         }
 
         public override int update(GameTime gameTime)
@@ -50,6 +65,14 @@ namespace TestsubjektV1
             data.player.draw(camera);
             data.npcs.draw(camera);
             data.bullets.draw(camera);
+            drawHUD();
+        }
+
+        private void drawHUD()
+        {
+            spriteBatch.Begin();
+            spriteBatch.Draw(hud, hudRectangle, Color.White);
+            spriteBatch.End();
         }
     }
 }

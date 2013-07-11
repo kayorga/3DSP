@@ -62,6 +62,11 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
+    <Compile Include="Fonts\ModFont.spritefont">
+      <Name>ModFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
     <None Include="map0.map">
       <Name>map0</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -167,6 +172,18 @@
     </Compile>
     <Compile Include="Icons\mod_str.png">
       <Name>mod_str</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="hud.png">
+      <Name>hud</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="missionCompleteInterface.png">
+      <Name>missionCompleteInterface</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

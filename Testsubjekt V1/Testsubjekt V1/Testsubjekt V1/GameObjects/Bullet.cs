@@ -67,8 +67,8 @@ namespace TestsubjektV1
 
         private bool collision(World world) 
         {
-            int xtile = (int)Math.Round(position.X) / 2 + (Constants.MAP_SIZE - 1) / 2;
-            int ztile = -(int)Math.Round(position.Z) / 2 + (Constants.MAP_SIZE - 1) / 2;
+            int xtile = (int)Math.Round(-1*(position.X) + (Constants.MAP_SIZE - 1)) / 2;
+            int ztile = (int)Math.Round(-1*(position.Z) + (Constants.MAP_SIZE - 1)) / 2;
             if (world.MoveData[xtile][ztile] == 1)
                 return true;
             return false;
