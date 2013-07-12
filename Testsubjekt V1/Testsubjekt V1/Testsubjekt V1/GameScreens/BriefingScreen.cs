@@ -101,15 +101,16 @@ namespace TestsubjektV1
         }
         private void onStartClick()
         {
-            if (caveRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (startRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 switch (activeStage)
                 {
-                    case 0: break;
+                    case 0: camera.reset();  world.warp(1, 1); break;
                     case 1: break;
                     case 2: break;
                     default: break;
                 }
+                screenReturnValue = Constants.CMD_NEW;
             }
         }
 

@@ -11,14 +11,23 @@ namespace TestsubjektV1
 {
     class PauseScreen : GameScreen
     {
-                int index;
+        int index;
         private SpriteFont menuFont1;
         private Rectangle resumeRectangle;
-        private Rectangle loadRectangle;
+        private Rectangle saveRectangle;
         private Rectangle exitRectangle;
+        private Rectangle modRectangle;
+        private Rectangle charRectangle;
+        private Rectangle missionRectangle;
         private Rectangle fadeRectangle;
+        private Rectangle baseRectangle;
+        private Rectangle interfaceRectangle;
+        private Rectangle frameRectangle;
+
 
         Texture2D cursor;
+        private Texture2D userInterface;
+        private Texture2D frame;
 
         private SpriteBatch spriteBatch;
         private ContentManager contentManager;
@@ -37,39 +46,100 @@ namespace TestsubjektV1
             world = w;
             camera = cam;
             menuFont1 = content.Load<SpriteFont>("Fonts/MenuFont1");
-            resumeRectangle = new Rectangle(358, 290, 286, 45);
-            loadRectangle = new Rectangle(402, 390, 214, 45);
-            exitRectangle = new Rectangle(409, 490, 187, 45);
+            resumeRectangle = new Rectangle(725, 76, 63, 58);
+            saveRectangle = new Rectangle(402, 225, 228, 43);
+            exitRectangle = new Rectangle(402, 505, 228, 43);
+            modRectangle = new Rectangle(402, 393, 228, 43);
+            charRectangle = new Rectangle(402, 281, 228, 43);
+            missionRectangle = new Rectangle(402, 337, 228, 43);
+            baseRectangle = new Rectangle(402, 449, 228, 43);
+            frameRectangle = saveRectangle;
+            
             graphicsDevice = gD;
             spriteBatch = new SpriteBatch(graphicsDevice);
             contentManager = content;
             cursor = content.Load<Texture2D>("cursor");
             fadeRectangle = new Rectangle(0, 0, 1024, 768);
+
+            userInterface = content.Load<Texture2D>("PauseMenu");
+            frame = content.Load<Texture2D>("briefing_frame");
+            interfaceRectangle = new Rectangle(0, 0, 1024, 768);
         }
 
         private void onNewGameClick()
         {
-            if (resumeRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
-                screenReturnValue = Constants.CMD_NEW;
+            if (resumeRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y))
+            {
+                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    screenReturnValue = Constants.CMD_NEW;
+            }
         }
 
         private void onExitClick()
         {
-            if (exitRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
-                screenReturnValue = Constants.CMD_EXIT;
+            if (exitRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y))
+            {
+                frameRectangle = exitRectangle;
+                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    screenReturnValue = Constants.CMD_EXIT;
+            }
         }
 
-        private void onLoadClick()
+        private void onSaveClick()
         { 
             //TODO
+        }
+
+        private void onBaseClick()
+        {
+            if (baseRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y))
+            {
+                frameRectangle = baseRectangle;
+                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                {
+                    world.warp(0, 0);
+                    camera.reset();
+                    screenReturnValue = Constants.CMD_NEW;
+                }
+            }
+        }
+        private void onModClick()
+        {
+            if (modRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y))
+            {
+                frameRectangle = modRectangle;
+                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    screenReturnValue = Constants.CMD_MOD;
+            }
+        }
+        private void onCharClick()
+        {
+            if (charRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y))
+            {
+                frameRectangle = charRectangle;
+                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    screenReturnValue = Constants.CMD_NEW;
+            }
+        }
+        private void onMissionClick()
+        {
+            if (missionRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y))
+            {
+                frameRectangle = missionRectangle;
+                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    screenReturnValue = Constants.CMD_JOURNAL;
+            }
         }
        
         public override int update(GameTime gameTime)
         {
-            //TODO
+            onSaveClick();
             onExitClick();
-            onLoadClick();
             onNewGameClick();
+            onBaseClick();
+            onCharClick();
+            onMissionClick();
+            onModClick();
             return screenReturnValue;
         }
 
@@ -86,7 +156,8 @@ namespace TestsubjektV1
             //Draw Fade
             drawFade();
             //Draw Menu
-            drawMenu(); 
+            spriteBatch.Draw(userInterface, interfaceRectangle, Color.White);
+            spriteBatch.Draw(frame, frameRectangle, Color.White);
             
             //Draw Cursor
             spriteBatch.Draw(cursor, new Rectangle(Mouse.GetState().X, Mouse.GetState().Y, 38, 50), Color.White);
@@ -103,16 +174,5 @@ namespace TestsubjektV1
             
         }
 
-        private void drawMenu()
-        {
-
-            spriteBatch.DrawString(menuFont1, "Resume Game", new Vector2(401, 295),
-                                   (resumeRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y)) ? Color.Orange : Color.LemonChiffon);
-            spriteBatch.DrawString(menuFont1, "Load Game", new Vector2(415, 395),
-                                   (loadRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y)) ? Color.Orange : Color.LemonChiffon);
-            spriteBatch.DrawString(menuFont1, "Exit Game", new Vector2(424, 495),
-                                   (exitRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y)) ? Color.Orange : Color.LemonChiffon);
-
-        }
     }
 }

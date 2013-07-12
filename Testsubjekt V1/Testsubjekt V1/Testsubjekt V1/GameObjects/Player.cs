@@ -44,6 +44,13 @@ namespace TestsubjektV1
             lastMapID = world.mapID;
         }
 
+
+        public Weapon myWeapon
+        {
+            get {return weapon;}
+        }
+
+
         public int ground
         {
             get

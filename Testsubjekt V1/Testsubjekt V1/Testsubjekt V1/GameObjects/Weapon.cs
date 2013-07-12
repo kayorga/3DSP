@@ -36,6 +36,10 @@ namespace TestsubjektV1
             cooldown = 0;
 
             mods = new List<Mod>(4);
+            mods.Add(new Mod(Constants.MOD_NIL));
+            mods.Add(new Mod(Constants.MOD_NIL));
+            mods.Add(new Mod(Constants.MOD_NIL));
+            mods.Add(new Mod(Constants.MOD_NIL));
             resetMods();
         }
 

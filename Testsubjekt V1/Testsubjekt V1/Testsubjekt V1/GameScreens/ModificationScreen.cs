@@ -136,14 +136,57 @@ namespace TestsubjektV1
                         default: inventoryItems[i][j].icon = i_mod_nil; break;
                     }
                 }
-            slot1Item=new ModItem(data.mods[19]);
-            slot1Item.icon = i_mod_nil;
-            slot2Item=new ModItem(data.mods[19]);
-            slot2Item.icon = i_mod_nil;
-            slot3Item=new ModItem(data.mods[19]);
-            slot3Item.icon = i_mod_nil;
-            slot4Item = new ModItem(data.mods[19]);
-            slot4Item.icon = i_mod_nil;
+            if (data.player.myWeapon.mods != null)
+            {
+                slot1Item = new ModItem(data.player.myWeapon.mods[0]);
+                switch (slot1Item.modification.type)
+                {
+                    case Constants.MOD_NIL: slot1Item.icon = i_mod_nil; break;
+                    case Constants.MOD_ELM: slot1Item.icon = i_mod_nil; break;
+                    case Constants.MOD_TYP: slot1Item.icon = i_mod_nil; break;
+                    case Constants.MOD_STR: slot1Item.icon = i_mod_str; break;
+                    case Constants.MOD_SPD: slot1Item.icon = i_mod_spd; break;
+                    case Constants.MOD_RCG: slot1Item.icon = i_mod_rcg; break;
+                    case Constants.MOD_ACP: slot1Item.icon = i_mod_acp; break;
+                    default: slot1Item.icon = i_mod_nil; break;
+                }
+                slot2Item = new ModItem(data.player.myWeapon.mods[1]);
+                switch (slot2Item.modification.type)
+                {
+                    case Constants.MOD_NIL: slot2Item.icon = i_mod_nil; break;
+                    case Constants.MOD_ELM: slot2Item.icon = i_mod_nil; break;
+                    case Constants.MOD_TYP: slot2Item.icon = i_mod_nil; break;
+                    case Constants.MOD_STR: slot2Item.icon = i_mod_str; break;
+                    case Constants.MOD_SPD: slot2Item.icon = i_mod_spd; break;
+                    case Constants.MOD_RCG: slot2Item.icon = i_mod_rcg; break;
+                    case Constants.MOD_ACP: slot2Item.icon = i_mod_acp; break;
+                    default: slot2Item.icon = i_mod_nil; break;
+                }
+                slot3Item = new ModItem(data.player.myWeapon.mods[2]);
+                switch (slot3Item.modification.type)
+                {
+                    case Constants.MOD_NIL: slot3Item.icon = i_mod_nil; break;
+                    case Constants.MOD_ELM: slot3Item.icon = i_mod_nil; break;
+                    case Constants.MOD_TYP: slot3Item.icon = i_mod_nil; break;
+                    case Constants.MOD_STR: slot3Item.icon = i_mod_str; break;
+                    case Constants.MOD_SPD: slot3Item.icon = i_mod_spd; break;
+                    case Constants.MOD_RCG: slot3Item.icon = i_mod_rcg; break;
+                    case Constants.MOD_ACP: slot3Item.icon = i_mod_acp; break;
+                    default: slot3Item.icon = i_mod_nil; break;
+                }
+                slot4Item = new ModItem(data.player.myWeapon.mods[3]);
+                switch (slot4Item.modification.type)
+                {
+                    case Constants.MOD_NIL: slot4Item.icon = i_mod_nil; break;
+                    case Constants.MOD_ELM: slot4Item.icon = i_mod_nil; break;
+                    case Constants.MOD_TYP: slot4Item.icon = i_mod_nil; break;
+                    case Constants.MOD_STR: slot4Item.icon = i_mod_str; break;
+                    case Constants.MOD_SPD: slot4Item.icon = i_mod_spd; break;
+                    case Constants.MOD_RCG: slot4Item.icon = i_mod_rcg; break;
+                    case Constants.MOD_ACP: slot4Item.icon = i_mod_acp; break;
+                    default: slot4Item.icon = i_mod_nil; break;
+                }
+            }
 
             #endregion
 
@@ -312,6 +355,14 @@ namespace TestsubjektV1
                     {
                         data.mods[i + j * 4] = inventoryItems[i][j].modification;
                     }
+                data.player.myWeapon.mods.Clear();
+                data.player.myWeapon.mods.Add(slot1Item.modification);
+                data.player.myWeapon.mods.Add(slot2Item.modification);
+                data.player.myWeapon.mods.Add(slot3Item.modification);
+                data.player.myWeapon.mods.Add(slot4Item.modification);
+
+                data.player.myWeapon.setup(); //applies mods to weapon
+
                 screenReturnValue = Constants.CMD_NEW;
             }
         }
