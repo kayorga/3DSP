@@ -22,6 +22,7 @@ namespace TestsubjektV1
         World world;
         GameData data;
         GameScreen screen;
+        ActionScreen myAction;
 
         Camera camera;
         Character player;
@@ -48,6 +49,7 @@ namespace TestsubjektV1
             world = new World(Content, GraphicsDevice);
             data = new GameData(Content, world);
             screen = new TitleScreen(Content, GraphicsDevice);
+            myAction = new ActionScreen(Content, GraphicsDevice, data, camera, world);
 
             base.Initialize();
         }
@@ -89,7 +91,7 @@ namespace TestsubjektV1
             {
                 case Constants.CMD_EXIT: Exit(); break;
                 case Constants.CMD_NONE: break;
-                case Constants.CMD_NEW: screen = new ActionScreen(Content, GraphicsDevice, data, camera, world); break;
+                case Constants.CMD_NEW: Mouse.SetPosition(512, 384); screen = myAction; break;
                 case Constants.CMD_PAUSE: screen = new PauseScreen(Content, GraphicsDevice, data, world, camera); break;
                 case Constants.CMD_JOURNAL: screen = new BriefingScreen(Content, GraphicsDevice, data, world, camera); break;
                 case Constants.CMD_MOD: screen = new ModificationScreen(Content, GraphicsDevice, data, world, camera); break;

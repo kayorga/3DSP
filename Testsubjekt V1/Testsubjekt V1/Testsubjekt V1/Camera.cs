@@ -40,6 +40,16 @@ namespace TestsubjektV1
             RebuildProjectionMatrix();
         }
 
+        public void reset()
+        {
+            viewDirection = new Vector3(0, -0.7f, -0.5f);
+            position = new Vector3(0, 10, 0);
+            phi = .5f*MathHelper.Pi;
+            theta = -.75f*MathHelper.Pi;
+            lastMouseX = 511; // last x position of the mouse
+            lastMouseY = 383; // last y position of the mouse
+        }
+
         /// <summary>
         /// The projection matrix for this camera
         /// </summary>

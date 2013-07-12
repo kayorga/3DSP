@@ -120,12 +120,13 @@
       <Name>mainframe</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_RotationY>-90</ProcessorParameters_RotationY>
     </Compile>
     <Compile Include="Models\T.fbx">
       <Name>T</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_DefaultEffect>AlphaTestEffect</ProcessorParameters_DefaultEffect>
+      <ProcessorParameters_RotationY>-90</ProcessorParameters_RotationY>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +246,26 @@
   <ItemGroup>
     <Compile Include="Models\mainframe_screen.png">
       <Name>mainframe_screen</Name>
+    </Compile>
+    <Compile Include="CharInfo.png">
+      <Name>CharInfo</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="missionInfo.png">
+      <Name>missionInfo</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="PauseMenu.png">
+      <Name>PauseMenu</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="hp_1.png">
+      <Name>hp_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -252,6 +273,9 @@
   <ItemGroup>
     <Compile Include="Models\metal2_mainframe.jpg">
       <Name>metal2_mainframe</Name>
+    </Compile>
+    <Compile Include="hp.png">
+      <Name>hp</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
