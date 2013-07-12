@@ -50,15 +50,18 @@ namespace TestsubjektV1
             // some settings to the material
             foreach (ModelMesh mesh in model.Meshes)
             {
-                foreach (BasicEffect effect in mesh.Effects)
+                foreach (Effect effect in mesh.Effects)
                 {
-                    BasicEffect basicEffect = (BasicEffect)effect;
-                    basicEffect.AmbientLightColor = new Vector3(0.5f, 0.5f, 0.5f);
-                    basicEffect.DirectionalLight0.Enabled = true;
-                    basicEffect.DirectionalLight1.Enabled = false;
-                    basicEffect.DirectionalLight2.Enabled = false;
-                    basicEffect.LightingEnabled = true;
-                    basicEffect.PreferPerPixelLighting = true;  // much better :)
+                    if (effect is BasicEffect)
+                    {
+                        BasicEffect basicEffect = (BasicEffect)effect;
+                        basicEffect.AmbientLightColor = new Vector3(0.5f, 0.5f, 0.5f);
+                        basicEffect.DirectionalLight0.Enabled = true;
+                        basicEffect.DirectionalLight1.Enabled = false;
+                        basicEffect.DirectionalLight2.Enabled = false;
+                        basicEffect.LightingEnabled = true;
+                        basicEffect.PreferPerPixelLighting = true;  // much better :)
+                    }
                 }
             }
         }
@@ -116,7 +119,7 @@ namespace TestsubjektV1
                         e.World = worldMatrix;
                         e.View = viewMatrix;
                         e.Projection = projectionMatrix;
-                        e.ReferenceAlpha = 50;
+                        e.ReferenceAlpha = 150;
                     }
                 }
                 mesh.Draw();

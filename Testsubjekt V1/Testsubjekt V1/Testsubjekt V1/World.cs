@@ -13,6 +13,7 @@ namespace TestsubjektV1
     class World
     {
         ContentManager content;
+        GraphicsDevice device;
         char[][] mapData;
         int[][] moveData;
         ModelObject[][] mapObjects;
@@ -28,8 +29,9 @@ namespace TestsubjektV1
         Model[] wallObs;
         Model[] wall2Obs;
 
-        public World(ContentManager Content)
+        public World(ContentManager Content, GraphicsDevice gdev)
         {
+            device = gdev;
             content = Content;
             int SIZE = Constants.MAP_SIZE;
             mapData = new char[SIZE][];
@@ -59,7 +61,7 @@ namespace TestsubjektV1
             #region Objects theme 0
             groundObs[0] = content.Load<Model>("Models\\floor_sim");
             wallObs[0] = content.Load<Model>("Models\\wall_sim");
-            wall2Obs[0] = content.Load <Model>("Models\\wall_sim");
+            wall2Obs[0] = content.Load <Model>("Models\\mainframe");
             #endregion
 
             #region Objects theme 1
@@ -96,6 +98,17 @@ namespace TestsubjektV1
                     ground[i][j] = new ModelObject(groundObs[th]);
                     ground[i][j].Position = new Vector3(i * -2.0f + Constants.MAP_SIZE - 1, -0.5f, -2.0f * j + Constants.MAP_SIZE - 1);
                     ground[i][j].Scaling = new Vector3(2.0f, 1, 2.0f);
+                }
+            }
+        }
+
+        private void setEffect(Model model, Effect effect)
+        {
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                foreach (ModelMeshPart part in mesh.MeshParts)
+                {
+                    part.Effect = effect;
                 }
             }
         }

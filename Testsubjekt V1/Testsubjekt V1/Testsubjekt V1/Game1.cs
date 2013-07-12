@@ -45,7 +45,7 @@ namespace TestsubjektV1
             // TODO: Add your initialization logic here
 
             camera = new Camera(GraphicsDevice.Viewport.AspectRatio);
-            world = new World(Content);
+            world = new World(Content, GraphicsDevice);
             data = new GameData(Content, world);
             screen = new TitleScreen(Content, GraphicsDevice);
 

@@ -23,7 +23,7 @@ namespace TestsubjektV1
             : base()
         {
             this.world = world;
-            this.model= new ModelObject(Content.Load<Model>("cube_rounded"));
+            this.model= new ModelObject(Content.Load<Model>("Models\\T"));
             resetPosDir();
             this.speed=0.2f;
             this.level=1;
