@@ -335,7 +335,7 @@ namespace TestsubjektV1
         public override void draw()
         {
             //TODO
-            world.draw(camera);
+            world.draw(camera, graphicsDevice);
             data.player.draw(camera);
             data.npcs.draw(camera);
             data.bullets.draw(camera);

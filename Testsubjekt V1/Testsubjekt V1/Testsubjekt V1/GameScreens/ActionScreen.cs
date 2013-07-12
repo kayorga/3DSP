@@ -55,13 +55,24 @@ namespace TestsubjektV1
             if (Keyboard.GetState().IsKeyDown(Keys.M))
                 return Constants.CMD_MOD;
 
+            if (Keyboard.GetState().IsKeyDown(Keys.U))
+            {
+                world.warp(1, 1);
+                return Constants.CMD_NONE;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Z))
+            {
+                world.warp(0, 0);
+                return Constants.CMD_NONE;
+            }
+
             return Constants.CMD_NONE;
         }
 
         public override void draw()
         {
             //TODO
-            world.draw(camera);
+            world.draw(camera, graphicsDevice);
             data.player.draw(camera);
             data.npcs.draw(camera);
             data.bullets.draw(camera);

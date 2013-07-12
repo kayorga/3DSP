@@ -99,6 +99,7 @@ namespace TestsubjektV1
 
             foreach (ModelMesh mesh in model.Meshes)
             {
+                
                 foreach (Effect effect in mesh.Effects)
                 {
                     if (effect is BasicEffect)
@@ -111,6 +112,11 @@ namespace TestsubjektV1
                     else
                     {
                         // unknown effect!
+                        AlphaTestEffect e = (AlphaTestEffect)effect;
+                        e.World = worldMatrix;
+                        e.View = viewMatrix;
+                        e.Projection = projectionMatrix;
+                        e.ReferenceAlpha = 50;
                     }
                 }
                 mesh.Draw();

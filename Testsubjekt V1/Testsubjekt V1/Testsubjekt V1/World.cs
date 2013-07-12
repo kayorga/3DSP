@@ -12,19 +12,25 @@ namespace TestsubjektV1
 {
     class World
     {
+        ContentManager content;
         char[][] mapData;
         int[][] moveData;
         ModelObject[][] mapObjects;
         ModelObject[][] ground;
-        int mapID;
+        int _mapID;
+        int _theme;
+        public int theme { get { return _theme; } }
+        public int mapID { get { return _mapID; } }
         public int[] player_start;
         public NPCSpawner[] spawners;
 
-        Model groundOb;
-        Model wallOb;
+        Model[] groundObs;
+        Model[] wallObs;
+        Model[] wall2Obs;
 
         public World(ContentManager Content)
         {
+            content = Content;
             int SIZE = Constants.MAP_SIZE;
             mapData = new char[SIZE][];
             mapObjects = new ModelObject[SIZE][];
@@ -46,12 +52,25 @@ namespace TestsubjektV1
                 mapObjects[i] = new ModelObject[SIZE];
                 ground[i] = new ModelObject[SIZE];
             }
+            groundObs = new Model[2];
+            wallObs = new Model[2];
+            wall2Obs = new Model[2];
 
-            groundOb = Content.Load<Model>("Models\\grass");
-            wallOb = Content.Load<Model>("Models\\stone");
-            mapID = 0;
-            loadMap(Content, mapID);
-            setup();
+            #region Objects theme 0
+            groundObs[0] = content.Load<Model>("Models\\floor_sim");
+            wallObs[0] = content.Load<Model>("Models\\wall_sim");
+            wall2Obs[0] = content.Load <Model>("Models\\wall_sim");
+            #endregion
+
+            #region Objects theme 1
+            groundObs[1] = content.Load<Model>("Models\\grass");
+            wallObs[1] = content.Load<Model>("Models\\stone");
+            wall2Obs[1] = content.Load<Model>("Models\\tree1");
+            #endregion
+
+            _mapID = 0;
+            _theme = 0;
+            warp(_mapID, _theme);
         }
 
         public int[][] MoveData
@@ -65,22 +84,33 @@ namespace TestsubjektV1
                 spawner.update(npcs, p);
         }
 
-        private void generateGround()
+        /// <summary>
+        /// generates the ground plane: sets ground[i][j] as new ModelObject(groundOb) with according coordinates
+        /// </summary>
+        private void generateGround(int th)
         {
             for (int i = 0; i < Constants.MAP_SIZE; i++)
             {
                 for (int j = 0; j < Constants.MAP_SIZE; j++)
                 {
-                    ground[i][j] = new ModelObject(groundOb);
+                    ground[i][j] = new ModelObject(groundObs[th]);
                     ground[i][j].Position = new Vector3(i * -2.0f + Constants.MAP_SIZE - 1, -0.5f, -2.0f * j + Constants.MAP_SIZE - 1);
                     ground[i][j].Scaling = new Vector3(2.0f, 1, 2.0f);
                 }
             }
         }
 
-        public void setup()
+        /// <summary>
+        /// calls generateGround to set the ground ModelObjects
+        /// <para></para>
+        /// sets moveData and mapObjects according to mapData
+        /// <para> </para>
+        /// sets up player and npc spawner start positions and activates npc spawners
+        /// </summary>
+        public void setup(int th)
         {
-            generateGround();
+            _theme = th;
+            generateGround(th);
 
             for (int i = 0; i < Constants.MAP_SIZE; ++i)
             {
@@ -88,11 +118,18 @@ namespace TestsubjektV1
                 {
                     switch (mapData[i][j])
                     {
+                        #region tile cases
                         case '0':
                             mapObjects[i][j] = null;
                             moveData[i][j] = 0; break;
                         case '1': 
-                            mapObjects[i][j] = new ModelObject(wallOb);
+                            mapObjects[i][j] = new ModelObject(wallObs[th]);
+                            mapObjects[i][j].Scaling = new Vector3(2.0f, 1.5f, 2.0f);
+                            mapObjects[i][j].Position = new Vector3(i * -2.0f + Constants.MAP_SIZE - 1, 0.25f, -2.0f * j + Constants.MAP_SIZE - 1);
+                            moveData[i][j] = 1;
+                            break;
+                        case '#':
+                            mapObjects[i][j] = new ModelObject(wall2Obs[th]);
                             mapObjects[i][j].Scaling = new Vector3(2.0f, 1.5f, 2.0f);
                             mapObjects[i][j].Position = new Vector3(i * -2.0f + Constants.MAP_SIZE - 1, 0.25f, -2.0f * j + Constants.MAP_SIZE - 1);
                             moveData[i][j] = 1;
@@ -127,19 +164,27 @@ namespace TestsubjektV1
                             mapObjects[i][j] = null;
                             moveData[i][j] = 0;
                             break;
+                        #endregion
                     }
                 }
             }
         }
 
-        private void loadMap(ContentManager Content, int id)
+        /// <summary>
+        /// reads map of specified ID from file "map"ID".map" to mapData
+        /// <para></para>
+        /// calls loadMap(0) on exception
+        /// </summary>
+        /// <param name="id">map ID to load</param>
+        private void loadMap(int id)
         {
             try
             {
+                _mapID = id;
                 //create a string variable to hold the file contents
                 char[][] fileContents = new char[Constants.MAP_SIZE][];
                 //create a new TextReader then open the file
-                TextReader reader = new StreamReader(Content.RootDirectory + "\\map" + id + ".map");
+                TextReader reader = new StreamReader(content.RootDirectory + "\\map" + id + ".map");
                 //loop through the entire file            
                 for (int i = 0; i < Constants.MAP_SIZE; ++i)
                 {
@@ -161,13 +206,22 @@ namespace TestsubjektV1
             }
             catch
             {
-                mapID = 0;
-                loadMap(Content, 0);
+                _mapID = 0;
+                loadMap(0);
             }
         }
 
-        public void draw(Camera camera)
+        public void warp(int id, int th)
         {
+            loadMap(id);
+            setup(th);
+        }
+
+        public void draw(Camera camera, GraphicsDevice device)
+        {
+            //device.DepthStencilState = DepthStencilState.None;
+            device.BlendState = BlendState.AlphaBlend;
+
             for (int i = 0; i < Constants.MAP_SIZE; ++i)
             {
                 for (int j = 0; j < Constants.MAP_SIZE; ++j)
@@ -176,9 +230,19 @@ namespace TestsubjektV1
                     ModelObject g = ground[i][j];
                     if (g != null) g.Draw(camera);
                     ModelObject m = mapObjects[i][j];
+
+                    //if (mapData[i][j] == '#' && m != null)
+                    //{
+                    //    device.DepthStencilState = DepthStencilState.None;
+                    //    m.Draw(camera);
+                    //    device.DepthStencilState = DepthStencilState.Default;
+                    //}
                     if (m != null) m.Draw(camera);
                 }
             }
+
+            //device.DepthStencilState = DepthStencilState.Default;
+            device.BlendState = BlendState.Opaque;
         }
     }
 }

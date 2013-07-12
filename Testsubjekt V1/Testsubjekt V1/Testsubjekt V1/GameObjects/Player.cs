@@ -12,8 +12,9 @@ namespace TestsubjektV1
     class Player : Character
     {
         int exp;
-        int xtile;
-        int ztile;
+        int lastMapID;
+        //int xtile;
+        //int ztile;
         Weapon weapon;
         //protected int lastMouseX = 0; // last x position of the mouse
         //protected float phi = 0.0f;//MathHelper.Pi;
@@ -21,18 +22,26 @@ namespace TestsubjektV1
         public Player(/*BulletCollection bullets,*/ World world, ContentManager Content)
             : base()
         {
+            this.world = world;
             this.model= new ModelObject(Content.Load<Model>("cube_rounded"));
-            xtile = world.player_start[0];
-            ztile = world.player_start[1];
-            this.position = new Vector3(Constants.MAP_SIZE -2 * xtile - 1, 0, Constants.MAP_SIZE - 2 * ztile - 1);
-            this.direction=new Vector3(1,0,0);
+            resetPosDir();
             this.speed=0.2f;
             this.level=1;
             this.maxHealth=100;
             this.health=100;
-            
             weapon = new Weapon();
-            this.world = world;
+        }
+
+        /// <summary>
+        /// sets position to world coordinates according to map coordinates in world.player_start
+        /// </summary>
+        private void resetPosDir()
+        {
+            int xtile = world.player_start[0];
+            int ztile = world.player_start[1];
+            this.position  = new Vector3(Constants.MAP_SIZE - 2 * xtile - 1, 0, Constants.MAP_SIZE - 2 * ztile - 1);
+            this.direction = new Vector3(1,0,0);
+            lastMapID = world.mapID;
         }
 
         public int ground
@@ -47,6 +56,12 @@ namespace TestsubjektV1
         public override bool update(BulletCollection bullets, Camera camera)
         {
             if (health <= 0) return false;
+
+            if (lastMapID != world.mapID)
+            {
+                resetPosDir();
+                return true;
+            }
 
             this.direction = camera.Direction;
             /*Vector3 sideVec = Vector3.Cross(camera.Direction, camera.UpDirection);

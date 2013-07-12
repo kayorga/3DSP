@@ -107,7 +107,14 @@ namespace TestsubjektV1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkSlateBlue);
+            Color clear = Color.DarkSlateBlue;
+            switch (world.theme)
+            {
+                case 0: clear = Color.DarkSlateGray; break;
+                case 1: clear = Color.DarkSlateBlue; break;
+                default: clear = Color.Yellow; break;
+            }
+            GraphicsDevice.Clear(clear);
             screen.draw();
 
             // TODO: Add your drawing code here
@@ -116,6 +123,7 @@ namespace TestsubjektV1
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+
             base.Draw(gameTime);
         }
     }
