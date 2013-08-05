@@ -27,6 +27,9 @@ namespace TestsubjektV1
         private GraphicsDevice graphicsDevice;
         private ContentManager contentManager;
         private SpriteFont font;
+        private AStar pathFinder;
+        int test = 0;
+        private int i=0;
 
         public ActionScreen(ContentManager content, GraphicsDevice gD, GameData gameData, Camera cam, World w)
         {
@@ -46,6 +49,15 @@ namespace TestsubjektV1
             HP = content.Load<Texture2D>("hp");
             HPRectangle = new Rectangle(67, 56, 200, 17);
             spriteBatch = new SpriteBatch(graphicsDevice);
+            pathFinder = new AStar(world, data.player, new Point(7, 16));
+            Vector3 goPos = pathFinder.findPath();
+        }
+
+        private void testUpdate()
+        {
+            Vector3 goPos = pathFinder.list.ElementAt(i);
+            data.player.setPosition(goPos);
+            if(i<7)i++;
         }
 
         public override int update(GameTime gameTime)
@@ -57,6 +69,13 @@ namespace TestsubjektV1
             data.missions.update(data.player.level);
             data.npcs.update(data.bullets, camera, data.player, data.missions.activeMission);
             world.update(data.npcs, data.player);
+
+            /*test++;
+            if (test == 50)
+            {
+                testUpdate();
+                test = 0;
+            }*/
 
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 return Constants.CMD_PAUSE;
@@ -99,10 +118,12 @@ namespace TestsubjektV1
             spriteBatch.Draw(hud, hudRectangle, Color.White);
             if (data.player.health > 0)
             {
+                int x1 = (int)Math.Round(-1 * data.player.position.X + Constants.MAP_SIZE - 1) / 2;
+                int z1 = (int)Math.Round(-1 * data.player.position.Z + Constants.MAP_SIZE - 1) / 2;
                 spriteBatch.Draw(HP1, HP1Rectangle, Color.White);
                 HPRectangle.Width = (MAX_HP_WIDTH * data.player.health) / data.player.maxHealth;
                 spriteBatch.DrawString(font, data.player.level.ToString(), new Vector2(79, 24), Color.LemonChiffon);
-                spriteBatch.DrawString(font, "0 / 76", new Vector2(178, 24), Color.LemonChiffon);
+                spriteBatch.DrawString(font, x1+" "+z1/*"0 / 76"*/, new Vector2(178, 24), Color.LemonChiffon);
                 spriteBatch.Draw(HP, HPRectangle, Color.White);
             }
             spriteBatch.End();

@@ -44,6 +44,7 @@ namespace TestsubjektV1
             lastMapID = world.mapID;
         }
 
+        public void setPosition(Vector3 X) { this.position = X; }
 
         public Weapon myWeapon
         {
