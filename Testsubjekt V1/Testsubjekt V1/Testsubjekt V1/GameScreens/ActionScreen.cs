@@ -76,6 +76,7 @@ namespace TestsubjektV1
                 testUpdate();
                 test = 0;
             }*/
+            if (isConsoleInFront() == Constants.CMD_JOURNAL) return Constants.CMD_JOURNAL;
 
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 return Constants.CMD_PAUSE;
@@ -99,6 +100,22 @@ namespace TestsubjektV1
                 return Constants.CMD_NONE;
             }
 
+            return Constants.CMD_NONE;
+        }
+
+        private int isConsoleInFront()
+        {
+            if (world.theme == 0)
+            {
+                int xtile = (int)Math.Round(-1 * data.player.position.X + Constants.MAP_SIZE - 1) / 2;
+                int ztile = (int)Math.Round(-1 * data.player.position.Z + Constants.MAP_SIZE - 1) / 2;
+
+                if (ztile == 14 && (xtile == 11 || xtile == 12 || xtile == 13))
+                {
+                    if (Keyboard.GetState().IsKeyDown(Keys.E))
+                        return Constants.CMD_JOURNAL;
+                }
+            }
             return Constants.CMD_NONE;
         }
 
