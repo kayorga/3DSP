@@ -61,7 +61,7 @@ namespace TestsubjektV1
             }
         }
 
-        public override bool update(BulletCollection bullets, Camera camera)
+        public /*override*/ bool update(BulletCollection bullets, Camera camera)
         {
             if (health <= 0) return false;
 
@@ -71,7 +71,7 @@ namespace TestsubjektV1
                 return true;
             }
 
-            this.direction = camera.Direction;
+            //this.direction = camera.Direction;
             /*Vector3 sideVec = Vector3.Cross(camera.Direction, camera.UpDirection);
             Vector3 front = Vector3.Cross(camera.UpDirection, sideVec);
             
@@ -99,20 +99,21 @@ namespace TestsubjektV1
             Vector3 sideVec = Vector3.Cross(front, new Vector3(0,1,0));
             float side = (Keyboard.GetState().IsKeyDown(Keys.D) ? 1.0f : 0.0f) - (Keyboard.GetState().IsKeyDown(Keys.A) ? 1.0f : 0.0f);
 
-            Vector3 move = front * forward + sideVec * side;
-            if (move != Vector3.Zero) move.Normalize();
+            this.direction = front * forward + sideVec * side;
+            if (this.direction != Vector3.Zero) this.direction.Normalize();
 
-            this.position += speed * move;
-            int x1 = (int)Math.Round(-1 * this.position.X + Constants.MAP_SIZE - 1) / 2;
-            int x2 = (int)Math.Round(-1 * this.position.X + Constants.MAP_SIZE) / 2;
-            int z1 = (int)Math.Round(-1 * this.position.Z + Constants.MAP_SIZE - 1) / 2;
-            int z2 = (int)Math.Round(-1 * this.position.Z + Constants.MAP_SIZE) / 2;
-            if ((world.MoveData[x1][z1] == 1) || (world.MoveData[x2][z2] == 1) || (world.MoveData[x2][z1] == 1) || (world.MoveData[x1][z2] == 1))
-            {
-                this.position = this.model.Position;
-                this.model.Position = this.position;
-            }
-            else model.Position = this.position;
+            moveAndCollide();
+            //this.position += speed * move;
+            //int x1 = (int)Math.Round(-1 * this.position.X + Constants.MAP_SIZE - 1) / 2;
+            //int x2 = (int)Math.Round(-1 * this.position.X + Constants.MAP_SIZE) / 2;
+            //int z1 = (int)Math.Round(-1 * this.position.Z + Constants.MAP_SIZE - 1) / 2;
+            //int z2 = (int)Math.Round(-1 * this.position.Z + Constants.MAP_SIZE) / 2;
+            //if ((world.MoveData[x1][z1] == 1) || (world.MoveData[x2][z2] == 1) || (world.MoveData[x2][z1] == 1) || (world.MoveData[x1][z2] == 1))
+            //{
+            //    this.position = this.model.Position;
+            //    this.model.Position = this.position;
+            //}
+            //else model.Position = this.position;
 
             //xtile = (int)Math.Round(position.X)/2 + (Constants.MAP_SIZE - 1) / 2;
             //ztile = -(int)Math.Round(position.Z)/2 + (Constants.MAP_SIZE - 1) / 2;
@@ -136,8 +137,8 @@ namespace TestsubjektV1
 
             //this.position += speed * move;
             //model.Position = position;
-
-            weapon.update(bullets, position, front);
+            if (world.mapID != 0) 
+                weapon.update(bullets, position, front);
             return true;
         }
 

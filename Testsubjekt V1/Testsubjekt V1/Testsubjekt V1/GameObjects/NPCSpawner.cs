@@ -25,7 +25,7 @@ namespace Testsubjekt_V1
             kind = Constants.NPC_NONE;
             rate = Constants.SPAWN_INFINITE;
             cooldown = 0;
-            maxCooldown = 90;
+            maxCooldown = 150;
         }
 
         public void setup(int kind, int rate)
@@ -47,9 +47,11 @@ namespace Testsubjekt_V1
             if (cooldown == 0)
             {
                 Vector3 pos = new Vector3(Constants.MAP_SIZE - 2 * x - 1, 0, Constants.MAP_SIZE - 2 * z - 1);
-                Vector3 d = p.Position - pos;
-                d.Normalize();
-                npcs.generate(kind, pos, d, p.lv);
+                Vector3 dir = p.Position - pos;
+                //Console.WriteLine("pre norm dist: " + dir.Length() + "x: " + dir.X + " y: " + dir.Y + " z: " + dir.Z);
+                dir.Normalize();
+                //Console.WriteLine("post norm dist: " + dir.Length() + "x: " + dir.X + " y: " + dir.Y + " z: " + dir.Z);
+                npcs.generate(kind, pos, dir, p.lv);
                 if (rate == Constants.SPAWN_ONCE)
                     active = false;
                 else

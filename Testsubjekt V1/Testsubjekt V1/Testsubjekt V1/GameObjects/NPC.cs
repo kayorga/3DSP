@@ -45,9 +45,10 @@ namespace TestsubjektV1
             XP = x;
             maxCooldn = mc;
             active = true;
+            model.Position = this.position;
         }
 
-        public override bool update(BulletCollection bullets, Camera camera)
+        public /*override*/ bool update(BulletCollection bullets, Camera camera, Player p)
         {
             //TODO
             if (health <= 0)
@@ -55,7 +56,19 @@ namespace TestsubjektV1
                 active = false;
                 return false;
             }
+
+            direction = p.Position - position;
+
+            moveAndCollide();
+            //Console.WriteLine("act move dist: " + direction.Length() + "x: " + direction.X + " y: " + direction.Y + " z: " + direction.Z + " * " + speed);
+            
             return true;
+        }
+
+        public override void draw(Camera camera)
+        {
+            if (!active) return;
+            base.draw(camera);
         }
     }
 }

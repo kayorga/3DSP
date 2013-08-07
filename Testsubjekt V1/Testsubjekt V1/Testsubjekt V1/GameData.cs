@@ -20,7 +20,7 @@ namespace TestsubjektV1
             player = new Player(world, Content);
             missions = new MissionCollection();
             mods = new ModCollection();
-            npcs = new NPCCollection(world);
+            npcs = new NPCCollection(world, Content);
             bullets = new BulletCollection(Content);
         }
     }
