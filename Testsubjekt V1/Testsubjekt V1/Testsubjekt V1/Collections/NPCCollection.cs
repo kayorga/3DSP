@@ -20,6 +20,8 @@ namespace TestsubjektV1
         bool[][] moveData;
         public bool[][] npcMoveData { get { return moveData; } }
         World world;
+        AStar pathFinder;
+        public AStar PathFinder { get { return pathFinder; } }
 
         public NPCCollection(World w, ContentManager Content, Player pl)
             : base(Constants.CAP_NPCS)
@@ -30,10 +32,10 @@ namespace TestsubjektV1
                 _content.Add(new NPC(world));
 
             player = pl;
-            moveData = new bool[world.size * 3][];
-            for (int i = 0; i < world.size * 3; ++i)
+            moveData = new bool[world.size * 2][];
+            for (int i = 0; i < world.size * 2; ++i)
             {
-                moveData[i] = new bool[world.size * 3];
+                moveData[i] = new bool[world.size * 2];
             }
 
             #region load models
@@ -43,6 +45,7 @@ namespace TestsubjektV1
             #endregion
 
             //model0 = new ModelObject("cube");
+            pathFinder = new AStar(world, pl, new Point(1,1), this);
         }
 
         private void clearMoveData()
@@ -74,8 +77,10 @@ namespace TestsubjektV1
                 {
                     float nx = n.position.X;
                     float nz = n.position.Z;
-                    int X = (int)Math.Round((-1 * n.position.X + world.size - 1) * 3.0f / 2.0f);
-                    int Z = (int)Math.Round((-1 * n.position.Z + world.size - 1) * 3.0f / 2.0f);
+                    //int X = (int)Math.Round((-1 * n.position.X + world.size - 1) * 3.0f / 2.0f);
+                    //int Z = (int)Math.Round((-1 * n.position.Z + world.size - 1) * 3.0f / 2.0f);
+                    int X = (int)Math.Round((-1 * n.position.X + world.size - 1));
+                    int Z = (int)Math.Round((-1 * n.position.Z + world.size - 1));
                     //Console.WriteLine("target: " + n.target.X + "," + n.target.Z + " nx: " + nx + " nz: " + nz +" X: " + X + " Z: " + Z);
                     //for (int i = -1; i < 2; ++i)
                     {

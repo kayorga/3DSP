@@ -53,7 +53,8 @@ namespace TestsubjektV1
             active = true;
             model.Position = this.position;
             moving = false;
-            pathFinder = new AStar(world, pl, new Point((int)Math.Round((-1 * position.X + world.size - 1) * 3.0f / 2.0f), (int)Math.Round((-1 * position.Z + world.size - 1) * 3.0f / 2.0f)), npcs);
+            //pathFinder = new AStar(world, pl, new Point((int)Math.Round((-1 * position.X + world.size - 1) * 3.0f / 2.0f), (int)Math.Round((-1 * position.Z + world.size - 1) * 3.0f / 2.0f)), npcs);
+            pathFinder = npcs.PathFinder;
         }
 
         public /*override*/ bool update(BulletCollection bullets, Camera camera, Player p)
@@ -70,7 +71,8 @@ namespace TestsubjektV1
             else
             {
                 if ((p.position - position).Length() < 4) return true;
-                pathFinder.setup(new Point((int)Math.Round((-1 * position.X + world.size - 1) * 3.0f / 2.0f), (int)Math.Round((-1 * position.Z + world.size - 1) * 3.0f / 2.0f)), p);
+                //pathFinder.setup(new Point((int)Math.Round((-1 * position.X + world.size - 1) * 3.0f / 2.0f), (int)Math.Round((-1 * position.Z + world.size - 1) * 3.0f / 2.0f)), p);
+                pathFinder.setup(new Point((int)Math.Round((-1 * position.X + world.size - 1)), (int)Math.Round((-1 * position.Z + world.size - 1))), p);
                 target = pathFinder.findPath();
                 direction = target - position;
                 if (direction.Length() != 0) direction.Normalize();

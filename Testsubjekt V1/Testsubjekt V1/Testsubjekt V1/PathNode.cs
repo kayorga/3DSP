@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace TestsubjektV1
 {
-    class PathNode
+    class PathNode : PathNoteEqualityComparer
     {
         private int hCosts;
         private int fCosts;
@@ -24,7 +24,8 @@ namespace TestsubjektV1
             if (this.previousNode == null) this.gCosts = 1;
             else this.gCosts = this.previousNode.G + 1;
             this.fCosts = this.hCosts + this.gCosts;
-            worldPosition = new Vector3(X * -2.0f/3.0f + Constants.MAP_SIZE - 1, 0, -2.0f * Y / 3.0f + Constants.MAP_SIZE - 1);
+            //worldPosition = new Vector3(X * -2.0f/3.0f + Constants.MAP_SIZE - 1, 0, -2.0f * Y / 3.0f + Constants.MAP_SIZE - 1);
+            worldPosition = new Vector3(X * -1.0f + Constants.MAP_SIZE - 1, 0, -1.0f * Y + Constants.MAP_SIZE - 1);
         }
 
         public bool Equals(PathNode node2)

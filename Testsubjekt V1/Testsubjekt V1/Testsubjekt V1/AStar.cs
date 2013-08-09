@@ -21,23 +21,28 @@ namespace TestsubjektV1
         public AStar(World w, Player p, Point o, NPCCollection col){
             world = w;
             npcs = col;
-            origin = o;
-            setup(origin, p);
+            origin = o;            
             list = new List<Vector3>();
+            PathNoteEqualityComparer comparer = new PathNoteEqualityComparer();
+            openList = new SortedList<ulong, PathNode>();
+            closedList = new HashSet<PathNode>(comparer);
+            setup(origin, p);
         }
 
         public void setup(Point o, Player p)
         {
             origin = o;
-            int xTilePlayer = (int)Math.Round((-1 * p.position.X + Constants.MAP_SIZE - 1) * 3.0f / 2.0f);
-            int zTilePlayer = (int)Math.Round((-1 * p.position.Z + Constants.MAP_SIZE - 1) * 3.0f / 2.0f);
+            //int xTilePlayer = (int)Math.Round((-1 * p.position.X + Constants.MAP_SIZE - 1) * 3.0f / 2.0f);
+            //int zTilePlayer = (int)Math.Round((-1 * p.position.Z + Constants.MAP_SIZE - 1) * 3.0f / 2.0f);
+            int xTilePlayer = (int)Math.Round((-1 * p.position.X + Constants.MAP_SIZE - 1));
+            int zTilePlayer = (int)Math.Round((-1 * p.position.Z + Constants.MAP_SIZE - 1));
             //int xTileNPC=(int)Math.Round(-1 * origin.position.X + Constants.MAP_SIZE - 1) / 2;
             //int zTileNPC=(int)Math.Round(-1 * origin.position.Z + Constants.MAP_SIZE - 1) / 2;
             goal = new PathNode(null, xTilePlayer, zTilePlayer, new Point(xTilePlayer, zTilePlayer));
             PathNode start = new PathNode(null, origin.X, origin.Y, new Point(goal.X, goal.Y));
-            openList = new SortedList<ulong, PathNode>();
+            openList.Clear();
             openList.Add(start.key, start);
-            closedList = new HashSet<PathNode>();
+            closedList.Clear();
         }
 
         public Vector3 findPath()
@@ -62,7 +67,7 @@ namespace TestsubjektV1
                 expandNode(activeNode);
 
             } while (openList.Count>0 && openList.Count<world.size*6 && closedList.Count<world.size*3);
-            return new Vector3(origin.X * -2.0f / 3.0f + Constants.MAP_SIZE - 1, 0, -2.0f * origin.Y / 3.0f + Constants.MAP_SIZE - 1);
+            return new Vector3(origin.X * -1.0f + Constants.MAP_SIZE - 1, 0, -1.0f * origin.Y + Constants.MAP_SIZE - 1);//new Vector3(origin.X * -2.0f / 3.0f + Constants.MAP_SIZE - 1, 0, -2.0f * origin.Y / 3.0f + Constants.MAP_SIZE - 1);
         }
 
         private PathNode getFirstNode(SortedList<ulong, PathNode> list)
@@ -77,8 +82,10 @@ namespace TestsubjektV1
              for(int i=-1; i<2; i++)
                 for (int j = -1; j < 2; j++)
                 {
-                    if(currentNode.X+i>=0 && currentNode.Y+j>=0 && currentNode.X+i<world.MoveData.Length*3 && currentNode.Y+i<world.MoveData.Length*3
-                        && world.MoveData[(currentNode.X+i)/3][(currentNode.Y+j)/3]==0 && npcs.npcMoveData[currentNode.X+i][currentNode.Y+j]!=true)
+                    /*if(currentNode.X+i>=0 && currentNode.Y+j>=0 && currentNode.X+i<world.MoveData.Length*3 && currentNode.Y+i<world.MoveData.Length*3
+                        && world.MoveData[(currentNode.X+i)/3][(currentNode.Y+j)/3]==0 && npcs.npcMoveData[currentNode.X+i][currentNode.Y+j]!=true)*/
+                    if(currentNode.X+i>=0 && currentNode.Y+j>=0 && currentNode.X+i<world.MoveData.Length*2 && currentNode.Y+i<world.MoveData.Length*2
+                        && world.MoveData[(currentNode.X+i)/2][(currentNode.Y+j)/2]==0 && npcs.npcMoveData[currentNode.X+i][currentNode.Y+j]!=true)
                     {
                         PathNode succNode = new PathNode(currentNode, currentNode.X+i, currentNode.Y+j, new Point(goal.X, goal.Y));
                         if (isNodeInClosedList(succNode)) break;
@@ -90,8 +97,11 @@ namespace TestsubjektV1
 
         private bool isNodeInClosedList(PathNode node)
         {
-            foreach (PathNode node2 in closedList) if (node2.Equals(node)) return true;
-            return false;
+            //foreach (PathNode node2 in closedList) if (node2.Equals(node)) return true;
+            //return false;
+            //problem: return value immer false
+            bool b = closedList.Contains(node);
+            return b;
         }
 
         private bool isNodeInOpenList(PathNode node2)
@@ -101,8 +111,11 @@ namespace TestsubjektV1
                 {
                     if (node.G >= node2.G)
                     {
-                        openList.RemoveAt(openList.IndexOfValue(node));
-                        openList.Add(node2.key, node2);
+                        //problem: muss neu einsortiert werden, key muss geändert werden
+                        node.replaceAndUpdateValues(node2);
+                        //openList.ElementAt(openList.IndexOfValue(node)).Key = node.key;
+                        //openList.RemoveAt(openList.IndexOfValue(node));
+                        //openList.Add(node2.key, node2);
                     }
                     return true;
                 }

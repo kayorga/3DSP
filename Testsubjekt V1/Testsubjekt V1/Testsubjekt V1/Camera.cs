@@ -23,6 +23,7 @@ namespace TestsubjektV1
         protected float nearPlane;
         protected float farPlane;
         
+        
         /// <summary>
         /// creates a new camera and sets a projection matrix up
         /// </summary>
@@ -136,8 +137,12 @@ namespace TestsubjektV1
                                         (float)(System.Math.Cos(theta2)),
                                         (float)(System.Math.Sin(phi) * System.Math.Sin(theta2)));
             MouseState mouseState = Mouse.GetState();
-            float ScrollWheelChange = mouseState.ScrollWheelValue;
-            float distance = (ScrollWheelChange*0.02f+5.0f);
+
+            float ScrollWheelChange = -1.0f*mouseState.ScrollWheelValue;
+            float distance= (ScrollWheelChange*0.02f+7.5f);
+            if (ScrollWheelChange * 0.02f + 7.5f < 2.0f) distance = 2.0f;
+            else if (ScrollWheelChange * 0.02f + 7.5f > 12.5f) distance = 12.5f;
+            
             Position = targetPosition - distance * viewDirection;
             float c = viewDirection.Length();
             ;
@@ -156,7 +161,10 @@ namespace TestsubjektV1
             Mouse.SetPosition(512, 384);
             phi += deltaX * rotationSpeed;
             theta -= deltaY * rotationSpeed;
-            if (theta > MathHelper.Pi) theta = MathHelper.Pi;
+            while (theta < 0) theta += 2 * MathHelper.Pi;
+            while (theta > 2*MathHelper.Pi) theta -= 2 * MathHelper.Pi;
+            if (theta < MathHelper.Pi) theta = MathHelper.Pi;
+            if (theta > 1.5f * MathHelper.Pi) theta = 1.5f * MathHelper.Pi;
             lastMouseX = Mouse.GetState().X;
             lastMouseY = Mouse.GetState().Y;
         }
