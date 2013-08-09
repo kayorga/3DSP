@@ -13,6 +13,10 @@ namespace TestsubjektV1
         public int kind;
         public bool active;
         public int XP;
+        private AStar pathFinder;
+        private bool moving;
+        public bool isMoving { get { return moving; } }
+        public Vector3 target;
 
         public NPC(World world)
         {
@@ -30,9 +34,11 @@ namespace TestsubjektV1
             cooldown = 0;
             maxCooldn = 0;
             kind = 0;
+            pathFinder = null;
+            target = Vector3.Zero;
         }
 
-        public void setup(int k, ModelObject m, Vector3 p, Vector3 d, float s, int l, int mh, int x, int mc)
+        public void setup(int k, ModelObject m, Vector3 p, Vector3 d, float s, int l, int mh, int x, int mc, Player pl, NPCCollection npcs)
         {
             kind = k;
             model = m;
@@ -46,6 +52,8 @@ namespace TestsubjektV1
             maxCooldn = mc;
             active = true;
             model.Position = this.position;
+            moving = false;
+            pathFinder = new AStar(world, pl, new Point((int)Math.Round((-1 * position.X + world.size - 1) * 3.0f / 2.0f), (int)Math.Round((-1 * position.Z + world.size - 1) * 3.0f / 2.0f)), npcs);
         }
 
         public /*override*/ bool update(BulletCollection bullets, Camera camera, Player p)
@@ -57,12 +65,41 @@ namespace TestsubjektV1
                 return false;
             }
 
-            direction = p.Position - position;
+            if (moving)
+                move();
+            else
+            {
+                if ((p.position - position).Length() < 4) return true;
+                pathFinder.setup(new Point((int)Math.Round((-1 * position.X + world.size - 1) * 3.0f / 2.0f), (int)Math.Round((-1 * position.Z + world.size - 1) * 3.0f / 2.0f)), p);
+                target = pathFinder.findPath();
+                direction = target - position;
+                if (direction.Length() != 0) direction.Normalize();
+                moving = true;
+                move();
+            }
 
-            moveAndCollide();
             //Console.WriteLine("act move dist: " + direction.Length() + "x: " + direction.X + " y: " + direction.Y + " z: " + direction.Z + " * " + speed);
-            
+
             return true;
+        }
+
+
+        private void move()
+        {
+            //Console.WriteLine("pre move : " + position.X + " ; " + position.Z + " ; direction: " + direction.X + " ; " + direction.Z);
+            this.position += speed * direction;
+            model.Position = this.position;
+
+            if (float.IsNaN(position.X)) Console.WriteLine("X is NaN cause direction is");
+
+            if ((this.position - target).Length() < 0.02f)
+            {
+                this.position = target;
+                if (float.IsNaN(position.X)) Console.WriteLine("X is NaN cause target is");
+                moving = false;
+                //Console.WriteLine("done: " + position.X + "/" + position.Z);
+            }
+            //Console.WriteLine("post move : " + position.X + " ; " + position.Z);
         }
 
         public override void draw(Camera camera)

@@ -16,10 +16,13 @@ namespace TestsubjektV1
         GraphicsDevice device;
         char[][] mapData;
         int[][] moveData;
+        bool[][] npcMoveData;
         ModelObject[][] mapObjects;
         ModelObject[][] ground;
         int _mapID;
         int _theme;
+        private int SIZE;
+        public int size { get { return SIZE; } }
         public int theme { get { return _theme; } }
         public int mapID { get { return _mapID; } }
         public int[] player_start;
@@ -33,13 +36,13 @@ namespace TestsubjektV1
         {
             device = gdev;
             content = Content;
-            int SIZE = Constants.MAP_SIZE;
+            SIZE = Constants.MAP_SIZE;
             mapData = new char[SIZE][];
             mapObjects = new ModelObject[SIZE][];
             moveData = new int[SIZE][];
             ground = new ModelObject[SIZE][];
             player_start = new int[2];
-
+            
             spawners = new NPCSpawner[4];
 
             for (int i = 0; i < 4; ++i)
@@ -54,6 +57,7 @@ namespace TestsubjektV1
                 mapObjects[i] = new ModelObject[SIZE];
                 ground[i] = new ModelObject[SIZE];
             }
+
             groundObs = new Model[2];
             wallObs = new Model[2];
             wall2Obs = new Model[2];
@@ -91,12 +95,12 @@ namespace TestsubjektV1
         /// </summary>
         private void generateGround(int th)
         {
-            for (int i = 0; i < Constants.MAP_SIZE; i++)
+            for (int i = 0; i < SIZE; i++)
             {
-                for (int j = 0; j < Constants.MAP_SIZE; j++)
+                for (int j = 0; j < SIZE; j++)
                 {
                     ground[i][j] = new ModelObject(groundObs[th]);
-                    ground[i][j].Position = new Vector3(i * -2.0f + Constants.MAP_SIZE - 1, -0.5f, -2.0f * j + Constants.MAP_SIZE - 1);
+                    ground[i][j].Position = new Vector3(i * -2.0f + SIZE - 1, -0.5f, -2.0f * j + SIZE - 1);
                     ground[i][j].Scaling = new Vector3(2.0f, 1, 2.0f);
                 }
             }
@@ -235,9 +239,9 @@ namespace TestsubjektV1
             //device.DepthStencilState = DepthStencilState.None;
             device.BlendState = BlendState.AlphaBlend;
 
-            for (int i = 0; i < Constants.MAP_SIZE; ++i)
+            for (int i = 0; i < SIZE; ++i)
             {
-                for (int j = 0; j < Constants.MAP_SIZE; ++j)
+                for (int j = 0; j < SIZE; ++j)
                 {
                     if (mapData[i][j] == '-') continue;
                     ModelObject g = ground[i][j];

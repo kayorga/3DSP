@@ -24,7 +24,7 @@ namespace TestsubjektV1
             if (this.previousNode == null) this.gCosts = 1;
             else this.gCosts = this.previousNode.G + 1;
             this.fCosts = this.hCosts + this.gCosts;
-            worldPosition = new Vector3(X * -2.0f + Constants.MAP_SIZE - 1, -0.5f, -2.0f * Y + Constants.MAP_SIZE - 1);
+            worldPosition = new Vector3(X * -2.0f/3.0f + Constants.MAP_SIZE - 1, 0, -2.0f * Y / 3.0f + Constants.MAP_SIZE - 1);
         }
 
         public bool Equals(PathNode node2)
@@ -68,11 +68,11 @@ namespace TestsubjektV1
             get
             {
                 ulong returnValue = (ulong) Y;
-                Console.WriteLine(returnValue);
+                //Console.WriteLine(returnValue);
                 returnValue += (ulong) X * 1000;
-                Console.WriteLine(returnValue);
+                //Console.WriteLine(returnValue);
                 returnValue += (ulong) hCosts * 1000000;
-                Console.WriteLine(returnValue);
+                //Console.WriteLine(returnValue);
                 returnValue += (ulong)fCosts * 1000000000;
                 return returnValue;
             }

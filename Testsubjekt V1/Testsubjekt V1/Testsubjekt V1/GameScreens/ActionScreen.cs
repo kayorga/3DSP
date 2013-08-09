@@ -49,8 +49,8 @@ namespace TestsubjektV1
             HP = content.Load<Texture2D>("hp");
             HPRectangle = new Rectangle(67, 56, 200, 17);
             spriteBatch = new SpriteBatch(graphicsDevice);
-            pathFinder = new AStar(world, data.player, new Point(7, 16));
-            Vector3 goPos = pathFinder.findPath();
+            //pathFinder = new AStar(world, data.player, new Point(7, 16));
+            //Vector3 goPos = pathFinder.findPath();
         }
 
         private void testUpdate()
@@ -87,6 +87,11 @@ namespace TestsubjektV1
             if (Keyboard.GetState().IsKeyDown(Keys.M))
                 return Constants.CMD_MOD;
 
+            if (Keyboard.GetState().IsKeyDown(Keys.L))
+            {
+                Console.WriteLine("Paused");
+            }
+
             if (Keyboard.GetState().IsKeyDown(Keys.U))
             {
                 world.warp(1, 1);
@@ -107,8 +112,8 @@ namespace TestsubjektV1
         {
             if (world.theme == 0)
             {
-                int xtile = (int)Math.Round(-1 * data.player.position.X + Constants.MAP_SIZE - 1) / 2;
-                int ztile = (int)Math.Round(-1 * data.player.position.Z + Constants.MAP_SIZE - 1) / 2;
+                int xtile = (int)Math.Round((-1 * data.player.position.X + Constants.MAP_SIZE - 1) / 2.0f);
+                int ztile = (int)Math.Round((-1 * data.player.position.Z + Constants.MAP_SIZE - 1) / 2.0f);
 
                 if (ztile == 14 && (xtile == 11 || xtile == 12 || xtile == 13))
                 {
@@ -135,8 +140,8 @@ namespace TestsubjektV1
             spriteBatch.Draw(hud, hudRectangle, Color.White);
             if (data.player.health > 0)
             {
-                int x1 = (int)Math.Round(-1 * data.player.position.X + Constants.MAP_SIZE - 1) / 2;
-                int z1 = (int)Math.Round(-1 * data.player.position.Z + Constants.MAP_SIZE - 1) / 2;
+                int x1 = (int)Math.Round((-1 * data.player.position.X + Constants.MAP_SIZE - 1) * 3.0f / 2.0f);
+                int z1 = (int)Math.Round((-1 * data.player.position.Z + Constants.MAP_SIZE - 1) * 3.0f / 2.0f);
                 spriteBatch.Draw(HP1, HP1Rectangle, Color.White);
                 HPRectangle.Width = (MAX_HP_WIDTH * data.player.health) / data.player.maxHealth;
                 spriteBatch.DrawString(font, data.player.level.ToString(), new Vector2(79, 24), Color.LemonChiffon);

@@ -14,19 +14,30 @@ namespace TestsubjektV1
         private HashSet<PathNode> closedList;
         private World world;
         private PathNode goal;
+        private NPCCollection npcs;
         public List<Vector3> list;
-        public AStar(World w, Player p, Point origin){
+        private Point origin;
+        
+        public AStar(World w, Player p, Point o, NPCCollection col){
             world = w;
-            int xTilePlayer=(int)Math.Round(-1 * p.position.X + Constants.MAP_SIZE - 1) / 2;
-            int zTilePlayer=(int)Math.Round(-1 * p.position.Z + Constants.MAP_SIZE - 1) / 2;
+            npcs = col;
+            origin = o;
+            setup(origin, p);
+            list = new List<Vector3>();
+        }
+
+        public void setup(Point o, Player p)
+        {
+            origin = o;
+            int xTilePlayer = (int)Math.Round((-1 * p.position.X + Constants.MAP_SIZE - 1) * 3.0f / 2.0f);
+            int zTilePlayer = (int)Math.Round((-1 * p.position.Z + Constants.MAP_SIZE - 1) * 3.0f / 2.0f);
             //int xTileNPC=(int)Math.Round(-1 * origin.position.X + Constants.MAP_SIZE - 1) / 2;
             //int zTileNPC=(int)Math.Round(-1 * origin.position.Z + Constants.MAP_SIZE - 1) / 2;
-            goal=new PathNode(null ,xTilePlayer, zTilePlayer, new Point(xTilePlayer, zTilePlayer));
-            PathNode start=new PathNode(null, origin.X, origin.Y, new Point(goal.X, goal.Y));
+            goal = new PathNode(null, xTilePlayer, zTilePlayer, new Point(xTilePlayer, zTilePlayer));
+            PathNode start = new PathNode(null, origin.X, origin.Y, new Point(goal.X, goal.Y));
             openList = new SortedList<ulong, PathNode>();
             openList.Add(start.key, start);
             closedList = new HashSet<PathNode>();
-            list = new List<Vector3>();
         }
 
         public Vector3 findPath()
@@ -38,9 +49,11 @@ namespace TestsubjektV1
                 if (activeNode.Equals(goal))
                 {
                     PathNode node = activeNode;
-                    while (node.PreviousNode != null)
+
+                    if (node.PreviousNode == null) return node.Position;
+                    while (node.PreviousNode.PreviousNode != null)
                     {
-                        list.Add(node.Position);
+                        //list.Add(node.Position);
                         node = node.PreviousNode;
                     }
                     return node.Position;
@@ -48,8 +61,8 @@ namespace TestsubjektV1
                 closedList.Add(activeNode);
                 expandNode(activeNode);
 
-            } while (openList.ElementAt(0).Value!=null);
-            return new Vector3(0,0,0);
+            } while (openList.Count>0 && openList.Count<world.size*6 && closedList.Count<world.size*3);
+            return new Vector3(origin.X * -2.0f / 3.0f + Constants.MAP_SIZE - 1, 0, -2.0f * origin.Y / 3.0f + Constants.MAP_SIZE - 1);
         }
 
         private PathNode getFirstNode(SortedList<ulong, PathNode> list)
@@ -64,8 +77,8 @@ namespace TestsubjektV1
              for(int i=-1; i<2; i++)
                 for (int j = -1; j < 2; j++)
                 {
-                    if(currentNode.X+i>=0 && currentNode.Y+j>=0 && currentNode.X+i<world.MoveData.Length && currentNode.Y+i<world.MoveData.Length
-                        && world.MoveData[currentNode.X+i][currentNode.Y+j]==0)
+                    if(currentNode.X+i>=0 && currentNode.Y+j>=0 && currentNode.X+i<world.MoveData.Length*3 && currentNode.Y+i<world.MoveData.Length*3
+                        && world.MoveData[(currentNode.X+i)/3][(currentNode.Y+j)/3]==0 && npcs.npcMoveData[currentNode.X+i][currentNode.Y+j]!=true)
                     {
                         PathNode succNode = new PathNode(currentNode, currentNode.X+i, currentNode.Y+j, new Point(goal.X, goal.Y));
                         if (isNodeInClosedList(succNode)) break;
