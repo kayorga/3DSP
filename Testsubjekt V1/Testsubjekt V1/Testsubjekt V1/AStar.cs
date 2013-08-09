@@ -38,8 +38,8 @@ namespace TestsubjektV1
             int zTilePlayer = (int)Math.Round((-1 * p.position.Z + Constants.MAP_SIZE - 1));
             //int xTileNPC=(int)Math.Round(-1 * origin.position.X + Constants.MAP_SIZE - 1) / 2;
             //int zTileNPC=(int)Math.Round(-1 * origin.position.Z + Constants.MAP_SIZE - 1) / 2;
-            goal = new PathNode(null, xTilePlayer, zTilePlayer, new Point(xTilePlayer, zTilePlayer));
-            PathNode start = new PathNode(null, origin.X, origin.Y, new Point(goal.X, goal.Y));
+            goal = new PathNode(null, xTilePlayer, zTilePlayer, new Point(xTilePlayer, zTilePlayer),1);
+            PathNode start = new PathNode(null, origin.X, origin.Y, new Point(goal.X, goal.Y),1);
             openList.Clear();
             openList.Add(start.key, start);
             closedList.Clear();
@@ -66,7 +66,7 @@ namespace TestsubjektV1
                 closedList.Add(activeNode);
                 expandNode(activeNode);
 
-            } while (openList.Count>0 && openList.Count<world.size*6 && closedList.Count<world.size*3);
+            } while (openList.Count>0 /*&&closedList.Count<world.size*3*/);
             return new Vector3(origin.X * -1.0f + Constants.MAP_SIZE - 1, 0, -1.0f * origin.Y + Constants.MAP_SIZE - 1);//new Vector3(origin.X * -2.0f / 3.0f + Constants.MAP_SIZE - 1, 0, -2.0f * origin.Y / 3.0f + Constants.MAP_SIZE - 1);
         }
 
@@ -79,27 +79,30 @@ namespace TestsubjektV1
 
         private void expandNode(PathNode currentNode)
         {
-             for(int i=-1; i<2; i++)
+            for (int i = -1; i < 2; i++)
+            {
                 for (int j = -1; j < 2; j++)
                 {
+                    if (i == 0 && j == 0) continue;
                     /*if(currentNode.X+i>=0 && currentNode.Y+j>=0 && currentNode.X+i<world.MoveData.Length*3 && currentNode.Y+i<world.MoveData.Length*3
                         && world.MoveData[(currentNode.X+i)/3][(currentNode.Y+j)/3]==0 && npcs.npcMoveData[currentNode.X+i][currentNode.Y+j]!=true)*/
-                    if(currentNode.X+i>=0 && currentNode.Y+j>=0 && currentNode.X+i<world.MoveData.Length*2 && currentNode.Y+i<world.MoveData.Length*2
-                        && world.MoveData[(currentNode.X+i)/2][(currentNode.Y+j)/2]==0 && npcs.npcMoveData[currentNode.X+i][currentNode.Y+j]!=true)
+                    if (currentNode.X + i >= 0 && currentNode.Y + j >= 0 && currentNode.X + i < world.MoveData.Length * 2 && currentNode.Y + i < world.MoveData.Length * 2
+                        && world.MoveData[(currentNode.X + i) / 2][(currentNode.Y + j) / 2] == 0 && npcs.npcMoveData[currentNode.X + i][currentNode.Y + j] != true)
                     {
-                        PathNode succNode = new PathNode(currentNode, currentNode.X+i, currentNode.Y+j, new Point(goal.X, goal.Y));
-                        if (isNodeInClosedList(succNode)) break;
-                        
+                        PathNode succNode = new PathNode(currentNode, currentNode.X + i, currentNode.Y + j, new Point(goal.X, goal.Y), (Math.Abs(i)+Math.Abs(j)==2? 1.4f:1));
+                        if (isNodeInClosedList(succNode)) continue;
+
                         if (!isNodeInOpenList(succNode)) openList.Add(succNode.key, succNode);
                     }
                 }
+            }
         }
 
         private bool isNodeInClosedList(PathNode node)
         {
             //foreach (PathNode node2 in closedList) if (node2.Equals(node)) return true;
             //return false;
-            //problem: return value immer false
+            //problem: return value immer false - solved
             bool b = closedList.Contains(node);
             return b;
         }
@@ -109,13 +112,13 @@ namespace TestsubjektV1
             foreach (PathNode node in openList.Values)
                 if (node.Equals(node2))
                 {
-                    if (node.G >= node2.G)
+                    if (node.G > node2.G)
                     {
                         //problem: muss neu einsortiert werden, key muss geändert werden
-                        node.replaceAndUpdateValues(node2);
+                        //node.replaceAndUpdateValues(node2);
                         //openList.ElementAt(openList.IndexOfValue(node)).Key = node.key;
-                        //openList.RemoveAt(openList.IndexOfValue(node));
-                        //openList.Add(node2.key, node2);
+                        openList.RemoveAt(openList.IndexOfValue(node));
+                        openList.Add(node2.key, node2);
                     }
                     return true;
                 }

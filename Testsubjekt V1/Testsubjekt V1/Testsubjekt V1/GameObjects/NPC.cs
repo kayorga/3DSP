@@ -80,6 +80,9 @@ namespace TestsubjektV1
                 move();
             }
 
+            double rotationAngle = Math.Acos((Vector3.Dot(direction, -1*Vector3.UnitX))/(direction.Length()));
+            model.Rotation = new Vector3(0, (float)rotationAngle, 0);
+
             //Console.WriteLine("act move dist: " + direction.Length() + "x: " + direction.X + " y: " + direction.Y + " z: " + direction.Z + " * " + speed);
 
             return true;

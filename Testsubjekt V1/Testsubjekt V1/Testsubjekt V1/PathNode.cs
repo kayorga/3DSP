@@ -8,21 +8,21 @@ namespace TestsubjektV1
 {
     class PathNode : PathNoteEqualityComparer
     {
-        private int hCosts;
-        private int fCosts;
-        private int gCosts;
+        private float hCosts;
+        private float fCosts;
+        private float gCosts;
         private PathNode previousNode;
         private Vector3 worldPosition;
         private int mapX;
         private int mapY;
 
-        public PathNode(PathNode prev, int X, int Y, Point goal)
+        public PathNode(PathNode prev, int X, int Y, Point goal, float constantG)
         {
             this.mapX = X; this.mapY = Y;
-            this.hCosts = Math.Abs(goal.X - this.mapX) + Math.Abs(goal.Y - this.mapY);
+            this.hCosts = Math.Max(Math.Abs(goal.X - this.mapX), Math.Abs(goal.Y - this.mapY));
             this.previousNode = prev;
             if (this.previousNode == null) this.gCosts = 1;
-            else this.gCosts = this.previousNode.G + 1;
+            else this.gCosts = this.previousNode.G + constantG;
             this.fCosts = this.hCosts + this.gCosts;
             //worldPosition = new Vector3(X * -2.0f/3.0f + Constants.MAP_SIZE - 1, 0, -2.0f * Y / 3.0f + Constants.MAP_SIZE - 1);
             worldPosition = new Vector3(X * -1.0f + Constants.MAP_SIZE - 1, 0, -1.0f * Y + Constants.MAP_SIZE - 1);
@@ -51,15 +51,15 @@ namespace TestsubjektV1
         {
             get { return mapY; }
         }
-        public int F
+        public float F
         {
             get { return fCosts; }
         }
-        public int G
+        public float G
         {
             get { return gCosts; }
         }
-        public int H
+        public float H
         {
             get { return hCosts; }
         }
@@ -69,12 +69,9 @@ namespace TestsubjektV1
             get
             {
                 ulong returnValue = (ulong) Y;
-                //Console.WriteLine(returnValue);
                 returnValue += (ulong) X * 1000;
-                //Console.WriteLine(returnValue);
-                returnValue += (ulong) hCosts * 1000000;
-                //Console.WriteLine(returnValue);
-                returnValue += (ulong)fCosts * 1000000000;
+                returnValue += (ulong) (Math.Round(hCosts) * 1000000);
+                returnValue += (ulong) Math.Round(fCosts) * 1000000000;
                 return returnValue;
             }
         }

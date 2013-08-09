@@ -140,8 +140,8 @@ namespace TestsubjektV1
             spriteBatch.Draw(hud, hudRectangle, Color.White);
             if (data.player.health > 0)
             {
-                int x1 = (int)Math.Round((-1 * data.player.position.X + Constants.MAP_SIZE - 1) * 3.0f / 2.0f);
-                int z1 = (int)Math.Round((-1 * data.player.position.Z + Constants.MAP_SIZE - 1) * 3.0f / 2.0f);
+                int x1 = (int)Math.Round((-1 * data.player.position.X + Constants.MAP_SIZE - 1));
+                int z1 = (int)Math.Round((-1 * data.player.position.Z + Constants.MAP_SIZE - 1));
                 spriteBatch.Draw(HP1, HP1Rectangle, Color.White);
                 HPRectangle.Width = (MAX_HP_WIDTH * data.player.health) / data.player.maxHealth;
                 spriteBatch.DrawString(font, data.player.level.ToString(), new Vector2(79, 24), Color.LemonChiffon);

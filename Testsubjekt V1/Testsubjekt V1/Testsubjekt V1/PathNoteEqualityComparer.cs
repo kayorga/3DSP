@@ -22,7 +22,8 @@ namespace TestsubjektV1
         public int GetHashCode(PathNode node)
         {
             int value = node.X*1000;
-            return value+node.Y;
+            value += node.Y;
+            return value;
         }
     }
 }
