@@ -17,8 +17,8 @@ namespace TestsubjektV1
         Model model2;
 
         Player player;
-        bool[][] moveData;
-        public bool[][] npcMoveData { get { return moveData; } }
+        byte[][] moveData;
+        public byte[][] npcMoveData { get { return moveData; } }
         World world;
         AStar pathFinder;
         public AStar PathFinder { get { return pathFinder; } }
@@ -32,14 +32,14 @@ namespace TestsubjektV1
                 _content.Add(new NPC(world));
 
             player = pl;
-            moveData = new bool[world.size * 2][];
+            moveData = new byte[world.size * 2][];
             for (int i = 0; i < world.size * 2; ++i)
             {
-                moveData[i] = new bool[world.size * 2];
+                moveData[i] = new byte[world.size * 2];
             }
 
             #region load models
-            model0 = Content.Load<Model>("Models/T2");
+            model0 = Content.Load<Model>("Models/T");
             model1 = Content.Load<Model>("Models/stone");
             model2 = Content.Load<Model>("Models/tree1");
             #endregion
@@ -50,7 +50,7 @@ namespace TestsubjektV1
 
         private void clearMoveData()
         {
-            foreach (bool[] b in moveData)
+            foreach (byte[] b in moveData)
             {
                 Array.Clear(b, 0, b.Length);
             }
@@ -62,16 +62,21 @@ namespace TestsubjektV1
 
             clearMoveData();
 
-            foreach (NPC n in _content)
+            for (int i = 0; i < Constants.CAP_NPCS; ++i)
             {
-                bool k = n.update(bullets, camera, p);
+                NPC n = _content[i];
+
+                if (!n.active)
+                    continue;
+
+                bool k = n.update(bullets, camera, p, m);
                 if (!k)
                 {
-                    p.getEXP(n.XP);
-                    if (m != null && n.kind == m.target)
-                    {
-                        m.actCount--;
-                    }
+                    //p.getEXP(n.XP);
+                    //if (m != null && n.kind == m.target)
+                    //{
+                    //    m.actCount--;
+                    //}
                 }
                 else
                 {
@@ -85,7 +90,7 @@ namespace TestsubjektV1
                     //for (int i = -1; i < 2; ++i)
                     {
                     //    for (int j = -1; j < 2; ++j )
-                            moveData[X][Z] = true;
+                            moveData[X][Z] = (byte) (i + 1);
                     }
                 }
             }
@@ -93,10 +98,13 @@ namespace TestsubjektV1
 
         public override void clear()
         {
-            //TODO
+            foreach (NPC n in _content)
+            {
+                n.active = false;
+            }
         }
 
-        public void generate(int k, Vector3 p, Vector3 d, int l)
+        public void generate(byte k, Vector3 p, Vector3 d, int l)
         {
             //TODO
             for (int i = 0; i < Constants.CAP_NPCS; i++)

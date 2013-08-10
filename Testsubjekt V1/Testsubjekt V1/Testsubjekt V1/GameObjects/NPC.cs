@@ -10,7 +10,7 @@ namespace TestsubjektV1
     {
         int cooldown;
         int maxCooldn;
-        public int kind;
+        public byte kind;
         public bool active;
         public int XP;
         private AStar pathFinder;
@@ -38,7 +38,7 @@ namespace TestsubjektV1
             target = Vector3.Zero;
         }
 
-        public void setup(int k, ModelObject m, Vector3 p, Vector3 d, float s, int l, int mh, int x, int mc, Player pl, NPCCollection npcs)
+        public void setup(byte k, ModelObject m, Vector3 p, Vector3 d, float s, int l, int mh, int x, int mc, Player pl, NPCCollection npcs)
         {
             kind = k;
             model = m;
@@ -57,11 +57,13 @@ namespace TestsubjektV1
             pathFinder = npcs.PathFinder;
         }
 
-        public /*override*/ bool update(BulletCollection bullets, Camera camera, Player p)
+        public /*override*/ bool update(BulletCollection bullets, Camera camera, Player p, Mission m)
         {
             //TODO
             if (health <= 0)
             {
+                p.getEXP((int)(XP * (float)level/(float)p.level));
+                m.update(kind);
                 active = false;
                 return false;
             }
@@ -80,8 +82,8 @@ namespace TestsubjektV1
                 move();
             }
 
-            double rotationAngle = Math.Acos((Vector3.Dot(direction, -1*Vector3.UnitX))/(direction.Length()));
-            model.Rotation = new Vector3(0, (float)rotationAngle, 0);
+            //double rotationAngle = Math.Acos((Vector3.Dot(direction, -1*Vector3.UnitX))/(direction.Length()));
+            //model.Rotation = new Vector3(0, (float)rotationAngle, 0);
 
             //Console.WriteLine("act move dist: " + direction.Length() + "x: " + direction.X + " y: " + direction.Y + " z: " + direction.Z + " * " + speed);
 
@@ -107,9 +109,16 @@ namespace TestsubjektV1
             //Console.WriteLine("post move : " + position.X + " ; " + position.Z);
         }
 
+        public void getHit(Bullet b)
+        {
+            //TODO
+            health = Math.Max(health - 100, 0);
+        }
+
         public override void draw(Camera camera)
         {
-            if (!active) return;
+            if (!active)
+                return;
             base.draw(camera);
         }
     }

@@ -9,10 +9,11 @@ namespace TestsubjektV1
     {
         public const int RES_X = 1024;
         public const int RES_Y = 768;
-        public const int MAX_LEVEL = 20;
-        public const int CAP_BULLETS = 20;
-        public const int CAP_NPCS = 10;
-        public const int CAP_MODS = 20;
+        public const byte MAX_LEVEL = 20;
+        public const byte CAP_BULLETS = 50;
+        public const byte CAP_NPCS = 20;
+        public const byte CAP_MODS = 20;
+        public const byte CAP_MISSION_NPCS = 25;
 
         //Screen return commands
         public const int CMD_EXIT = -1;
@@ -26,23 +27,23 @@ namespace TestsubjektV1
         public const int CMD_MOD = 7;
 
         //Mod types
-        public const int MOD_NIL = -1;
-        public const int MOD_ELM = 0;
-        public const int MOD_TYP = 1;
-        public const int MOD_STR = 2;
-        public const int MOD_SPD = 3;
-        public const int MOD_RCG = 4;
-        public const int MOD_ACP = 5;
+        public const byte MOD_NIL = 0;
+        public const byte MOD_ELM = 1;
+        public const byte MOD_TYP = 2;
+        public const byte MOD_STR = 3;
+        public const byte MOD_SPD = 4;
+        public const byte MOD_RCG = 5;
+        public const byte MOD_ACP = 6;
 
         //NPC Spawn rates
-        public const int SPAWN_INFINITE = 0;
-        public const int SPAWN_ONCE = 1;
+        public const bool SPAWN_INFINITE = true;
+        public const bool SPAWN_ONCE = false;
 
         //NPC kinds
-        public const int NPC_NONE = 0;
-        public const int NPC_CUBE = 1;
+        public const byte NPC_NONE = 0;
+        public const byte NPC_CUBE = 1;
 
         //Map sizes
-        public const int MAP_SIZE = 25;
+        public const byte MAP_SIZE = 25;
     }
 }

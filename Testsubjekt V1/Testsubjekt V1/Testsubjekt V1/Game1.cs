@@ -91,7 +91,7 @@ namespace TestsubjektV1
             {
                 case Constants.CMD_EXIT: Exit(); break;
                 case Constants.CMD_NONE: break;
-                case Constants.CMD_NEW: Mouse.SetPosition(512, 384); screen = myAction; break;
+                case Constants.CMD_NEW: Mouse.SetPosition(512, 384); screen = myAction; myAction.reset(); break;
                 case Constants.CMD_PAUSE: screen = new PauseScreen(Content, GraphicsDevice, data, world, camera); break;
                 case Constants.CMD_JOURNAL: screen = new BriefingScreen(Content, GraphicsDevice, data, world, camera); break;
                 case Constants.CMD_MOD: screen = new ModificationScreen(Content, GraphicsDevice, data, world, camera); break;

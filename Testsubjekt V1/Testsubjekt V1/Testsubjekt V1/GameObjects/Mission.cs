@@ -8,11 +8,18 @@ namespace TestsubjektV1
     abstract class Mission
     {
         public int target;
-        public int actCount;
-        private int count;
+        internal int actCount;
+        internal int tarCount;
+        public byte level;
+
+        public abstract string getLabel();
+
+        public abstract bool complete();
         
         public abstract bool isType1();
 
-        public abstract bool update();
+        public abstract bool update(byte kind);
+
+        public abstract void setup(byte level, byte kind, byte count);
     }
 }

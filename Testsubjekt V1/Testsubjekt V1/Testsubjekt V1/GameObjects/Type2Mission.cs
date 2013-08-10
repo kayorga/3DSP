@@ -17,10 +17,25 @@ namespace TestsubjektV1
             return false;
         }
 
-        public override bool update()
+        public override bool update(byte kind)
         {
             //TODO
             return true;
+        }
+
+        public override bool complete()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string getLabel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void setup(byte level, byte kind, byte count)
+        {
+            throw new NotImplementedException();
         }
     }
 }

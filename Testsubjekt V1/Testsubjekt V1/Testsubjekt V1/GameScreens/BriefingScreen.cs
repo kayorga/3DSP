@@ -22,6 +22,7 @@ namespace TestsubjektV1
         private Rectangle caveRectangle;
         private Rectangle frameRectangle;
         private Rectangle startRectangle;
+        private Rectangle briefingRectangle;
 
         private Texture2D cursor;
         private Texture2D userInterface;
@@ -60,6 +61,8 @@ namespace TestsubjektV1
             caveRectangle = new Rectangle(145, 485, 200, 144);
             frameRectangle = new Rectangle(144, 171, 203, 149);
             startRectangle = new Rectangle(563, 464, 232, 47);
+
+            data.missions.generate(0);
         }
 
         private void onNewGameClick()
@@ -103,13 +106,8 @@ namespace TestsubjektV1
         {
             if (startRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                switch (activeStage)
-                {
-                    case 0: camera.reset();  world.warp(1, 1); break;
-                    case 1: break;
-                    case 2: break;
-                    default: break;
-                }
+                camera.reset();  world.warp(1, 1);
+                data.missions.activeMission = data.missions[activeStage];
                 screenReturnValue = Constants.CMD_NEW;
             }
         }
@@ -117,6 +115,7 @@ namespace TestsubjektV1
         public override int update(GameTime gameTime)
         {
             //TODO
+
             onExitClick();
             onForestClick();
             onCaveClick();
@@ -151,6 +150,7 @@ namespace TestsubjektV1
             
             spriteBatch.Draw(userInterface, interfaceRectangle, Color.White);
             spriteBatch.Draw(frame, frameRectangle, Color.White);
+            spriteBatch.DrawString(menuFont1, data.missions[activeStage].getLabel(), new Vector2(410, 200), Color.White);
 
         }
 

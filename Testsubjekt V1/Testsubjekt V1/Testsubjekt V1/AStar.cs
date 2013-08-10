@@ -87,7 +87,7 @@ namespace TestsubjektV1
                     /*if(currentNode.X+i>=0 && currentNode.Y+j>=0 && currentNode.X+i<world.MoveData.Length*3 && currentNode.Y+i<world.MoveData.Length*3
                         && world.MoveData[(currentNode.X+i)/3][(currentNode.Y+j)/3]==0 && npcs.npcMoveData[currentNode.X+i][currentNode.Y+j]!=true)*/
                     if (currentNode.X + i >= 0 && currentNode.Y + j >= 0 && currentNode.X + i < world.MoveData.Length * 2 && currentNode.Y + i < world.MoveData.Length * 2
-                        && world.MoveData[(currentNode.X + i) / 2][(currentNode.Y + j) / 2] == 0 && npcs.npcMoveData[currentNode.X + i][currentNode.Y + j] != true)
+                        && world.MoveData[(currentNode.X + i) / 2][(currentNode.Y + j) / 2] == 0 && npcs.npcMoveData[currentNode.X + i][currentNode.Y + j] == 0)
                     {
                         PathNode succNode = new PathNode(currentNode, currentNode.X + i, currentNode.Y + j, new Point(goal.X, goal.Y), (Math.Abs(i)+Math.Abs(j)==2? 1.4f:1));
                         if (isNodeInClosedList(succNode)) continue;

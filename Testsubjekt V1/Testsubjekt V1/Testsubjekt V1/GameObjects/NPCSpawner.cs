@@ -12,8 +12,8 @@ namespace Testsubjekt_V1
         private int x;
         private int z;
         private bool active;
-        private int kind;
-        private int rate;
+        private byte kind;
+        private bool rate;
         private int cooldown;
         private int maxCooldown;
 
@@ -28,7 +28,7 @@ namespace Testsubjekt_V1
             maxCooldown = 150;
         }
 
-        public void setup(int kind, int rate)
+        public void setup(byte kind, bool rate)
         {
             this.kind = kind;
             this.rate = rate;

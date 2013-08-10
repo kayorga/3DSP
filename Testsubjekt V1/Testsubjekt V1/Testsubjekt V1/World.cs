@@ -15,16 +15,15 @@ namespace TestsubjektV1
         ContentManager content;
         GraphicsDevice device;
         char[][] mapData;
-        int[][] moveData;
-        bool[][] npcMoveData;
+        byte[][] moveData;
         ModelObject[][] mapObjects;
         ModelObject[][] ground;
-        int _mapID;
-        int _theme;
-        private int SIZE;
-        public int size { get { return SIZE; } }
-        public int theme { get { return _theme; } }
-        public int mapID { get { return _mapID; } }
+        byte _mapID;
+        byte _theme;
+        private byte SIZE;
+        public byte size { get { return SIZE; } }
+        public byte theme { get { return _theme; } }
+        public byte mapID { get { return _mapID; } }
         public int[] player_start;
         public NPCSpawner[] spawners;
 
@@ -39,7 +38,7 @@ namespace TestsubjektV1
             SIZE = Constants.MAP_SIZE;
             mapData = new char[SIZE][];
             mapObjects = new ModelObject[SIZE][];
-            moveData = new int[SIZE][];
+            moveData = new byte[SIZE][];
             ground = new ModelObject[SIZE][];
             player_start = new int[2];
             
@@ -53,7 +52,7 @@ namespace TestsubjektV1
             for (int i = 0; i < SIZE; ++i)
             {
                 mapData[i] = new char[SIZE];
-                moveData[i] = new int[SIZE];
+                moveData[i] = new byte[SIZE];
                 mapObjects[i] = new ModelObject[SIZE];
                 ground[i] = new ModelObject[SIZE];
             }
@@ -79,7 +78,7 @@ namespace TestsubjektV1
             warp(_mapID, _theme);
         }
 
-        public int[][] MoveData
+        public byte[][] MoveData
         {
             get { return moveData; }
         }
@@ -124,7 +123,7 @@ namespace TestsubjektV1
         /// <para> </para>
         /// sets up player and npc spawner start positions and activates npc spawners
         /// </summary>
-        public void setup(int th)
+        public void setup(byte th)
         {
             _theme = th;
             generateGround(th);
@@ -193,7 +192,7 @@ namespace TestsubjektV1
         /// calls loadMap(0) on exception
         /// </summary>
         /// <param name="id">map ID to load</param>
-        private void loadMap(int id)
+        private void loadMap(byte id)
         {
             try
             {
@@ -228,7 +227,7 @@ namespace TestsubjektV1
             }
         }
 
-        public void warp(int id, int th)
+        public void warp(byte id, byte th)
         {
             loadMap(id);
             setup(th);

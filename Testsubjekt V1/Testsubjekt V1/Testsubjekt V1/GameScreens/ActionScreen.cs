@@ -60,15 +60,25 @@ namespace TestsubjektV1
             if(i<7)i++;
         }
 
+        public void reset()
+        {
+            data.missions.activeMission.actCount = 0;
+            data.npcs.clear();
+            data.bullets.clear();
+        }
+
         public override int update(GameTime gameTime)
         {
             //TODO
             camera.Update(gameTime, data.player.Position);
             data.player.update(data.bullets, camera);
-            data.bullets.update(world);
-            data.missions.update(data.player.level);
+            data.bullets.update(world, data.npcs);
             data.npcs.update(data.bullets, camera, data.player, data.missions.activeMission);
+            data.missions.update(data.player.level);
             world.update(data.npcs, data.player);
+
+            if (data.missions.activeMission != null && data.missions.activeMission.complete())
+                return Constants.CMD_JOURNAL;
 
             /*test++;
             if (test == 50)
@@ -106,6 +116,11 @@ namespace TestsubjektV1
             }
 
             return Constants.CMD_NONE;
+        }
+
+        private void missionCompleteFeedback()
+        {
+            throw new NotImplementedException();
         }
 
         private int isConsoleInFront()

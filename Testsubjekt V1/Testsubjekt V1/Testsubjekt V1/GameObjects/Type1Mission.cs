@@ -7,11 +7,13 @@ namespace TestsubjektV1
 {
     class Type1Mission : Mission
     {
-        private int[] kinds;
+        private byte[] kinds;
 
-        public Type1Mission()
+        public Type1Mission(byte lv, byte tKind, byte tCount, byte[] k)
         {
             //TODO
+            kinds = k;
+            setup(lv, tKind, tCount);
         }
 
         public override bool isType1()
@@ -19,10 +21,35 @@ namespace TestsubjektV1
             return true;
         }
 
-        public override bool update()
+        public override string getLabel()
+        {
+            string l = "Level " + level + "\n\nExterminate " + ((tarCount == 1) ? "the Nemesis" : tarCount + " Type" + target + " Enemies");
+            return l;
+        }
+
+        public override bool update(byte kind)
         {
             //TODO
+            if (kind == target)
+            {
+                actCount+=1;
+            }
             return true;
+        }
+
+        public override bool complete()
+        {
+            if (actCount >= tarCount)
+                return true;
+            return false;
+        }
+
+        public override void setup(byte lv, byte kind, byte count)
+        {
+            level = lv;
+            target = kind;
+            tarCount = count;
+            actCount = 0;
         }
     }
 }

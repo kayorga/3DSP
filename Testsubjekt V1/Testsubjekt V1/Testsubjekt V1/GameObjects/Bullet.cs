@@ -21,6 +21,9 @@ namespace TestsubjektV1
         World world;
         int strength;
 
+        byte xTile;
+        byte zTile;
+
         public Bullet(ContentManager Content)
         {
             active = false;
@@ -47,7 +50,7 @@ namespace TestsubjektV1
             strength = str;
         }
 
-        public void update(World world)
+        public void update(World world, NPCCollection npcs)
         {
             if (!active) return;
             position += speed * direction;
@@ -55,7 +58,10 @@ namespace TestsubjektV1
 
             bulletOb.Position = position;
 
-            if (collision(world) || distance > maxDist)
+            xTile = (byte)Math.Round(-1 * (position.X) + (Constants.MAP_SIZE - 1));
+            zTile = (byte)Math.Round(-1 * (position.Z) + (Constants.MAP_SIZE - 1));
+
+            if (collision(world) || collision(npcs) || distance > maxDist)
             {
                 active = false;
                 return;
@@ -67,10 +73,19 @@ namespace TestsubjektV1
 
         private bool collision(World world) 
         {
-            int xtile = (int)Math.Round(-1*(position.X) + (Constants.MAP_SIZE - 1)) / 2;
-            int ztile = (int)Math.Round(-1*(position.Z) + (Constants.MAP_SIZE - 1)) / 2;
-            if (world.MoveData[xtile][ztile] == 1)
+            if (world.MoveData[xTile / 2][zTile / 2] == 1)
                 return true;
+            return false;
+        }
+
+        private bool collision(NPCCollection npcs)
+        {
+            byte tile = npcs.npcMoveData[xTile][zTile];
+            if (tile != 0)
+            {
+                npcs[tile - 1].getHit(this);
+                return true;
+            }
             return false;
         }
 
