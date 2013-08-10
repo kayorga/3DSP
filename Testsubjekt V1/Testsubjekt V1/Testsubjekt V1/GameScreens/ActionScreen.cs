@@ -20,16 +20,26 @@ namespace TestsubjektV1
         private Texture2D hud;
         private Texture2D HP1;
         private Texture2D HP;
+        private Texture2D green;
+        private Texture2D violet;
+        private Texture2D red;
+        private Texture2D blue;
+
         private Rectangle hudRectangle;
         private Rectangle HP1Rectangle;
         private Rectangle HPRectangle;
+        private Rectangle Mod1Rectangle;
+        private Rectangle Mod2Rectangle;
+        private Rectangle Mod3Rectangle;
+        private Rectangle Mod4Rectangle;
+        
         private SpriteBatch spriteBatch;
         private GraphicsDevice graphicsDevice;
         private ContentManager contentManager;
         private SpriteFont font;
-        private AStar pathFinder;
-        int test = 0;
-        private int i=0;
+        private bool spawnNewEnemies;
+        private bool isMissionActive;
+        private TimeSpan timeInMission;
 
         public ActionScreen(ContentManager content, GraphicsDevice gD, GameData gameData, Camera cam, World w)
         {
@@ -49,15 +59,21 @@ namespace TestsubjektV1
             HP = content.Load<Texture2D>("hp");
             HPRectangle = new Rectangle(67, 56, 200, 17);
             spriteBatch = new SpriteBatch(graphicsDevice);
-            //pathFinder = new AStar(world, data.player, new Point(7, 16));
-            //Vector3 goPos = pathFinder.findPath();
-        }
 
-        private void testUpdate()
-        {
-            Vector3 goPos = pathFinder.list.ElementAt(i);
-            data.player.setPosition(goPos);
-            if(i<7)i++;
+            red = content.Load<Texture2D>("Icons/redslot");
+            blue = content.Load<Texture2D>("Icons/blueslot");
+            violet = content.Load<Texture2D>("Icons/violetslot");
+            green = content.Load<Texture2D>("Icons/greenslot");
+
+            Mod1Rectangle = new Rectangle(52, 676, 40, 39);
+            Mod2Rectangle = new Rectangle(91, 649, 40, 39);
+            Mod3Rectangle = new Rectangle(134, 672, 40, 39);
+            Mod4Rectangle = new Rectangle(93, 699, 40, 39);
+
+            spawnNewEnemies = false;
+            isMissionActive = false;
+            timeInMission = new TimeSpan(0);
+            data.missions.activeMission.timeSpent = timeInMission;
         }
 
         public void reset()
@@ -65,34 +81,52 @@ namespace TestsubjektV1
             data.missions.activeMission.actCount = 0;
             data.npcs.clear();
             data.bullets.clear();
+            timeInMission = new TimeSpan(0);
+            data.missions.activeMission.timeSpent = timeInMission;
         }
 
         public override int update(GameTime gameTime)
         {
             //TODO
+            timeInMission+=gameTime.ElapsedGameTime;
             camera.Update(gameTime, data.player.Position);
             data.player.update(data.bullets, camera);
             data.bullets.update(world, data.npcs);
             data.npcs.update(data.bullets, camera, data.player, data.missions.activeMission);
             data.missions.update(data.player.level);
-            world.update(data.npcs, data.player);
+            
+            if(spawnNewEnemies) world.update(data.npcs, data.player);
 
-            if (data.missions.activeMission != null && data.missions.activeMission.complete())
-                return Constants.CMD_JOURNAL;
-
-            /*test++;
-            if (test == 50)
+            if (data.missions.activeMission != null)
             {
-                testUpdate();
-                test = 0;
-            }*/
+                if (data.missions.activeMission.complete())
+                {
+                    if (spawnNewEnemies)
+                    {
+                        spawnNewEnemies = false;
+                        isMissionActive = false;
+                        data.missions.activeMission.timeSpent = timeInMission;
+                        return Constants.CMD_MISSIONCOMPLETE;
+                    }
+                }
+                else
+                {
+                    if (world.theme != 0)
+                    {
+                        spawnNewEnemies = true;
+                        isMissionActive = true;
+                    }
+                }
+            }
+                
+            
             if (isConsoleInFront() == Constants.CMD_JOURNAL) return Constants.CMD_JOURNAL;
 
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 return Constants.CMD_PAUSE;
 
             if (Keyboard.GetState().IsKeyDown(Keys.J))
-                return Constants.CMD_JOURNAL;
+                return Constants.CMD_MISSIONINFO;
 
             if (Keyboard.GetState().IsKeyDown(Keys.M))
                 return Constants.CMD_MOD;
@@ -127,16 +161,18 @@ namespace TestsubjektV1
         {
             if (world.theme == 0)
             {
+                data.npcs.clear();
                 int xtile = (int)Math.Round((-1 * data.player.position.X + Constants.MAP_SIZE - 1) / 2.0f);
                 int ztile = (int)Math.Round((-1 * data.player.position.Z + Constants.MAP_SIZE - 1) / 2.0f);
 
                 if (ztile == 14 && (xtile == 11 || xtile == 12 || xtile == 13))
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.E))
-                        return Constants.CMD_JOURNAL;
+                        return Constants.CMD_JOURNAL; // activate Journal
+                    return Constants.CMD_NEW; // console is only in front but nothing done
                 }
             }
-            return Constants.CMD_NONE;
+            return Constants.CMD_NONE; // console is not in front
         }
 
         public override void draw()
@@ -163,7 +199,75 @@ namespace TestsubjektV1
                 spriteBatch.DrawString(font, x1+" "+z1/*"0 / 76"*/, new Vector2(178, 24), Color.LemonChiffon);
                 spriteBatch.Draw(HP, HPRectangle, Color.White);
             }
+
+            drawMods();
+
+            String time = (timeInMission.Minutes<10? "0":"") + timeInMission.Minutes + ":" + (timeInMission.Seconds<10? "0":"")+timeInMission.Seconds + ":" + timeInMission.Milliseconds;
+            spriteBatch.DrawString(font, time, new Vector2(894,43), Color.LemonChiffon);
+
+            if (world.theme != 0 && data.missions.activeMission != null)
+                spriteBatch.DrawString(font, data.missions.activeMission.getShortLabel(), new Vector2(800, 450), Color.LemonChiffon);
+            if (isConsoleInFront()==Constants.CMD_NEW)
+                spriteBatch.DrawString(font, "Press 'E' Button", new Vector2(800, 450), Color.LemonChiffon);
+
+
             spriteBatch.End();
+        }
+
+        private void drawMods()
+        {
+            Texture2D icon = null;
+            switch (data.player.myWeapon.mods[0].type)
+            {
+                case Constants.MOD_NIL: icon = null; break;
+                case Constants.MOD_ELM: icon = null; break;
+                case Constants.MOD_TYP: icon = null; break;
+                case Constants.MOD_STR: icon = red; break;
+                case Constants.MOD_SPD: icon = blue; break;
+                case Constants.MOD_RCG: icon = green; break;
+                case Constants.MOD_ACP: icon = violet; break;
+                default: icon = null; break;
+            }
+            if (icon != null) spriteBatch.Draw(icon, Mod1Rectangle, Color.White);
+            
+            switch (data.player.myWeapon.mods[1].type)
+            {
+                case Constants.MOD_NIL: icon = null; break;
+                case Constants.MOD_ELM: icon = null; break;
+                case Constants.MOD_TYP: icon = null; break;
+                case Constants.MOD_STR: icon = red; break;
+                case Constants.MOD_SPD: icon = blue; break;
+                case Constants.MOD_RCG: icon = green; break;
+                case Constants.MOD_ACP: icon = violet; break;
+                default: icon = null; break;
+            }
+            if (icon != null) spriteBatch.Draw(icon, Mod2Rectangle, Color.White);
+            
+            switch (data.player.myWeapon.mods[2].type)
+            {
+                case Constants.MOD_NIL: icon = null; break;
+                case Constants.MOD_ELM: icon = null; break;
+                case Constants.MOD_TYP: icon = null; break;
+                case Constants.MOD_STR: icon = red; break;
+                case Constants.MOD_SPD: icon = blue; break;
+                case Constants.MOD_RCG: icon = green; break;
+                case Constants.MOD_ACP: icon = violet; break;
+                default: icon = null; break;
+            }
+            if (icon != null) spriteBatch.Draw(icon, Mod3Rectangle, Color.White);
+
+            switch (data.player.myWeapon.mods[3].type)
+            {
+                case Constants.MOD_NIL: icon = null; break;
+                case Constants.MOD_ELM: icon = null; break;
+                case Constants.MOD_TYP: icon = null; break;
+                case Constants.MOD_STR: icon = red; break;
+                case Constants.MOD_SPD: icon = blue; break;
+                case Constants.MOD_RCG: icon = green; break;
+                case Constants.MOD_ACP: icon = violet; break;
+                default: icon = null; break;
+            }
+            if (icon != null) spriteBatch.Draw(icon, Mod4Rectangle, Color.White);
         }
     }
 }

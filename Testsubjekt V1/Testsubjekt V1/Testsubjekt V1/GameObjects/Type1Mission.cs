@@ -8,12 +8,16 @@ namespace TestsubjektV1
     class Type1Mission : Mission
     {
         private byte[] kinds;
+        public byte countKilledEnemies;
+        public int countXPGained;
+        public TimeSpan timeSpent;
 
         public Type1Mission(byte lv, byte tKind, byte tCount, byte[] k)
         {
             //TODO
             kinds = k;
             setup(lv, tKind, tCount);
+            countKilledEnemies = 0;
         }
 
         public override bool isType1()
@@ -27,13 +31,21 @@ namespace TestsubjektV1
             return l;
         }
 
-        public override bool update(byte kind)
+        public override string getShortLabel()
+        {
+            string l = actCount + " / " + tarCount + " Type" + target + " Enemies down";
+            return l;
+        }
+
+        public override bool update(byte kind, int exp)
         {
             //TODO
             if (kind == target)
             {
                 actCount+=1;
             }
+            countKilledEnemies++;
+            countXPGained += exp;
             return true;
         }
 

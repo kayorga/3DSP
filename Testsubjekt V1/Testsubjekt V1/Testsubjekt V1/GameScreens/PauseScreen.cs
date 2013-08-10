@@ -71,7 +71,7 @@ namespace TestsubjektV1
             if (resumeRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y))
             {
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                    screenReturnValue = Constants.CMD_NEW;
+                    screenReturnValue = Constants.CMD_BACK;
             }
         }
 
@@ -127,7 +127,7 @@ namespace TestsubjektV1
             {
                 frameRectangle = missionRectangle;
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                    screenReturnValue = Constants.CMD_JOURNAL;
+                    screenReturnValue = Constants.CMD_MISSIONINFO;
             }
         }
        

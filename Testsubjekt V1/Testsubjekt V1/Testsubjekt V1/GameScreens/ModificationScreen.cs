@@ -342,7 +342,7 @@ namespace TestsubjektV1
         private void onExitClick()
         {
             if (exitRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
-                screenReturnValue = Constants.CMD_NEW;
+                screenReturnValue = Constants.CMD_BACK;
         }
 
         //click finish button
@@ -363,7 +363,7 @@ namespace TestsubjektV1
 
                 data.player.myWeapon.setup(); //applies mods to weapon
 
-                screenReturnValue = Constants.CMD_NEW;
+                screenReturnValue = Constants.CMD_BACK;
             }
         }
 

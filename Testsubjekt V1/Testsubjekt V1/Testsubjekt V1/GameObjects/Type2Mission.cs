@@ -17,7 +17,7 @@ namespace TestsubjektV1
             return false;
         }
 
-        public override bool update(byte kind)
+        public override bool update(byte kind, int exp)
         {
             //TODO
             return true;
@@ -29,6 +29,11 @@ namespace TestsubjektV1
         }
 
         public override string getLabel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string getShortLabel()
         {
             throw new NotImplementedException();
         }

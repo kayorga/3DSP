@@ -62,8 +62,9 @@ namespace TestsubjektV1
             //TODO
             if (health <= 0)
             {
-                p.getEXP((int)(XP * (float)level/(float)p.level));
-                m.update(kind);
+                int exp = (int)(XP * (float)level / (float)p.level);
+                p.getEXP(exp);
+                m.update(kind, exp);
                 active = false;
                 return false;
             }

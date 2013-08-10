@@ -25,6 +25,9 @@ namespace TestsubjektV1
         public const int CMD_PAUSE = 5;
         public const int CMD_JOURNAL = 6;
         public const int CMD_MOD = 7;
+        public const int CMD_MISSIONCOMPLETE = 8;
+        public const int CMD_BACK = 9;
+        public const int CMD_MISSIONINFO = 10;
 
         //Mod types
         public const byte MOD_NIL = 0;

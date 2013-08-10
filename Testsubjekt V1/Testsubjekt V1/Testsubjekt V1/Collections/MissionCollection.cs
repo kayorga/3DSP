@@ -10,6 +10,7 @@ namespace TestsubjektV1
         public Mission activeMission;
         public Mission mainMission;
         private byte level;
+        public bool isMissionActive;
 
         public MissionCollection()
             : base(4)

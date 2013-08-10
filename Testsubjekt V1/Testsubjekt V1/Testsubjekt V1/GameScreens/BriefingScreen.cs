@@ -68,13 +68,13 @@ namespace TestsubjektV1
         private void onNewGameClick()
         {
             if (resumeRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
-                screenReturnValue = Constants.CMD_NEW;
+                screenReturnValue = Constants.CMD_BACK;
         }
 
         private void onExitClick()
         {
             if (exitRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
-                screenReturnValue = Constants.CMD_NEW;
+                screenReturnValue = Constants.CMD_BACK;
         }
 
 
@@ -150,7 +150,7 @@ namespace TestsubjektV1
             
             spriteBatch.Draw(userInterface, interfaceRectangle, Color.White);
             spriteBatch.Draw(frame, frameRectangle, Color.White);
-            spriteBatch.DrawString(menuFont1, data.missions[activeStage].getLabel(), new Vector2(410, 200), Color.White);
+            spriteBatch.DrawString(menuFont1, data.missions[activeStage].getLabel(), new Vector2(410, 200), Color.LemonChiffon);
 
         }
 

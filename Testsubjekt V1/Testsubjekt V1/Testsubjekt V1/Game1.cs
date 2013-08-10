@@ -83,10 +83,11 @@ namespace TestsubjektV1
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Tab))
                 this.Exit();
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape)) screen = myAction;
+            
             switch (screen.update(gameTime))
             {
                 case Constants.CMD_EXIT: Exit(); break;
@@ -95,6 +96,9 @@ namespace TestsubjektV1
                 case Constants.CMD_PAUSE: screen = new PauseScreen(Content, GraphicsDevice, data, world, camera); break;
                 case Constants.CMD_JOURNAL: screen = new BriefingScreen(Content, GraphicsDevice, data, world, camera); break;
                 case Constants.CMD_MOD: screen = new ModificationScreen(Content, GraphicsDevice, data, world, camera); break;
+                case Constants.CMD_MISSIONCOMPLETE: screen = new MissionCompleteScreen(Content, GraphicsDevice, data, world, camera); break;
+                case Constants.CMD_BACK: Mouse.SetPosition(512, 384); screen = myAction; break;
+                case Constants.CMD_MISSIONINFO: screen = new MissionInfoScreen(Content, GraphicsDevice, data, world, camera); break;
                 default: break;
             }
 
