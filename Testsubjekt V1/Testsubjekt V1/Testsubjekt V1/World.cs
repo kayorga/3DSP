@@ -26,6 +26,25 @@ namespace TestsubjektV1
         public byte mapID { get { return _mapID; } }
         public int[] player_start;
         public NPCSpawner[] spawners;
+        private byte spawner_count;
+        //private byte sDistance;
+        public byte shootDistance { get { return maps[_mapID].attackDistance; } }
+        private List<Map> maps;
+        public IList<Map> Maps { get { return maps.AsReadOnly(); } }
+
+        public class Map
+        {
+            public readonly byte spawnerCount;
+            public readonly byte attackDistance;
+            public Map(byte sCount, byte aDistance)
+            {
+                spawnerCount = sCount;
+                attackDistance = aDistance;
+            }
+        }
+
+        static string[] labels = { "Forest", "Desert", "Arctic"};
+        public string[] Labels { get { return labels; } }
 
         Model[] groundObs;
         Model[] wallObs;
@@ -41,6 +60,9 @@ namespace TestsubjektV1
             moveData = new byte[SIZE][];
             ground = new ModelObject[SIZE][];
             player_start = new int[2];
+
+            maps = new List<Map>(1);
+            scanFiles();
             
             spawners = new NPCSpawner[4];
 
@@ -48,6 +70,8 @@ namespace TestsubjektV1
             {
                 spawners[i] = new NPCSpawner();
             }
+
+            spawner_count = 0;
 
             for (int i = 0; i < SIZE; ++i)
             {
@@ -57,9 +81,9 @@ namespace TestsubjektV1
                 ground[i] = new ModelObject[SIZE];
             }
 
-            groundObs = new Model[2];
-            wallObs = new Model[2];
-            wall2Obs = new Model[2];
+            groundObs = new Model[4];
+            wallObs = new Model[4];
+            wall2Obs = new Model[4];
 
             #region Objects theme 0
             groundObs[0] = content.Load<Model>("Models\\floor_sim");
@@ -73,9 +97,57 @@ namespace TestsubjektV1
             wall2Obs[1] = content.Load<Model>("Models\\tree1");
             #endregion
 
+            #region Objects theme 2
+            groundObs[2] = content.Load<Model>("Models\\grass");
+            wallObs[2] = content.Load<Model>("Models\\stone");
+            wall2Obs[2] = content.Load<Model>("Models\\tree1");
+            #endregion
+
+            #region Objects theme 3
+            groundObs[3] = content.Load<Model>("Models\\grass");
+            wallObs[3] = content.Load<Model>("Models\\stone");
+            wall2Obs[3] = content.Load<Model>("Models\\tree1");
+            #endregion
+
             _mapID = 0;
             _theme = 0;
             warp(_mapID, _theme);
+        }
+
+        private byte readNext(TextReader reader, char stop)
+        {
+            string filecontents = "";
+            while (true)
+            {
+                char c = (char)reader.Read();
+                if (c == stop)
+                    break;
+                else
+                    filecontents += c;
+            }
+
+            return Byte.Parse(filecontents);
+        }
+
+        private void scanFiles()
+        {
+            byte id = 0;
+            string next_file = "\\map0.map";
+
+            while (File.Exists(content.RootDirectory + next_file))
+            {
+                TextReader reader = new StreamReader(content.RootDirectory + next_file);
+
+                byte sCount = readNext(reader, ',');
+                byte aDist = readNext(reader, '\n');
+
+                maps.Add(new Map(sCount, aDist));
+
+                reader.Close();
+
+                id++;
+                next_file = "\\map" + id + ".map";
+            }
         }
 
         public byte[][] MoveData
@@ -83,10 +155,10 @@ namespace TestsubjektV1
             get { return moveData; }
         }
 
-        public void update(NPCCollection npcs, Player p)
+        public void update(NPCCollection npcs, Player p, Mission m)
         {
             foreach (NPCSpawner spawner in spawners)
-                spawner.update(npcs, p);
+                spawner.update(npcs, p, m);
         }
 
         /// <summary>
@@ -127,6 +199,7 @@ namespace TestsubjektV1
         {
             _theme = th;
             generateGround(th);
+            spawner_count = 0;
 
             for (int i = 0; i < Constants.MAP_SIZE; ++i)
             {
@@ -162,21 +235,25 @@ namespace TestsubjektV1
                             break;
                         case 'A':
                             spawners[0].setPos(i, j);
+                            spawner_count++;
                             mapObjects[i][j] = null;
                             moveData[i][j] = 0;
                             break;
                         case 'B':
                             spawners[1].setPos(i, j);
+                            spawner_count++;
                             mapObjects[i][j] = null;
                             moveData[i][j] = 0;
                             break;
                         case 'C':
-                            spawners[1].setPos(i, j);
+                            spawners[2].setPos(i, j);
+                            spawner_count++;
                             mapObjects[i][j] = null;
                             moveData[i][j] = 0;
                             break;
                         case 'D':
-                            spawners[1].setPos(i, j);
+                            spawners[3].setPos(i, j);
+                            spawner_count++;
                             mapObjects[i][j] = null;
                             moveData[i][j] = 0;
                             break;
@@ -184,6 +261,17 @@ namespace TestsubjektV1
                     }
                 }
             }
+        }
+
+        public void setupSpawners(Mission m)
+        {
+            if (m.Kinds[0] == 3)
+                spawners[0].setup(m.Kinds[0], Constants.SPAWN_ONCE);
+            else
+                spawners[0].setup(m.Kinds[0], Constants.SPAWN_INFINITE);
+
+            for (int i = 1; i < 4; i++)
+                spawners[i].setup(m.Kinds[i], Constants.SPAWN_INFINITE);
         }
 
         /// <summary>
@@ -206,6 +294,18 @@ namespace TestsubjektV1
                 {
                     fileContents[i] = new char[Constants.MAP_SIZE];
                 }
+
+                reader.ReadLine();
+
+                //string d = "";
+                //while (true)
+                //{
+                //    char c = (char)reader.Read();
+                //    if (c == '\n')
+                //        break;
+                //}
+
+                //sDistance = Byte.Parse(d);
 
                 for (int a = Constants.MAP_SIZE - 1; a >= 0; --a)
                 {

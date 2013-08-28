@@ -11,7 +11,7 @@ namespace TestsubjektV1
         public const int RES_Y = 768;
         public const byte MAX_LEVEL = 20;
         public const byte CAP_BULLETS = 50;
-        public const byte CAP_NPCS = 20;
+        public const byte CAP_NPCS = 20; // must be less than 254!
         public const byte CAP_MODS = 20;
         public const byte CAP_MISSION_NPCS = 25;
 
@@ -45,6 +45,8 @@ namespace TestsubjektV1
         //NPC kinds
         public const byte NPC_NONE = 0;
         public const byte NPC_CUBE = 1;
+
+        public const byte PLAYER_INVINCIBILITY = 45;
 
         //Map sizes
         public const byte MAP_SIZE = 25;

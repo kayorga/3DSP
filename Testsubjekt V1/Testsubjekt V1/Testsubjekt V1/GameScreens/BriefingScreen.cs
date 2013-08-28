@@ -20,6 +20,7 @@ namespace TestsubjektV1
         private Rectangle arcticRectangle;
         private Rectangle forestRectangle;
         private Rectangle caveRectangle;
+        private Rectangle bossRectangle;
         private Rectangle frameRectangle;
         private Rectangle startRectangle;
         private Rectangle briefingRectangle;
@@ -59,10 +60,12 @@ namespace TestsubjektV1
             forestRectangle = new Rectangle(145, 173, 200, 144);
             arcticRectangle = new Rectangle(145, 329, 200, 144);
             caveRectangle = new Rectangle(145, 485, 200, 144);
+            bossRectangle = new Rectangle(379, 543, 542, 111);
             frameRectangle = new Rectangle(144, 171, 203, 149);
             startRectangle = new Rectangle(563, 464, 232, 47);
 
-            data.missions.generate(0);
+            data.missions.generate((byte)data.player.level);
+            data.missions.update();
         }
 
         private void onNewGameClick()
@@ -102,12 +105,27 @@ namespace TestsubjektV1
                 frameRectangle = new Rectangle(144, 483, 203, 149);
             }
         }
+        private void onBossClick()
+        {
+            if (bossRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                activeStage = 3;
+                frameRectangle = new Rectangle(378, 542, 544, 113);
+            }
+        }
         private void onStartClick()
         {
             if (startRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                camera.reset();  world.warp(1, 1);
-                data.missions.activeMission = data.missions[activeStage];
+                if (data.missions[activeStage].blocked) return;
+                Mission m = data.missions[activeStage];
+                m.reset();
+                data.missions.activeMission = m;
+
+                camera.reset(); 
+                world.warp(m.Area, m.Zone);
+                world.setupSpawners(m);
+                data.player.myWeapon.reload();
                 screenReturnValue = Constants.CMD_NEW;
             }
         }
@@ -120,6 +138,7 @@ namespace TestsubjektV1
             onForestClick();
             onCaveClick();
             onArcticClick();
+            onBossClick();
             onStartClick();
             return screenReturnValue;
         }

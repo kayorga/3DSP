@@ -41,7 +41,7 @@ namespace Testsubjekt_V1
             active = true;
         }
 
-        public void update(NPCCollection npcs, Player p)
+        public void update(NPCCollection npcs, Player p, Mission m)
         {
             if (!active) return;
             if (cooldown == 0)
@@ -56,6 +56,9 @@ namespace Testsubjekt_V1
                     active = false;
                 else
                     cooldown = maxCooldown;
+
+
+
             }
             else cooldown = Math.Max(cooldown - 1, 0);
         }

@@ -11,22 +11,21 @@ namespace TestsubjektV1
         public Mission mainMission;
         private byte level;
         public bool isMissionActive;
+        private World world;
+        private NPCCollection npcs;
 
-        public MissionCollection()
+        public MissionCollection(World w, NPCCollection n)
             : base(4)
         {
-            //TODO
-            level = 10;
+            world = w;
+            npcs = n;
+
+            level = 1;
             Random ran = new Random();
             for (int i = 0; i < 3; ++i)
-            {
-                
-                byte kind = (byte)ran.Next(3);
-                byte count = (byte)Math.Min((int)Constants.CAP_MISSION_NPCS, 2 + ran.Next((int)1.5 * level));
-                _content.Add(new Type1Mission(level, kind, count, new byte[1]));
-            }
+                _content.Add(new Type1Mission());
 
-            _content.Add(new Type1Mission(8, 3, 1, new byte[1]));
+            _content.Add(new Type1Mission());
 
             activeMission = this[0];
             mainMission = this[3];
@@ -34,39 +33,50 @@ namespace TestsubjektV1
 
         public void generate(byte lv)
         {
-            level = (byte)new Random().Next(100);//(byte)Math.Min(lv, (byte)200);
+            level = lv;//(byte)new Random().Next(100);
 
             Random ran = new Random();
             for (int i = 0; i < 3; ++i)
             {
                 Mission m = this[i];
-                //if (m.complete())
-                //{
+                if (!m.active)
+                {
                     byte kind = (byte)ran.Next(3);
                     byte count = (byte)Math.Min((int)Constants.CAP_MISSION_NPCS, 2 + ran.Next((int)1.5 * level));
-                    m.setup(level, kind, count);
-                //}
+
+                    byte area = (byte)(ran.Next(world.Maps.Count-1) + 1);
+                    
+                    m.setup(level, kind, count, (byte) (i + 1), area, npcs.Labels, world.Labels);
+                }
             }
 
-            if (this[3].complete())
+            if (!this[3].active)
             {
-                this[3] = new Type1Mission((byte)(level + 8), 3, 1, new byte[1]);
+                byte kind = 3;
+                byte zone = (byte)(ran.Next(3) + 1);
+                byte area = (byte)(ran.Next(world.Maps.Count-1) + 1);
+                this[3].setup((byte)(this[3].level+12), kind, 1, zone, area, npcs.Labels, world.Labels);
             }
         }
 
-        public void update(int level)
+        public void update()
         {
-            //TODO
+            byte[] lvs = new byte[] { this[0].level, this[1].level, this[2].level };
+            byte minLv = lvs.Min<byte>();
+
+            for (int i = 0; i < 3; i++)
+            {
+                if (this[i].level > minLv + 5 || this[i].level > this[3].level)
+                    this[i].blocked = true;
+                else this[i].blocked = false;
+            }
         }
 
         public override void clear()
         {
             //TODO
-        }
-
-        public void generate()
-        {
-            //TODO
+            for (int i = 0; i < 4; i++)
+                this[i].active = false;
         }
     }
 }

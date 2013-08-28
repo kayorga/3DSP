@@ -88,14 +88,14 @@ namespace TestsubjektV1
         public override int update(GameTime gameTime)
         {
             //TODO
-            timeInMission+=gameTime.ElapsedGameTime;
+            if (world.mapID != 0)
+                timeInMission+=gameTime.ElapsedGameTime;
             camera.Update(gameTime, data.player.Position);
-            data.player.update(data.bullets, camera);
-            data.bullets.update(world, data.npcs);
+            data.player.update(data.npcs, data.bullets, camera);
+            data.bullets.update(world, data.npcs, data.player, data.missions.activeMission);
             data.npcs.update(data.bullets, camera, data.player, data.missions.activeMission);
-            data.missions.update(data.player.level);
             
-            if(spawnNewEnemies) world.update(data.npcs, data.player);
+            if(spawnNewEnemies) world.update(data.npcs, data.player, data.missions.activeMission);
 
             if (data.missions.activeMission != null)
             {
@@ -106,6 +106,7 @@ namespace TestsubjektV1
                         spawnNewEnemies = false;
                         isMissionActive = false;
                         data.missions.activeMission.timeSpent = timeInMission;
+                        data.missions.activeMission.reward(data.player, data.mods);
                         return Constants.CMD_MISSIONCOMPLETE;
                     }
                 }
@@ -148,13 +149,15 @@ namespace TestsubjektV1
                 camera.reset();
                 return Constants.CMD_NONE;
             }
-
+            if (Keyboard.GetState().IsKeyDown(Keys.R))
+            {
+                data.missions.clear();
+                //data.missions.mainMission.level = 0;
+                data.missions.generate(1);
+            }
+            if (Mouse.GetState().RightButton == ButtonState.Pressed)
+                data.player.myWeapon.reload();
             return Constants.CMD_NONE;
-        }
-
-        private void missionCompleteFeedback()
-        {
-            throw new NotImplementedException();
         }
 
         private int isConsoleInFront()
@@ -164,6 +167,9 @@ namespace TestsubjektV1
                 data.npcs.clear();
                 int xtile = (int)Math.Round((-1 * data.player.position.X + Constants.MAP_SIZE - 1) / 2.0f);
                 int ztile = (int)Math.Round((-1 * data.player.position.Z + Constants.MAP_SIZE - 1) / 2.0f);
+
+                //int xtile = data.player.xTile;
+                //int ztile = data.player.zTile;
 
                 if (ztile == 14 && (xtile == 11 || xtile == 12 || xtile == 13))
                 {
@@ -196,7 +202,7 @@ namespace TestsubjektV1
                 spriteBatch.Draw(HP1, HP1Rectangle, Color.White);
                 HPRectangle.Width = (MAX_HP_WIDTH * data.player.health) / data.player.maxHealth;
                 spriteBatch.DrawString(font, data.player.level.ToString(), new Vector2(79, 24), Color.LemonChiffon);
-                spriteBatch.DrawString(font, x1+" "+z1/*"0 / 76"*/, new Vector2(178, 24), Color.LemonChiffon);
+                spriteBatch.DrawString(font, data.player.XP.ToString()/*x1+" "+z1*/, new Vector2(178, 24), Color.LemonChiffon);
                 spriteBatch.Draw(HP, HPRectangle, Color.White);
             }
 

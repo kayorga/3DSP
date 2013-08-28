@@ -63,6 +63,13 @@ namespace TestsubjektV1
             recharge = Math.Max(recharge - 1, 0);
         }
 
+        public void reload()
+        {
+            ammo = maxAmmo + mod_acp;
+            cooldown = 0;
+            recharge = 0;
+        }
+
         public void setup()
         {
             resetMods();
@@ -89,8 +96,9 @@ namespace TestsubjektV1
             if (m == null) return;
             switch (m.type)
             {
-                case 0: mod_elm  = m.value; break;
-                case 1:
+                case Constants.MOD_NIL: break;
+                case Constants.MOD_ELM: mod_elm  = m.value; break;
+                case Constants.MOD_TYP:
                     {
                         mod_typ = m.value;
                         switch (m.value)
@@ -99,10 +107,10 @@ namespace TestsubjektV1
                         }
                         break;
                     }
-                case 2: mod_str += m.value * 2; break;
-                case 3: mod_spd += m.value * .1f; break;
-                case 4: mod_rcg += m.value * 4; break;
-                case 5: mod_acp += m.value * 2; break;
+                case Constants.MOD_STR: mod_str += m.value * 2; break;
+                case Constants.MOD_SPD: mod_spd += m.value * .1f; break;
+                case Constants.MOD_RCG: mod_rcg += m.value * 4; break;
+                case Constants.MOD_ACP: mod_acp += m.value * 2; break;
             }
         }
     }

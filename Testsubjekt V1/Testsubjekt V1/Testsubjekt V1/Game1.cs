@@ -87,20 +87,31 @@ namespace TestsubjektV1
                 this.Exit();
             
             if (Keyboard.GetState().IsKeyDown(Keys.Escape)) screen = myAction;
-            
-            switch (screen.update(gameTime))
+
+            int updateState = screen.update(gameTime);
+            switch (updateState)
             {
                 case Constants.CMD_EXIT: Exit(); break;
                 case Constants.CMD_NONE: break;
-                case Constants.CMD_NEW: Mouse.SetPosition(512, 384); screen = myAction; myAction.reset(); break;
-                case Constants.CMD_PAUSE: screen = new PauseScreen(Content, GraphicsDevice, data, world, camera); break;
-                case Constants.CMD_JOURNAL: screen = new BriefingScreen(Content, GraphicsDevice, data, world, camera); break;
-                case Constants.CMD_MOD: screen = new ModificationScreen(Content, GraphicsDevice, data, world, camera); break;
-                case Constants.CMD_MISSIONCOMPLETE: screen = new MissionCompleteScreen(Content, GraphicsDevice, data, world, camera); break;
-                case Constants.CMD_BACK: Mouse.SetPosition(512, 384); screen = myAction; break;
-                case Constants.CMD_MISSIONINFO: screen = new MissionInfoScreen(Content, GraphicsDevice, data, world, camera); break;
+                case Constants.CMD_NEW:
+                    screen = myAction; myAction.reset(); break;
+                case Constants.CMD_PAUSE: 
+                    screen = new PauseScreen(Content, GraphicsDevice, data, world, camera); break;
+                case Constants.CMD_JOURNAL: 
+                    screen = new BriefingScreen(Content, GraphicsDevice, data, world, camera); break;
+                case Constants.CMD_MOD: 
+                    screen = new ModificationScreen(Content, GraphicsDevice, data, world, camera); break;
+                case Constants.CMD_MISSIONCOMPLETE: 
+                    screen = new MissionCompleteScreen(Content, GraphicsDevice, data, world, camera); break;
+                case Constants.CMD_BACK: 
+                    screen = myAction; break;
+                case Constants.CMD_MISSIONINFO: 
+                    screen = new MissionInfoScreen(Content, GraphicsDevice, data, world, camera); break;
                 default: break;
             }
+
+            if (updateState != Constants.CMD_NONE)
+                Mouse.SetPosition(512, 384); 
 
             // TODO: Add your update logic here
 
@@ -118,7 +129,9 @@ namespace TestsubjektV1
             {
                 case 0: clear = Color.DarkSlateGray; break;
                 case 1: clear = Color.DarkSlateBlue; break;
-                default: clear = Color.Yellow; break;
+                case 2: clear = Color.Yellow; break;
+                case 3: clear = Color.LightBlue; break;
+                default: clear = Color.Red; break;
             }
             GraphicsDevice.Clear(clear);
             screen.draw();

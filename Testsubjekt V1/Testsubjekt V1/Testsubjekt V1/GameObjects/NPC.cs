@@ -15,7 +15,9 @@ namespace TestsubjektV1
         public int XP;
         private AStar pathFinder;
         private bool moving;
+        public bool newTarget;
         public bool isMoving { get { return moving; } }
+
         public Vector3 target;
 
         public NPC(World world)
@@ -30,6 +32,7 @@ namespace TestsubjektV1
             maxHealth = 0;
             health = 0;
             active = false;
+            newTarget = false;
             XP = 0;
             cooldown = 0;
             maxCooldn = 0;
@@ -38,21 +41,64 @@ namespace TestsubjektV1
             target = Vector3.Zero;
         }
 
-        public void setup(byte k, ModelObject m, Vector3 p, Vector3 d, float s, int l, int mh, int x, int mc, Player pl, NPCCollection npcs)
+        /// <summary>
+        /// assigns NPC attributes and ModelObject and activates the NPC
+        /// </summary>
+        /// <param name="k">NPC kind/species</param>
+        /// <param name="m">ModelObject</param>
+        /// <param name="p">starting position</param>
+        /// <param name="d">starting direction</param>
+        /// <param name="l">level</param>
+        /// <param name="pl">Player</param>
+        /// <param name="npcs">parent NPCCollection (should always be "this")</param>
+        public void setup(byte k, ModelObject m, Vector3 p, Vector3 d, int l, Player pl, NPCCollection npcs)
         {
             kind = k;
             model = m;
             position = p;
             direction = d;
-            speed = s;
             level = l;
-            maxHealth = mh;
-            health = mh;
-            XP = x;
-            maxCooldn = mc;
+
+            switch (kind)
+            {
+                case 0:
+                    speed = 0.025f;
+                    maxHealth = 50 * ((int)Math.Pow(1.06f, level));
+                    XP = 5;
+                    maxCooldn = 60;
+                    break;
+                case 1:
+                    speed = 0.1f;
+                    maxHealth = 50 * ((int)Math.Pow(1.05f, level));
+                    XP = 6;
+                    maxCooldn = 40;
+                    break;
+                case 2:
+                    speed = 0.09f;
+                    maxHealth = 50 * ((int)Math.Pow(1.07f, level));
+                    XP = 7;
+                    maxCooldn = 75;
+                    break;
+                case 3:
+                    speed = 0.01f;
+                    maxHealth = 200 * ((int)Math.Pow(1.07f, level));
+                    XP = 100;
+                    maxCooldn = 50;
+                    model.Scaling = new Vector3(3,3,3);
+                    break;
+                default:
+                    speed = 0.001f;
+                    maxHealth = 1;
+                    XP = 0;
+                    maxCooldn = 1000;
+                    break;
+            }
+
+            health = maxHealth;
             active = true;
             model.Position = this.position;
             moving = false;
+            newTarget = false;
             //pathFinder = new AStar(world, pl, new Point((int)Math.Round((-1 * position.X + world.size - 1) * 3.0f / 2.0f), (int)Math.Round((-1 * position.Z + world.size - 1) * 3.0f / 2.0f)), npcs);
             pathFinder = npcs.PathFinder;
         }
@@ -63,20 +109,39 @@ namespace TestsubjektV1
             if (health <= 0)
             {
                 int exp = (int)(XP * (float)level / (float)p.level);
+                exp = Math.Min(exp,(int) (XP * 1.5f));
+                exp = Math.Max(exp, 1);
                 p.getEXP(exp);
                 m.update(kind, exp);
                 active = false;
                 return false;
             }
 
+            float dist = (p.position - position).Length();
+
+            if (dist <= world.shootDistance && cooldown == 0)
+            {
+                cooldown = maxCooldn;
+                Vector3 dir = (p.position - position);
+                dir.Normalize();
+                bullets.generate(false, position + dir, dir, 1, world.shootDistance * 2, 1);
+            }
+
+            if (cooldown > 0) cooldown--;
+
             if (moving)
                 move();
             else
             {
-                if ((p.position - position).Length() < 4) return true;
+                if (dist < 4)
+                {
+                    target = position;
+                    return true;
+                }
                 //pathFinder.setup(new Point((int)Math.Round((-1 * position.X + world.size - 1) * 3.0f / 2.0f), (int)Math.Round((-1 * position.Z + world.size - 1) * 3.0f / 2.0f)), p);
                 pathFinder.setup(new Point((int)Math.Round((-1 * position.X + world.size - 1)), (int)Math.Round((-1 * position.Z + world.size - 1))), p);
                 target = pathFinder.findPath();
+                newTarget = true;
                 direction = target - position;
                 if (direction.Length() != 0) direction.Normalize();
                 moving = true;
@@ -95,25 +160,66 @@ namespace TestsubjektV1
         private void move()
         {
             //Console.WriteLine("pre move : " + position.X + " ; " + position.Z + " ; direction: " + direction.X + " ; " + direction.Z);
-            this.position += speed * direction;
+
+            int factor = (int)Math.Ceiling(speed / .025f);
+
+            float remainingSpeed = speed;
+            for (int i = 0; i < factor; i++)
+            {
+                float spd = speed / (float)factor;
+                spd = Math.Min(spd, remainingSpeed);
+                bool u = moveCycle(factor, spd);
+                remainingSpeed -= spd;
+                if (!u || remainingSpeed == 0) break;
+            }
+
+            
+            //Console.WriteLine("post move : " + position.X + " ; " + position.Z);
+        }
+
+        private bool moveCycle(int factor, float spd)
+        {
+            this.position += spd * direction;
             model.Position = this.position;
 
-            if (float.IsNaN(position.X)) Console.WriteLine("X is NaN cause direction is");
+            //if (float.IsNaN(position.X)) Console.WriteLine("X is NaN cause direction is");
 
             if ((this.position - target).Length() < 0.02f)
             {
                 this.position = target;
-                if (float.IsNaN(position.X)) Console.WriteLine("X is NaN cause target is");
+                //if (float.IsNaN(position.X)) Console.WriteLine("X is NaN cause target is");
                 moving = false;
+                return false;
                 //Console.WriteLine("done: " + position.X + "/" + position.Z);
             }
-            //Console.WriteLine("post move : " + position.X + " ; " + position.Z);
+            return true;
         }
 
-        public void getHit(Bullet b)
+        public void getHit(Bullet b, Mission m)
         {
-            //TODO
-            health = Math.Max(health - 100, 0);
+            //TODO/////
+            int dmg = 100;
+            ///////////
+
+            health = Math.Max(health - dmg, 0);
+            m.dmgOut += dmg;
+        }
+        
+        public void getHit(Player p)
+        {
+            //TODO/////
+            int dmg = p.lv;
+            ///////////
+
+            health = Math.Max(health - dmg, 0);
+        }
+
+        public String getLabel()
+        {
+            switch (kind)
+            {
+                default: return "Enemies";
+            }
         }
 
         public override void draw(Camera camera)
@@ -122,5 +228,7 @@ namespace TestsubjektV1
                 return;
             base.draw(camera);
         }
+
+        
     }
 }

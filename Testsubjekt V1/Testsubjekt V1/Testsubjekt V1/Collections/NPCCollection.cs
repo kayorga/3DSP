@@ -12,9 +12,7 @@ namespace TestsubjektV1
     {
         int level;
 
-        Model model0;
-        Model model1;
-        Model model2;
+        Model[] models;
 
         Player player;
         byte[][] moveData;
@@ -22,6 +20,11 @@ namespace TestsubjektV1
         World world;
         AStar pathFinder;
         public AStar PathFinder { get { return pathFinder; } }
+
+        static string[] labels = { "Ts", "Rocks", "Trees", "Cube"};
+        public string[] Labels { get { return labels; } }
+
+        private Mission mission;
 
         public NPCCollection(World w, ContentManager Content, Player pl)
             : base(Constants.CAP_NPCS)
@@ -38,10 +41,12 @@ namespace TestsubjektV1
                 moveData[i] = new byte[world.size * 2];
             }
 
+            models = new Model[4];
             #region load models
-            model0 = Content.Load<Model>("Models/T");
-            model1 = Content.Load<Model>("Models/stone");
-            model2 = Content.Load<Model>("Models/tree1");
+            models[0] = Content.Load<Model>("Models/T");
+            models[1] = Content.Load<Model>("Models/stone");
+            models[2] = Content.Load<Model>("Models/tree1");
+            models[3] = Content.Load<Model>("cube_rounded");
             #endregion
 
             //model0 = new ModelObject("cube");
@@ -82,16 +87,19 @@ namespace TestsubjektV1
                 {
                     float nx = n.position.X;
                     float nz = n.position.Z;
-                    //int X = (int)Math.Round((-1 * n.position.X + world.size - 1) * 3.0f / 2.0f);
-                    //int Z = (int)Math.Round((-1 * n.position.Z + world.size - 1) * 3.0f / 2.0f);
-                    int X = (int)Math.Round((-1 * n.position.X + world.size - 1));
-                    int Z = (int)Math.Round((-1 * n.position.Z + world.size - 1));
-                    //Console.WriteLine("target: " + n.target.X + "," + n.target.Z + " nx: " + nx + " nz: " + nz +" X: " + X + " Z: " + Z);
-                    //for (int i = -1; i < 2; ++i)
-                    {
-                    //    for (int j = -1; j < 2; ++j )
+                        float tx = n.target.X;
+                        float tz = n.target.Z;
+                        int TX = (int)Math.Round((-1 * tx + world.size - 1));
+                        int TZ = (int)Math.Round((-1 * tz + world.size - 1));
+                        moveData[TX][TZ] = 255;
+
+                    int X = (int)Math.Round((-1 * nx + world.size - 1));
+                    int Z = (int)Math.Round((-1 * nz + world.size - 1));
+                    //for (int l = -1; i < 2; ++i)
+                    //{
+                        //for (int j = -1; j < 2; ++j )
                             moveData[X][Z] = (byte) (i + 1);
-                    }
+                    //}
                 }
             }
         }
@@ -99,25 +107,19 @@ namespace TestsubjektV1
         public override void clear()
         {
             foreach (NPC n in _content)
-            {
                 n.active = false;
-            }
         }
 
         public void generate(byte k, Vector3 p, Vector3 d, int l)
         {
             //TODO
+            //k = (byte)(new Random().Next(3));
             for (int i = 0; i < Constants.CAP_NPCS; i++)
             {
                 NPC n = _content[i];
                 if (!n.active)
                 {
-                    switch (k)
-                    {
-                        case 0: n.setup(k, new ModelObject(model0), p, d, 0.025f, l, 10 + 2 * l, 5, 100, player, this); break;
-                        case 1: n.setup(k, new ModelObject(model1), p, d, 0.04f, l, 8 + 2 * l, 6, 80, player, this); break;
-                        case 2: n.setup(k, new ModelObject(model2), p, d, 0.01f, l, 12 + 4 * l, 8, 100, player, this); break;
-                    }
+                    n.setup(k, new ModelObject(models[k]), p, d, l, player, this);
                     break;
                 }
             }

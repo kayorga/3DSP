@@ -129,9 +129,11 @@ namespace TestsubjektV1
             spriteBatch.Draw(userInterface, interfaceRectangle, Color.White);
             spriteBatch.Draw(frame, frameRectangle, Color.White);
             String time = (data.missions.activeMission.timeSpent.Minutes < 10 ? "0" : "") + data.missions.activeMission.timeSpent.Minutes + ":" + (data.missions.activeMission.timeSpent.Seconds < 10 ? "0" : "") + data.missions.activeMission.timeSpent.Seconds + ":" + data.missions.activeMission.timeSpent.Milliseconds;
-            spriteBatch.DrawString(menuFont1, time, new Vector2(693, 219), Color.LemonChiffon);
-            spriteBatch.DrawString(menuFont1, data.missions.activeMission.countKilledEnemies.ToString(), new Vector2(693, 249), Color.LemonChiffon);
-            spriteBatch.DrawString(menuFont1, data.missions.activeMission.countXPGained.ToString(), new Vector2(693, 363), Color.LemonChiffon);
+            spriteBatch.DrawString(menuFont1, time, new Vector2(693, 205), Color.LemonChiffon);
+            spriteBatch.DrawString(menuFont1, data.missions.activeMission.countKilledEnemies.ToString(), new Vector2(693, 235), Color.LemonChiffon);
+            spriteBatch.DrawString(menuFont1, data.missions.activeMission.countXPGained.ToString(), new Vector2(693, 355), Color.LemonChiffon);
+            spriteBatch.DrawString(menuFont1, data.missions.activeMission.dmgOut.ToString(), new Vector2(693, 265), Color.LemonChiffon);
+            spriteBatch.DrawString(menuFont1, data.missions.activeMission.dmgIn.ToString(), new Vector2(693, 295), Color.LemonChiffon);
             if (world.theme == 1)
                 spriteBatch.Draw(forestImg, imageRectangle, Color.White);
 

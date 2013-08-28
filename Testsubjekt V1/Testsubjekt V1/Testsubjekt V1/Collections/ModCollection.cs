@@ -21,11 +21,11 @@ namespace TestsubjektV1
             count = new int[4];
             count.Initialize();
             z = 0;
-            generate(1);
-            generate(1);
-            generate(1);
-            generate(1);
-            generate(1);
+            generate(20, Constants.MOD_ACP);
+            //generate(1);
+            //generate(1);
+            //generate(1);
+            //generate(1);
         }
 
         public void update(int level)
@@ -51,17 +51,29 @@ namespace TestsubjektV1
                 {
                     //if (count[i] == m) ntype = i + 2;
                     if (count[i] == m)
-                    types.Add(i);
+                        types.Add(i);
                 }
 
-                ntype = (new Random()).Next(types.Count) + 2;
+                ntype = (new Random()).Next(types.Count);
 
                 for (int i = 0; i < Constants.CAP_MODS; i++)
                 {
                     if (_content[i].type == Constants.MOD_NIL)
                     {
-                        count[types[ntype - 2]]++;
-                        _content[i].setup(types[ntype-2]+2, level);
+                        count[types[ntype]]++;
+                        _content[i].setup(types[ntype] + 3, level);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < Constants.CAP_MODS; i++)
+                {
+                    if (_content[i].type == Constants.MOD_NIL)
+                    {
+                        count[t - 3]++;
+                        _content[i].setup(t, level);
                         break;
                     }
                 }

@@ -50,25 +50,43 @@ namespace TestsubjektV1
             strength = str;
         }
 
-        public void update(World world, NPCCollection npcs)
+        public void update(World world, NPCCollection npcs, Player p, Mission m)
         {
             if (!active) return;
-            position += speed * direction;
-            distance += speed;
+
+            int factor = (int) Math.Ceiling(speed);
+
+            float remainingSpeed = speed;
+            float spd = speed / (float)factor;
+
+            for (int i = 0; i < factor; i++)
+            {
+                spd = Math.Min(spd, remainingSpeed);
+                bool u = updateCycle(world, npcs, p, m, factor, spd);
+                remainingSpeed -= spd;
+                if (!u || remainingSpeed == 0) break;
+            }
+
+                return;
+            //false wenn getroffen oder distanz überschritten
+        }
+
+        private bool updateCycle(World world, NPCCollection npcs, Player p, Mission m, int factor, float spd)
+        {
+            position += spd * direction;
+            distance += spd;
 
             bulletOb.Position = position;
 
             xTile = (byte)Math.Round(-1 * (position.X) + (Constants.MAP_SIZE - 1));
             zTile = (byte)Math.Round(-1 * (position.Z) + (Constants.MAP_SIZE - 1));
 
-            if (collision(world) || collision(npcs) || distance > maxDist)
+            if (collision(world) || collision(npcs, m) || collision(p, m) || distance > maxDist)
             {
                 active = false;
-                return;
+                return false;
             }
-
-            return;
-            //false wenn getroffen oder distanz überschritten
+            return true;
         }
 
         private bool collision(World world) 
@@ -78,12 +96,22 @@ namespace TestsubjektV1
             return false;
         }
 
-        private bool collision(NPCCollection npcs)
+        private bool collision(NPCCollection npcs, Mission m)
         {
             byte tile = npcs.npcMoveData[xTile][zTile];
-            if (tile != 0)
+            if (tile != 0 && tile != 255)
             {
-                npcs[tile - 1].getHit(this);
+                npcs[tile - 1].getHit(this, m);
+                return true;
+            }
+            return false;
+        }
+
+        private bool collision(Player p, Mission m)
+        {
+            if (!fromPlayer && xTile == p.xTile && zTile == p.zTile)
+            {
+                p.getHit(this, m);
                 return true;
             }
             return false;

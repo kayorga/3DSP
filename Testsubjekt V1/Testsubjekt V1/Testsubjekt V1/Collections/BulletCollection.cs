@@ -19,10 +19,10 @@ namespace TestsubjektV1
                 _content.Add(new Bullet(Content));
         }
 
-        public void update(World world, NPCCollection npcs)
+        public void update(World world, NPCCollection npcs, Player p, Mission m)
         {
             for (int i = 0; i < Constants.CAP_BULLETS; i++)
-                _content[i].update(world, npcs);
+                _content[i].update(world, npcs, p, m);
         }
 
         public void draw(Camera camera)

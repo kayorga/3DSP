@@ -38,7 +38,17 @@ namespace TestsubjektV1
             throw new NotImplementedException();
         }
 
-        public override void setup(byte level, byte kind, byte count)
+        public override void setup(byte level, byte kind, byte count, byte zone, byte area, string[] nl, string[] zl)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void reward(Player player, ModCollection modCollection)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void reset()
         {
             throw new NotImplementedException();
         }

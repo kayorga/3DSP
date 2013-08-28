@@ -18,10 +18,10 @@ namespace TestsubjektV1
         public GameData(ContentManager Content, World world)
         {
             player = new Player(world, Content);
-            missions = new MissionCollection();
             mods = new ModCollection();
             npcs = new NPCCollection(world, Content, player);
             bullets = new BulletCollection(Content);
+            missions = new MissionCollection(world, npcs);
         }
     }
 }

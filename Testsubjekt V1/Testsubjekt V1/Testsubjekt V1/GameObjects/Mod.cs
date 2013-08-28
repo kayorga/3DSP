@@ -36,12 +36,13 @@ namespace TestsubjektV1
         public string getLabel() {
             switch (type)
             {
-                case 0: return "Element " + getElementLabel();
-                case 1: return getTypeLabel();
-                case 2: return "Strength Lv" + value;
-                case 3: return "Speed Lv" + value;
-                case 4: return "Recharge Lv" + value;
-                case 5: return "Ammo Lv" + value;
+                case Constants.MOD_NIL: return "";
+                case Constants.MOD_ELM: return "Element " + getElementLabel();
+                case Constants.MOD_TYP: return getTypeLabel();
+                case Constants.MOD_STR: return "Strength Lv" + value;
+                case Constants.MOD_SPD: return "Speed Lv" + value;
+                case Constants.MOD_RCG: return "Recharge Lv" + value;
+                case Constants.MOD_ACP: return "Ammo Lv" + value;
                 default: return "UNDEF";
             }
         }
