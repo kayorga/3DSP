@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 namespace TestsubjektV1
 {
@@ -20,7 +22,15 @@ namespace TestsubjektV1
 
         public Vector3 target;
 
-        public NPC(World world)
+        private GraphicsDevice graphicsDevice;
+        private BillboardEngine billboardEngine;
+        private bool isHit;
+        private int hitTimer;
+        private Explosion explosion;
+        private bool isDead;
+        private float playerDistance;
+
+        public NPC(ContentManager Content, GraphicsDevice graphicsDevice, World world, BillboardEngine bilbo)
         {
             //TODO
             model = null;
@@ -39,6 +49,12 @@ namespace TestsubjektV1
             kind = 0;
             pathFinder = null;
             target = Vector3.Zero;
+            isHit = false;
+            hitTimer = 0;
+            isDead = false;
+            billboardEngine = bilbo;
+            this.graphicsDevice = graphicsDevice;
+            explosion = new Explosion(Position, graphicsDevice, Content);
         }
 
         /// <summary>
@@ -58,6 +74,8 @@ namespace TestsubjektV1
             position = p;
             direction = d;
             level = l;
+
+            playerDistance = (pl.Position - this.Position).Length();
 
             switch (kind)
             {
@@ -99,22 +117,42 @@ namespace TestsubjektV1
             model.Position = this.position;
             moving = false;
             newTarget = false;
+            isHit = false;
+            hitTimer = 0;
+            isDead = false;
             //pathFinder = new AStar(world, pl, new Point((int)Math.Round((-1 * position.X + world.size - 1) * 3.0f / 2.0f), (int)Math.Round((-1 * position.Z + world.size - 1) * 3.0f / 2.0f)), npcs);
             pathFinder = npcs.PathFinder;
         }
 
-        public /*override*/ bool update(BulletCollection bullets, Camera camera, Player p, Mission m)
+        public /*override*/ bool update(GameTime gameTime, BulletCollection bullets, Camera camera, Player p, Mission m)
         {
             //TODO
-            if (health <= 0)
+            if (health <= 0 && !isDead)
             {
                 int exp = (int)(XP * (float)level / (float)p.level);
                 exp = Math.Min(exp,(int) (XP * 1.5f));
                 exp = Math.Max(exp, 1);
                 p.getEXP(exp);
                 m.update(kind, exp);
-                active = false;
-                return false;
+                isDead = true;
+                isHit = false;
+                hitTimer = 0;
+                explosion.Position = Position + new Vector3(0, 0.5f, 0);
+                explosion.Initialize(camera);
+            }
+
+            //Explosion Update if NPC is down
+            if (isDead && active)
+            {
+                hitTimer++;
+                explosion.Update(gameTime, camera);
+                if (hitTimer > 25)
+                {
+                    active = false;
+                    isDead = false;
+                    this.explosion.Clear();
+                    return false;
+                }
             }
 
             float dist = (p.position - position).Length();
@@ -136,22 +174,44 @@ namespace TestsubjektV1
                 if (dist < 4)
                 {
                     target = position;
-                    return true;
+                    direction = p.Position - this.Position;
                 }
-                //pathFinder.setup(new Point((int)Math.Round((-1 * position.X + world.size - 1) * 3.0f / 2.0f), (int)Math.Round((-1 * position.Z + world.size - 1) * 3.0f / 2.0f)), p);
-                pathFinder.setup(new Point((int)Math.Round((-1 * position.X + world.size - 1)), (int)Math.Round((-1 * position.Z + world.size - 1))), p);
-                target = pathFinder.findPath();
-                newTarget = true;
-                direction = target - position;
-                if (direction.Length() != 0) direction.Normalize();
-                moving = true;
-                move();
+                else
+                {
+                    //pathFinder.setup(new Point((int)Math.Round((-1 * position.X + world.size - 1) * 3.0f / 2.0f), (int)Math.Round((-1 * position.Z + world.size - 1) * 3.0f / 2.0f)), p);
+                    pathFinder.setup(new Point((int)Math.Round((-1 * position.X + world.size - 1)), (int)Math.Round((-1 * position.Z + world.size - 1))), p);
+                    target = pathFinder.findPath();
+                    newTarget = true;
+                    direction = target - position;
+                    if (direction.Length() != 0) direction.Normalize();
+                    moving = true;
+                    move();
+                }
             }
 
-            //double rotationAngle = Math.Acos((Vector3.Dot(direction, -1*Vector3.UnitX))/(direction.Length()));
-            //model.Rotation = new Vector3(0, (float)rotationAngle, 0);
+
+            //Hit Notification
+            if (isHit)
+            {
+                hitTimer++;
+                billboardEngine.AddBillboard(this.position + new Vector3(0, 2, 0), Color.Red, 1.5f);
+                if (hitTimer == 70)
+                {
+                    isHit = false;
+                    hitTimer = 0;
+                }
+            }
+
+
+            //Rotate Model
+            double rotationAngle = Math.Acos((Vector3.Dot(direction, -1 * Vector3.UnitX)) / (direction.Length()));
+            rotationAngle = (p.Position.Z < this.Position.Z) ? rotationAngle * -1.0f : rotationAngle;
+            model.Rotation = new Vector3(0, (float)rotationAngle, 0);
 
             //Console.WriteLine("act move dist: " + direction.Length() + "x: " + direction.X + " y: " + direction.Y + " z: " + direction.Z + " * " + speed);
+
+            //Update PlayerDistance
+            playerDistance = (p.Position - this.Position).Length();
 
             return true;
         }
@@ -198,20 +258,32 @@ namespace TestsubjektV1
         public void getHit(Bullet b, Mission m)
         {
             //TODO/////
-            int dmg = 100;
-            ///////////
+            if (!isDead)
+            {
+                int dmg = 100;
+                ///////////
 
-            health = Math.Max(health - dmg, 0);
-            m.dmgOut += dmg;
+                health = Math.Max(health - dmg, 0);
+                m.dmgOut += dmg;
+
+                Vector3 push = b.Direction;
+                push.Normalize();
+                this.position += push * 0.5f;
+                moving = false;
+                isHit = true;
+            }
         }
         
         public void getHit(Player p)
         {
             //TODO/////
-            int dmg = p.lv;
-            ///////////
+            if (!isDead)
+            {
+                int dmg = p.lv;
+                ///////////
 
-            health = Math.Max(health - dmg, 0);
+                health = Math.Max(health - dmg, 0);
+            }
         }
 
         public String getLabel()
@@ -226,9 +298,27 @@ namespace TestsubjektV1
         {
             if (!active)
                 return;
-            base.draw(camera);
+            if (isDead && active)
+                explosion.Draw(camera);
+            else base.draw(camera);
         }
 
+        public float DistanceToPlayer
+        {
+            get { return this.playerDistance; }
+        }
+
+        public static int compareUpward(NPC npc1, NPC npc2)
+        {
+            if (npc1.active && !npc2.active) return -1;
+            else return npc1.DistanceToPlayer.CompareTo(npc2.DistanceToPlayer);
+        }
+
+        public static int compareDownward(NPC npc1, NPC npc2)
+        {
+            if (npc2.active && !npc1.active) return 1;
+            else return npc2.DistanceToPlayer.CompareTo(npc1.DistanceToPlayer);
+        }
         
     }
 }

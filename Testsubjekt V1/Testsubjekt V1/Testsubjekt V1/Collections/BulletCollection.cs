@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace TestsubjektV1
 {
@@ -12,17 +13,17 @@ namespace TestsubjektV1
         
 
 
-        public BulletCollection(ContentManager Content)
+        public BulletCollection(ContentManager Content, GraphicsDevice graphicsDevice)
             : base(Constants.CAP_BULLETS)
         {
             for (int i = 0; i < Constants.CAP_BULLETS; ++i)
-                _content.Add(new Bullet(Content));
+                _content.Add(new Bullet(Content, graphicsDevice));
         }
 
-        public void update(World world, NPCCollection npcs, Player p, Mission m)
+        public void update(GameTime gameTime, Camera camera, World world, NPCCollection npcs, Player p, Mission m)
         {
             for (int i = 0; i < Constants.CAP_BULLETS; i++)
-                _content[i].update(world, npcs, p, m);
+                _content[i].update(gameTime, camera, world, npcs, p, m);
         }
 
         public void draw(Camera camera)

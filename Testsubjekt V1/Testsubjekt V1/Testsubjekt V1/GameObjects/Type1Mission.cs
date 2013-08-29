@@ -25,6 +25,17 @@ namespace TestsubjektV1
             blocked = false;
         }
 
+        public Type1Mission(byte lv, byte tKind, byte tCount, byte z, byte a, string[] nl, string[] zl, bool state)
+        {
+            //TODO
+            kinds = null;
+            if (state)
+                setup(lv, tKind, tCount, z, a, nl, zl);
+            else
+                active = state;
+            countKilledEnemies = 0;
+        }
+
         public override bool isType1()
         {
             return true;
@@ -48,7 +59,7 @@ namespace TestsubjektV1
             //TODO
             if (kind == target)
             {
-                actCount = Math.Min(actCount + 1, tarCount);
+                actCount = (byte)Math.Min(actCount + 1, tarCount);
             }
             countKilledEnemies++;
             countXPGained += exp;

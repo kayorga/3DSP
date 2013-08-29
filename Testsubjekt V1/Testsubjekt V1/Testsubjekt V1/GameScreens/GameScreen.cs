@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Xml;
+using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 
 namespace TestsubjektV1
 {
@@ -15,5 +17,68 @@ namespace TestsubjektV1
         }
 
         public abstract void draw();
+
+        public virtual void saveGame(GameData data)
+        {
+            SaveData saveData;
+            XmlWriter writer;
+            XmlWriterSettings settings;
+
+            saveData = new SaveData();
+            saveData.playerLevel = data.player.level;
+            saveData.playerXP = data.player.XP;
+            saveData.playerWeapon = data.player.myWeapon;
+            saveData.mods = data.mods._content;
+            saveData.missionLevels = new byte[4];
+            saveData.missionTKinds = new byte[4];
+            saveData.missionTCounts = new byte[4];
+            saveData.missionZones = new byte[4];
+            saveData.missionAreas = new byte[4];
+            saveData.missionStates = new bool[4];
+
+
+            for (int i = 0; i < 4; i++)
+            {
+                saveData.missionLevels[i] = data.missions[i].level;
+                saveData.missionTKinds[i] = data.missions[i].target;
+                saveData.missionTCounts[i] = data.missions[i].tarCount;
+                //saveData.missionKinds[i] = data.missions[i].Kinds;
+                saveData.missionZones[i] = data.missions[i].Zone;
+                saveData.missionAreas[i] = data.missions[i].Area;
+                saveData.missionStates[i] = data.missions[i].active;
+            }
+
+            string filename = "doNotTouchThis.Never";
+
+            settings = new XmlWriterSettings();
+            settings.Indent = true;
+
+            writer = XmlWriter.Create(filename, settings);
+
+            using (writer)
+            {
+                IntermediateSerializer.Serialize(writer, saveData, null);
+            }
+        }
+
+        public virtual void loadGame(GameData data)
+        {
+            string filename = "doNotTouchThis.Never";
+
+            XmlReaderSettings settings = new XmlReaderSettings();
+            SaveData saveData;
+            XmlReader reader;
+
+            reader = XmlReader.Create(filename, settings);
+            using (reader)
+            {
+                saveData = IntermediateSerializer.Deserialize<SaveData>(reader, null);
+            }
+
+            data.loadData(saveData.playerLevel, saveData.playerXP, saveData.playerWeapon,
+                saveData.mods, saveData.missionLevels, saveData.missionTKinds, saveData.missionTCounts,
+                saveData.missionZones, saveData.missionAreas, saveData.missionStates);
+        }
+
     }
 }

@@ -23,9 +23,10 @@ namespace TestsubjektV1
         private ContentManager contentManager;
         private GraphicsDevice graphicsDevice;
         private int screenReturnValue=Constants.CMD_NONE;
+        private GameData data;
 
 
-        public TitleScreen(ContentManager content, GraphicsDevice gD)
+        public TitleScreen(ContentManager content, GraphicsDevice gD, GameData data)
         {
             //Mouse.SetPosition(512, 384);
             menuFont1 = content.Load<SpriteFont>("Fonts/MenuFont1");
@@ -36,6 +37,7 @@ namespace TestsubjektV1
             spriteBatch = new SpriteBatch(graphicsDevice);
             contentManager = content;
             cursor = content.Load<Texture2D>("cursor");
+            this.data = data;
         }
 
         private void onNewGameClick()
@@ -51,8 +53,13 @@ namespace TestsubjektV1
         }
 
         private void onLoadClick()
-        { 
-            //TODO
+        {
+            if (loadRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                screenReturnValue = Constants.CMD_NEW;
+                loadGame(data);
+            }
+
         }
        
         public override int update(GameTime gameTime)

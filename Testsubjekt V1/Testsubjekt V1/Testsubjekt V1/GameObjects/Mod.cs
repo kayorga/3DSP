@@ -27,6 +27,11 @@ namespace TestsubjektV1
             setup(t, v);
         }
 
+        public Mod()
+        {
+            setup(0, 0);
+        }
+
         public void setup(int t, int v = 0)
         {
             type = t;

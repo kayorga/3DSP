@@ -26,13 +26,24 @@ namespace TestsubjektV1
 
         private Mission mission;
 
-        public NPCCollection(World w, ContentManager Content, Player pl)
+        private BillboardEngine billboardEngine;
+
+        private GraphicsDevice graphicsDevice;
+
+        public NPCCollection(World w, ContentManager Content, Player pl, GraphicsDevice graphicsDevice)
             : base(Constants.CAP_NPCS)
         {
             //TODO
             world = w;
+            
+            Texture2D hitTexture = Content.Load<Texture2D>("bam");
+
+            billboardEngine = new BillboardEngine(5, graphicsDevice);
+            billboardEngine.Effect.Texture = hitTexture;
+
+            this.graphicsDevice = graphicsDevice;
             for (int i = 0; i < Constants.CAP_NPCS; i++)
-                _content.Add(new NPC(world));
+                _content.Add(new NPC(Content, graphicsDevice, world, billboardEngine));
 
             player = pl;
             moveData = new byte[world.size * 2][];
@@ -61,11 +72,15 @@ namespace TestsubjektV1
             }
         }
 
-        public void update(BulletCollection bullets, Camera camera, Player p, Mission m)
+        public void update(GameTime gameTime, BulletCollection bullets, Camera camera, Player p, Mission m)
         {
             //TODO
 
             clearMoveData();
+
+            //Initialize BillboardEngine
+            billboardEngine.Begin(camera.ViewMatrix);
+            billboardEngine.AddBillboard(new Vector3(0.0f, 1.0f, 0.0f), Color.Transparent, 0.01f);
 
             for (int i = 0; i < Constants.CAP_NPCS; ++i)
             {
@@ -74,7 +89,7 @@ namespace TestsubjektV1
                 if (!n.active)
                     continue;
 
-                bool k = n.update(bullets, camera, p, m);
+                bool k = n.update(gameTime, bullets, camera, p, m);
                 if (!k)
                 {
                     //p.getEXP(n.XP);
@@ -128,8 +143,25 @@ namespace TestsubjektV1
         public void draw(Camera camera)
         {
             //TODO
+
+            graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+            graphicsDevice.BlendState = BlendState.Additive;
+            billboardEngine.Draw(graphicsDevice, camera);
+            graphicsDevice.BlendState = BlendState.Opaque;
+            graphicsDevice.DepthStencilState = DepthStencilState.Default;
+            
             foreach (NPC npc in _content)
                 npc.draw(camera);
+        }
+
+        public void sortNpcsUpward()
+        {
+            _content.Sort(NPC.compareUpward);
+        }
+
+        public void sortNpcsDownward()
+        {
+            _content.Sort(NPC.compareDownward);
         }
     }
 }

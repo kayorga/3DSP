@@ -7,6 +7,8 @@ namespace TestsubjektV1
 {
     static class Constants
     {
+        public const bool DEBUG = true;
+
         public const int RES_X = 1024;
         public const int RES_Y = 768;
         public const byte MAX_LEVEL = 20;

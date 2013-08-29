@@ -47,8 +47,8 @@ namespace TestsubjektV1
 
             camera = new Camera(GraphicsDevice.Viewport.AspectRatio);
             world = new World(Content, GraphicsDevice);
-            data = new GameData(Content, world);
-            screen = new TitleScreen(Content, GraphicsDevice);
+            data = new GameData(GraphicsDevice, Content, world);
+            screen = new TitleScreen(Content, GraphicsDevice, data);
             myAction = new ActionScreen(Content, GraphicsDevice, data, camera, world);
 
             base.Initialize();

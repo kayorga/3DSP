@@ -7,9 +7,9 @@ namespace TestsubjektV1
 {
     abstract class Mission
     {
-        public int target;
-        internal int actCount;
-        internal int tarCount;
+        public byte target;
+        internal byte actCount;
+        internal byte tarCount;
         public byte level;
         public byte countKilledEnemies;
         public int countXPGained;

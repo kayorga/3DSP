@@ -24,7 +24,13 @@ namespace TestsubjektV1
         byte xTile;
         byte zTile;
 
-        public Bullet(ContentManager Content)
+        private ParticleEffect particleEffect;
+        //BillboardEngine billboardEngine;
+        GraphicsDevice gd;
+
+        public Vector3 Direction { get { return direction; } }
+
+        public Bullet(ContentManager Content, GraphicsDevice graphicsDevice)
         {
             active = false;
             fromPlayer = false;
@@ -36,6 +42,13 @@ namespace TestsubjektV1
             strength = 1;
 
             bulletOb = new ModelObject(Content.Load<Model>("cube_rounded"));
+
+            Texture2D texture = Content.Load<Texture2D>("Particles/fire");
+            //billboardEngine = new BillboardEngine(5, graphicsDevice);
+            //billboardEngine.Effect.Texture = texture;
+            particleEffect = new ParticleEffect(10000, graphicsDevice, texture, Color.Gold, Color.Crimson, 0.2f);
+            particleEffect.VelocityScaling = 8.0f;
+            gd = graphicsDevice;
         }
 
         public void setup(bool fromP, Vector3 pos, Vector3 dir, float spd, float mdist, int str)
@@ -50,7 +63,7 @@ namespace TestsubjektV1
             strength = str;
         }
 
-        public void update(World world, NPCCollection npcs, Player p, Mission m)
+        public void update(GameTime gameTime, Camera camera, World world, NPCCollection npcs, Player p, Mission m)
         {
             if (!active) return;
 
@@ -62,7 +75,7 @@ namespace TestsubjektV1
             for (int i = 0; i < factor; i++)
             {
                 spd = Math.Min(spd, remainingSpeed);
-                bool u = updateCycle(world, npcs, p, m, factor, spd);
+                bool u = updateCycle(gameTime, camera, world, npcs, p, m, factor, spd);
                 remainingSpeed -= spd;
                 if (!u || remainingSpeed == 0) break;
             }
@@ -71,12 +84,14 @@ namespace TestsubjektV1
             //false wenn getroffen oder distanz überschritten
         }
 
-        private bool updateCycle(World world, NPCCollection npcs, Player p, Mission m, int factor, float spd)
+        private bool updateCycle(GameTime gameTime, Camera camera, World world, NPCCollection npcs, Player p, Mission m, int factor, float spd)
         {
             position += spd * direction;
             distance += spd;
 
             bulletOb.Position = position;
+
+            particleEffect.Update((float)gameTime.ElapsedGameTime.TotalSeconds, camera.ViewMatrix, position, direction);
 
             xTile = (byte)Math.Round(-1 * (position.X) + (Constants.MAP_SIZE - 1));
             zTile = (byte)Math.Round(-1 * (position.Z) + (Constants.MAP_SIZE - 1));
@@ -84,6 +99,7 @@ namespace TestsubjektV1
             if (collision(world) || collision(npcs, m) || collision(p, m) || distance > maxDist)
             {
                 active = false;
+                particleEffect.Clear();
                 return false;
             }
             return true;
@@ -99,7 +115,7 @@ namespace TestsubjektV1
         private bool collision(NPCCollection npcs, Mission m)
         {
             byte tile = npcs.npcMoveData[xTile][zTile];
-            if (tile != 0 && tile != 255)
+            if (tile != 0 && tile != 255 && fromPlayer)
             {
                 npcs[tile - 1].getHit(this, m);
                 return true;
@@ -120,7 +136,8 @@ namespace TestsubjektV1
         public void draw(Camera camera)
         {
             if (!active) return;
-            bulletOb.Draw(camera);
+            if (fromPlayer) particleEffect.Draw(camera);
+            else bulletOb.Draw(camera);
         }
     }
 }

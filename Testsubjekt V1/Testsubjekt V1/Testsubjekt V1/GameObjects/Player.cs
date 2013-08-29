@@ -14,8 +14,6 @@ namespace TestsubjektV1
         int exp;
         int lastMapID;
 
-        public int XP { get { return exp; } }
-
         byte invincibleTimer;
         byte maxInvincibility;
 
@@ -61,7 +59,14 @@ namespace TestsubjektV1
 
         public Weapon myWeapon
         {
-            get {return weapon;}
+            get { return weapon; }
+            set { weapon = value; }
+        }
+
+        public int XP
+        {
+            get { return exp; }
+            set { exp = value; }
         }
 
 

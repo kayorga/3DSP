@@ -86,8 +86,16 @@ namespace TestsubjektV1
         }
 
         private void onSaveClick()
-        { 
-            //TODO
+        {
+            if (saveRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y))
+            {
+                frameRectangle = saveRectangle;
+                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                {
+                    saveGame(data);
+                    screenReturnValue = Constants.CMD_BACK;
+                }
+            }
         }
 
         private void onBaseClick()

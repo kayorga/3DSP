@@ -92,8 +92,8 @@ namespace TestsubjektV1
                 timeInMission+=gameTime.ElapsedGameTime;
             camera.Update(gameTime, data.player.Position);
             data.player.update(data.npcs, data.bullets, camera);
-            data.bullets.update(world, data.npcs, data.player, data.missions.activeMission);
-            data.npcs.update(data.bullets, camera, data.player, data.missions.activeMission);
+            data.bullets.update(gameTime, camera, world, data.npcs, data.player, data.missions.activeMission);
+            data.npcs.update(gameTime, data.bullets, camera, data.player, data.missions.activeMission);
             
             if(spawnNewEnemies) world.update(data.npcs, data.player, data.missions.activeMission);
 
@@ -131,32 +131,37 @@ namespace TestsubjektV1
 
             if (Keyboard.GetState().IsKeyDown(Keys.M))
                 return Constants.CMD_MOD;
+            #region DEBUG commands
+            if (Constants.DEBUG)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.L))
+                {
+                    Console.WriteLine("Paused");
+                }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.L))
-            {
-                Console.WriteLine("Paused");
+                if (Keyboard.GetState().IsKeyDown(Keys.U))
+                {
+                    world.warp(1, 1);
+                    camera.reset();
+                    return Constants.CMD_NONE;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Z))
+                {
+                    world.warp(0, 0);
+                    camera.reset();
+                    return Constants.CMD_NONE;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.R))
+                {
+                    data.missions.clear();
+                    //data.missions.mainMission.level = 0;
+                    data.missions.generate(1);
+                }
+                if (Mouse.GetState().RightButton == ButtonState.Pressed)
+                    data.player.myWeapon.reload();
             }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.U))
-            {
-                world.warp(1, 1);
-                camera.reset();
-                return Constants.CMD_NONE;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Z))
-            {
-                world.warp(0, 0);
-                camera.reset();
-                return Constants.CMD_NONE;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.R))
-            {
-                data.missions.clear();
-                //data.missions.mainMission.level = 0;
-                data.missions.generate(1);
-            }
-            if (Mouse.GetState().RightButton == ButtonState.Pressed)
-                data.player.myWeapon.reload();
+            #endregion
+            
             return Constants.CMD_NONE;
         }
 

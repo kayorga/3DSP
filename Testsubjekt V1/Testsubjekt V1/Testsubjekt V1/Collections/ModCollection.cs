@@ -21,11 +21,7 @@ namespace TestsubjektV1
             count = new int[4];
             count.Initialize();
             z = 0;
-            generate(20, Constants.MOD_ACP);
-            //generate(1);
-            //generate(1);
-            //generate(1);
-            //generate(1);
+            if (Constants.DEBUG) generate(20, Constants.MOD_SPD);
         }
 
         public void update(int level)
