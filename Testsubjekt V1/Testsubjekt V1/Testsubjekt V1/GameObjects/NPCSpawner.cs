@@ -25,7 +25,7 @@ namespace Testsubjekt_V1
             kind = Constants.NPC_NONE;
             rate = Constants.SPAWN_INFINITE;
             cooldown = 0;
-            maxCooldown = 150;
+            maxCooldown = 300;
         }
 
         public void setup(byte kind, bool rate)
@@ -41,24 +41,24 @@ namespace Testsubjekt_V1
             active = true;
         }
 
-        public void update(NPCCollection npcs, Player p, Mission m)
+        public void update(NPCCollection npcs, Player p, Mission m, bool isMainMission = false)
         {
             if (!active) return;
             if (cooldown == 0)
             {
                 Vector3 pos = new Vector3(Constants.MAP_SIZE - 2 * x - 1, 0, Constants.MAP_SIZE - 2 * z - 1);
                 Vector3 dir = p.Position - pos;
-                //Console.WriteLine("pre norm dist: " + dir.Length() + "x: " + dir.X + " y: " + dir.Y + " z: " + dir.Z);
+
                 dir.Normalize();
-                //Console.WriteLine("post norm dist: " + dir.Length() + "x: " + dir.X + " y: " + dir.Y + " z: " + dir.Z);
-                npcs.generate(kind, pos, dir, p.lv);
+
+                if (isMainMission && kind != Constants.NPC_BOSS)
+                    npcs.generate(kind, pos, dir, m.level - 10);
+                else npcs.generate(kind, pos, dir, m.level);
+
                 if (rate == Constants.SPAWN_ONCE)
                     active = false;
                 else
-                    cooldown = maxCooldown;
-
-
-
+                    cooldown = new Random().Next((int)(maxCooldown * 0.8f), (int)(maxCooldown * 1.2f));
             }
             else cooldown = Math.Max(cooldown - 1, 0);
         }

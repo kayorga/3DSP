@@ -21,15 +21,12 @@ namespace TestsubjektV1
         public byte zTile { get { return (byte)Math.Round(-1 * (position.Z) + (Constants.MAP_SIZE - 1)); } }
 
         Weapon weapon;
-        //protected int lastMouseX = 0; // last x position of the mouse
-        //protected float phi = 0.0f;//MathHelper.Pi;
 
-        public Player(/*BulletCollection bullets,*/ World world, ContentManager Content)
+        public Player(World world, ContentManager Content)
             : base()
         {
             this.world = world;
-            this.model= new ModelObject(Content.Load<Model>("Models\\T"));
-            reset();
+            this.model = new ModelObject(Content.Load<Model>("Models\\T"));
             this.speed=0.2f;
             this.level=1;
             this.maxHealth=100;
@@ -39,6 +36,8 @@ namespace TestsubjektV1
 
             invincibleTimer = 0;
             maxInvincibility = Constants.PLAYER_INVINCIBILITY;
+
+            reset();
         }
 
         /// <summary>
@@ -53,6 +52,7 @@ namespace TestsubjektV1
             lastMapID = world.mapID;
             invincibleTimer = 0;
             health = maxHealth;
+            weapon.reload();
         }
 
         public void setPosition(Vector3 X) { this.position = X; }
@@ -69,44 +69,15 @@ namespace TestsubjektV1
             set { exp = value; }
         }
 
-
-        public int ground
+        public bool update(NPCCollection npcs, BulletCollection bullets, Camera camera)
         {
-            get
-            {
-                //TODO
-                return 0;
-            }
-        }
-
-        public /*override*/ bool update(NPCCollection npcs, BulletCollection bullets, Camera camera)
-        {
-            if (health <= 0) return false;
-
             if (lastMapID != world.mapID)
             {
                 reset();
                 return true;
             }
-
-            //this.direction = camera.Direction;
-            /*Vector3 sideVec = Vector3.Cross(camera.Direction, camera.UpDirection);
-            Vector3 front = Vector3.Cross(camera.UpDirection, sideVec);
             
-            float forward = (Keyboard.GetState().IsKeyDown(Keys.W) ? 1.0f : 0.0f) + (Keyboard.GetState().IsKeyDown(Keys.Up) ? 1.0f : 0.0f) -
-                            (Keyboard.GetState().IsKeyDown(Keys.S) ? 1.0f : 0.0f) - (Keyboard.GetState().IsKeyDown(Keys.Down) ? 1.0f : 0.0f);
-
-
-            this.position += forward * speed * front;
-
-            float side = (Keyboard.GetState().IsKeyDown(Keys.D) ? 1.0f : 0.0f) + (Keyboard.GetState().IsKeyDown(Keys.Right) ? 1.0f : 0.0f) -
-                         (Keyboard.GetState().IsKeyDown(Keys.A) ? 1.0f : 0.0f) - (Keyboard.GetState().IsKeyDown(Keys.Left) ? 1.0f : 0.0f);
-
-            this.position += side * speed * sideVec;
-
-            int deltaX = Mouse.GetState().X - lastMouseX;
-            phi -= deltaX * 0.01f;
-            lastMouseX = Mouse.GetState().X;*/
+            if (health <= 0) return false;
 
             model.Rotation = new Vector3(0, -camera.Phi,0);
 
@@ -121,40 +92,6 @@ namespace TestsubjektV1
             if (this.direction != Vector3.Zero) this.direction.Normalize();
 
             moveAndCollide(npcs);
-            //this.position += speed * move;
-            //int x1 = (int)Math.Round(-1 * this.position.X + Constants.MAP_SIZE - 1) / 2;
-            //int x2 = (int)Math.Round(-1 * this.position.X + Constants.MAP_SIZE) / 2;
-            //int z1 = (int)Math.Round(-1 * this.position.Z + Constants.MAP_SIZE - 1) / 2;
-            //int z2 = (int)Math.Round(-1 * this.position.Z + Constants.MAP_SIZE) / 2;
-            //if ((world.MoveData[x1][z1] == 1) || (world.MoveData[x2][z2] == 1) || (world.MoveData[x2][z1] == 1) || (world.MoveData[x1][z2] == 1))
-            //{
-            //    this.position = this.model.Position;
-            //    this.model.Position = this.position;
-            //}
-            //else model.Position = this.position;
-
-            //xtile = (int)Math.Round(position.X)/2 + (Constants.MAP_SIZE - 1) / 2;
-            //ztile = -(int)Math.Round(position.Z)/2 + (Constants.MAP_SIZE - 1) / 2;
-            //float xratio = (position.X / 2) % 1;
-            //xratio += (xratio < 0) ? 1 : 0;
-            //float zratio = (position.Z / 2) % 1;
-            //zratio += (zratio < 0) ? 1 : 0;
-            //int xl = xtile - 1;
-            //int xr = xtile + 1;
-            //int zd = ztile - 1;
-            //int zu = ztile + 1;
-
-            //if (move.X > 0 && world.MoveData[xr][ztile] == 1 && xratio > .9f)
-            //    move.X = 0;
-            //if (move.X < 0 && world.MoveData[xl][ztile] == 1 && xratio < .1f)
-            //    move.X = 0;
-            //if (move.Z > 0 && world.MoveData[xtile][zd] == 1 && zratio > .9f)
-            //    move.Z = 0;
-            //if (move.Z < 0 && world.MoveData[xtile][zu] == 1 && xratio < .1f)
-            //    move.Z = 0;
-
-            //this.position += speed * move;
-            //model.Position = position;
 
             if (invincibleTimer > 0)
                 invincibleTimer--;
@@ -166,18 +103,19 @@ namespace TestsubjektV1
 
         public void getEXP(int xp)
         {
-            //TODO
-            Console.WriteLine("got " + xp + " xp");
+            //Console.WriteLine("got " + xp + " xp");
             exp += xp;
-            if (exp >= 100)
+            while (exp >= 100)
+            {
                 lvUP();
+                exp -= 100;
+            }
 
-            exp = exp % 100;
+            if (level == 50) exp = 0;
         }
 
         public void lvUP()
         {
-            //TODO
             level++;
             int d = (int) (maxHealth * .05f);
             maxHealth += d;
@@ -190,7 +128,7 @@ namespace TestsubjektV1
             if (invincibleTimer > 0)
                 return;
             //TODO///////
-            int dmg = 5;
+            int dmg = b.Strength;
             /////////////
 
             health = Math.Max(health - dmg, 0);
@@ -208,28 +146,25 @@ namespace TestsubjektV1
             invincibleTimer = maxInvincibility;
         }
 
-        public void moveAndCollide1(NPCCollection npcs)
-        {
-            this.position += speed * direction;
-            int x1 = (int)Math.Round(-1 * this.position.X + Constants.MAP_SIZE - 1) / 2;
-            int x2 = (int)Math.Round(-1 * this.position.X + Constants.MAP_SIZE) / 2;
-            int z1 = (int)Math.Round(-1 * this.position.Z + Constants.MAP_SIZE - 1) / 2;
-            int z2 = (int)Math.Round(-1 * this.position.Z + Constants.MAP_SIZE) / 2;
-            if ((world.MoveData[x1][z1] == 1) || (world.MoveData[x2][z2] == 1) || (world.MoveData[x2][z1] == 1) || (world.MoveData[x1][z2] == 1))
-            {
-                this.position = this.model.Position;
-                //this.model.Position = this.position;
-            }
-            else model.Position = this.position;
+        //public void moveAndCollide1(NPCCollection npcs)
+        //{
+        //    this.position += speed * direction;
+        //    int x1 = (int)Math.Round(-1 * this.position.X + Constants.MAP_SIZE - 1) / 2;
+        //    int x2 = (int)Math.Round(-1 * this.position.X + Constants.MAP_SIZE) / 2;
+        //    int z1 = (int)Math.Round(-1 * this.position.Z + Constants.MAP_SIZE - 1) / 2;
+        //    int z2 = (int)Math.Round(-1 * this.position.Z + Constants.MAP_SIZE) / 2;
+        //    if ((world.MoveData[x1][z1] == 1) || (world.MoveData[x2][z2] == 1) || (world.MoveData[x2][z1] == 1) || (world.MoveData[x1][z2] == 1))
+        //        this.position = this.model.Position;
+        //    else model.Position = this.position;
 
-            byte tile = npcs.npcMoveData[xTile][zTile];
+        //    byte tile = npcs.npcMoveData[xTile][zTile];
 
-            if (tile != 0 && tile != 255 && invincibleTimer == 0)
-            {
-                getHit(npcs[tile - 1]);
-                npcs[tile - 1].getHit(this);
-            }
-        }
+        //    if (tile != 0 && tile != 255 && invincibleTimer == 0)
+        //    {
+        //        getHit(npcs[tile - 1]);
+        //        npcs[tile - 1].getHit(this);
+        //    }
+        //}
 
         public void moveAndCollide(NPCCollection npcs)
         {
@@ -256,7 +191,7 @@ namespace TestsubjektV1
 
             if (moveDataX1Z1 || moveDataX2Z2 || moveDataX2Z1 || moveDataX1Z2)
             {
-                //check for single Collisions
+                #region check for single Collisions
 
                 //Bottom Right
                 if (moveDataX1Z1 && !moveDataX2Z2 && !moveDataX2Z1 && !moveDataX1Z2)
@@ -317,9 +252,9 @@ namespace TestsubjektV1
                         this.position += speed * new Vector3(0, direction.Y, direction.Z);
                     }
                 }
+                #endregion
 
-
-                //check for collision on one whole side
+                #region check for collision on one whole side
 
                 //Bottom
                 else if (moveDataX1Z1 && !moveDataX2Z2 && moveDataX2Z1 && !moveDataX1Z2)
@@ -348,6 +283,7 @@ namespace TestsubjektV1
                     this.position = this.model.Position;
                     this.position += speed * new Vector3(direction.X, direction.Y, 0);
                 }
+                #endregion
 
                 // corner, nowhere to slide to
                 else this.position = this.model.Position;
@@ -356,6 +292,7 @@ namespace TestsubjektV1
             //Set Model Position at last
             this.model.Position = this.position;
 
+            //check for player - npc collision
             byte tile = npcs.npcMoveData[xTile][zTile];
 
             if (tile != 0 && tile != 255 && invincibleTimer == 0)

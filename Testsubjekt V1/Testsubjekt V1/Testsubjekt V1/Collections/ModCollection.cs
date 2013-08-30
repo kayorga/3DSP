@@ -7,8 +7,9 @@ namespace TestsubjektV1
 {
     class ModCollection : Collection<Mod>
     {
-        private int z;
         private int[] count;
+        private Mod lastGenerated;
+        public string lastMod { get { return lastGenerated.getLabel(); } }
         public ModCollection()
             : base(Constants.CAP_MODS)
         {
@@ -20,8 +21,13 @@ namespace TestsubjektV1
 
             count = new int[4];
             count.Initialize();
-            z = 0;
-            if (Constants.DEBUG) generate(20, Constants.MOD_SPD);
+
+            if (Constants.DEBUG)
+            {
+                generate((int)Constants.ELM_HEA, Constants.MOD_ELM);
+                generate((int)Constants.ELM_ICE, Constants.MOD_ELM);
+                generate((int)Constants.ELM_PLA, Constants.MOD_ELM);
+            }
         }
 
         public void update(int level)
@@ -34,10 +40,9 @@ namespace TestsubjektV1
             //TODO
         }
 
-        public void generate(int level, int t = 2)
+        public void generate(int level, int t = 0)
         {
-            //TODO
-            if (t == 2)
+            if (t == 0)
             {
                 int m = count.Min();
                 int ntype = 2;
@@ -45,7 +50,6 @@ namespace TestsubjektV1
 
                 for (int i = 0; i < 4; i++)
                 {
-                    //if (count[i] == m) ntype = i + 2;
                     if (count[i] == m)
                         types.Add(i);
                 }
@@ -58,6 +62,7 @@ namespace TestsubjektV1
                     {
                         count[types[ntype]]++;
                         _content[i].setup(types[ntype] + 3, level);
+                        lastGenerated = _content[i];
                         break;
                     }
                 }
@@ -68,8 +73,9 @@ namespace TestsubjektV1
                 {
                     if (_content[i].type == Constants.MOD_NIL)
                     {
-                        count[t - 3]++;
+                        if (t > 2) count[t - 3]++;
                         _content[i].setup(t, level);
+                        lastGenerated = _content[i];
                         break;
                     }
                 }

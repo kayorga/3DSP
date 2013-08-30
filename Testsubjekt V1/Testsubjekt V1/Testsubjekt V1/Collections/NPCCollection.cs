@@ -10,8 +10,6 @@ namespace TestsubjektV1
 {
     class NPCCollection : Collection<NPC>
     {
-        int level;
-
         Model[] models;
 
         Player player;
@@ -21,10 +19,8 @@ namespace TestsubjektV1
         AStar pathFinder;
         public AStar PathFinder { get { return pathFinder; } }
 
-        static string[] labels = { "Ts", "Rocks", "Trees", "Cube"};
+        static string[] labels = { "NIL", "PLA", "HEA", "ICE", "Boss"};
         public string[] Labels { get { return labels; } }
-
-        private Mission mission;
 
         private BillboardEngine billboardEngine;
 
@@ -52,12 +48,13 @@ namespace TestsubjektV1
                 moveData[i] = new byte[world.size * 2];
             }
 
-            models = new Model[4];
+            models = new Model[5];
             #region load models
-            models[0] = Content.Load<Model>("Models/T");
-            models[1] = Content.Load<Model>("Models/stone");
-            models[2] = Content.Load<Model>("Models/tree1");
-            models[3] = Content.Load<Model>("cube_rounded");
+            models[0] = Content.Load<Model>("Models/enemy4");
+            models[1] = Content.Load<Model>("Models/enemy3");
+            models[2] = Content.Load<Model>("Models/enemy1");
+            models[3] = Content.Load<Model>("Models/enemy2");
+            models[4] = Content.Load<Model>("cube_rounded");
             #endregion
 
             //model0 = new ModelObject("cube");
@@ -140,7 +137,7 @@ namespace TestsubjektV1
             }
         }
 
-        public void draw(Camera camera)
+        public void draw(Camera camera, SpriteBatch spriteBatch, SpriteFont font)
         {
             //TODO
 
@@ -150,6 +147,18 @@ namespace TestsubjektV1
             graphicsDevice.BlendState = BlendState.Opaque;
             graphicsDevice.DepthStencilState = DepthStencilState.Default;
             
+            foreach (NPC npc in _content)
+                npc.draw(camera, spriteBatch, font);
+        }
+
+        public void draw(Camera camera)
+        {
+            graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+            graphicsDevice.BlendState = BlendState.Additive;
+            billboardEngine.Draw(graphicsDevice, camera);
+            graphicsDevice.BlendState = BlendState.Opaque;
+            graphicsDevice.DepthStencilState = DepthStencilState.Default;
+
             foreach (NPC npc in _content)
                 npc.draw(camera);
         }

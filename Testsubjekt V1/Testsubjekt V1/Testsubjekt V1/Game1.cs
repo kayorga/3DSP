@@ -25,7 +25,6 @@ namespace TestsubjektV1
         ActionScreen myAction;
 
         Camera camera;
-        Character player;
 
         public Game1()
         {

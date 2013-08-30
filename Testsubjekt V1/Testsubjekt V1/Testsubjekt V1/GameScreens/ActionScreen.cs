@@ -38,7 +38,6 @@ namespace TestsubjektV1
         private ContentManager contentManager;
         private SpriteFont font;
         private bool spawnNewEnemies;
-        private bool isMissionActive;
         private TimeSpan timeInMission;
 
         public ActionScreen(ContentManager content, GraphicsDevice gD, GameData gameData, Camera cam, World w)
@@ -71,7 +70,6 @@ namespace TestsubjektV1
             Mod4Rectangle = new Rectangle(93, 699, 40, 39);
 
             spawnNewEnemies = false;
-            isMissionActive = false;
             timeInMission = new TimeSpan(0);
             data.missions.activeMission.timeSpent = timeInMission;
         }
@@ -91,11 +89,20 @@ namespace TestsubjektV1
             if (world.mapID != 0)
                 timeInMission+=gameTime.ElapsedGameTime;
             camera.Update(gameTime, data.player.Position);
-            data.player.update(data.npcs, data.bullets, camera);
+            if (!data.player.update(data.npcs, data.bullets, camera))
+            {
+                world.warp(0, 0);
+                camera.reset();
+                return Constants.CMD_NONE;
+            }
+
             data.bullets.update(gameTime, camera, world, data.npcs, data.player, data.missions.activeMission);
             data.npcs.update(gameTime, data.bullets, camera, data.player, data.missions.activeMission);
-            
-            if(spawnNewEnemies) world.update(data.npcs, data.player, data.missions.activeMission);
+
+            if (spawnNewEnemies)
+                if (data.missions.activeMission == data.missions.mainMission)
+                    world.update(data.npcs, data.player, data.missions.activeMission, true);
+                else world.update(data.npcs, data.player, data.missions.activeMission);
 
             if (data.missions.activeMission != null)
             {
@@ -104,22 +111,15 @@ namespace TestsubjektV1
                     if (spawnNewEnemies)
                     {
                         spawnNewEnemies = false;
-                        isMissionActive = false;
                         data.missions.activeMission.timeSpent = timeInMission;
                         data.missions.activeMission.reward(data.player, data.mods);
                         return Constants.CMD_MISSIONCOMPLETE;
                     }
                 }
-                else
-                {
-                    if (world.theme != 0)
-                    {
+                else if (world.theme != 0)
                         spawnNewEnemies = true;
-                        isMissionActive = true;
-                    }
-                }
             }
-                
+
             
             if (isConsoleInFront() == Constants.CMD_JOURNAL) return Constants.CMD_JOURNAL;
 
@@ -153,12 +153,16 @@ namespace TestsubjektV1
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.R))
                 {
+                    data.player.level = 20;
                     data.missions.clear();
                     //data.missions.mainMission.level = 0;
-                    data.missions.generate(1);
+                    //data.missions.generate(1);
                 }
                 if (Mouse.GetState().RightButton == ButtonState.Pressed)
+                {
+                    data.player.health = data.player.maxHealth;
                     data.player.myWeapon.reload();
+                }
             }
             #endregion
             
@@ -191,7 +195,7 @@ namespace TestsubjektV1
             //TODO
             world.draw(camera, graphicsDevice);
             data.player.draw(camera);
-            data.npcs.draw(camera);
+            data.npcs.draw(camera, spriteBatch, font);
             data.bullets.draw(camera);
             drawHUD();
         }

@@ -11,7 +11,6 @@ namespace TestsubjektV1
 {
     class BriefingScreen : GameScreen
     {
-        int index;
         private SpriteFont menuFont1;
         private Rectangle resumeRectangle;
         private Rectangle loadRectangle;
@@ -23,7 +22,6 @@ namespace TestsubjektV1
         private Rectangle bossRectangle;
         private Rectangle frameRectangle;
         private Rectangle startRectangle;
-        private Rectangle briefingRectangle;
 
         private Texture2D cursor;
         private Texture2D userInterface;
@@ -126,6 +124,7 @@ namespace TestsubjektV1
                 world.warp(m.Area, m.Zone);
                 world.setupSpawners(m);
                 data.player.myWeapon.reload();
+                data.missions.activeMission.setStartLevel(data.player.lv);
                 screenReturnValue = Constants.CMD_NEW;
             }
         }

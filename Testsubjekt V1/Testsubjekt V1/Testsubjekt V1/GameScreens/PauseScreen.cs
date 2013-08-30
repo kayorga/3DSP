@@ -11,7 +11,6 @@ namespace TestsubjektV1
 {
     class PauseScreen : GameScreen
     {
-        int index;
         private SpriteFont menuFont1;
         private Rectangle resumeRectangle;
         private Rectangle saveRectangle;

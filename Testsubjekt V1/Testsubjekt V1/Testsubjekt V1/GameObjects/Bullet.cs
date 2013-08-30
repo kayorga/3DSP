@@ -10,6 +10,7 @@ namespace TestsubjektV1
 {
     class Bullet
     {
+        #region attributes
         public bool active;
         public bool fromPlayer;
         Vector3 position;
@@ -18,17 +19,22 @@ namespace TestsubjektV1
         float distance;
         float maxDist;
         ModelObject bulletOb;
-        World world;
         int strength;
+        public int Strength { get { return strength; } }
+        byte element;
+        public byte Element { get { return element; } }
+        byte type;
+        public byte Type { get { return type; } }
 
         byte xTile;
         byte zTile;
 
         private ParticleEffect particleEffect;
-        //BillboardEngine billboardEngine;
         GraphicsDevice gd;
 
         public Vector3 Direction { get { return direction; } }
+
+        #endregion
 
         public Bullet(ContentManager Content, GraphicsDevice graphicsDevice)
         {
@@ -40,18 +46,17 @@ namespace TestsubjektV1
             distance = 0;
             maxDist = 0;
             strength = 1;
-
+            element = Constants.ELM_NIL;
             bulletOb = new ModelObject(Content.Load<Model>("cube_rounded"));
 
             Texture2D texture = Content.Load<Texture2D>("Particles/fire");
-            //billboardEngine = new BillboardEngine(5, graphicsDevice);
-            //billboardEngine.Effect.Texture = texture;
+
             particleEffect = new ParticleEffect(10000, graphicsDevice, texture, Color.Gold, Color.Crimson, 0.2f);
             particleEffect.VelocityScaling = 8.0f;
             gd = graphicsDevice;
         }
 
-        public void setup(bool fromP, Vector3 pos, Vector3 dir, float spd, float mdist, int str)
+        public void setup(bool fromP, Vector3 pos, Vector3 dir, float spd, float mdist, int str, byte elem = Constants.ELM_NIL)
         {
             active = true;
             fromPlayer = fromP;
@@ -61,6 +66,15 @@ namespace TestsubjektV1
             distance = 0;
             maxDist = mdist;
             strength = str;
+            element = elem;
+            switch (elem)
+            {
+                default: break;
+                case Constants.ELM_PLA: particleEffect.setColors(Color.Green, Color.DarkGreen); break;
+                case Constants.ELM_HEA: particleEffect.setColors(Color.Gold, Color.Crimson); break;
+                case Constants.ELM_ICE: particleEffect.setColors(Color.DarkBlue, Color.White); break;
+                case Constants.ELM_NIL: particleEffect.setColors(Color.Blue, Color.DarkBlue); break;
+            }
         }
 
         public void update(GameTime gameTime, Camera camera, World world, NPCCollection npcs, Player p, Mission m)
@@ -105,6 +119,8 @@ namespace TestsubjektV1
             return true;
         }
 
+        #region collision checks
+        //bullet - world collision
         private bool collision(World world) 
         {
             if (world.MoveData[xTile / 2][zTile / 2] == 1)
@@ -112,17 +128,19 @@ namespace TestsubjektV1
             return false;
         }
 
+        //bullet - npc collision
         private bool collision(NPCCollection npcs, Mission m)
         {
             byte tile = npcs.npcMoveData[xTile][zTile];
-            if (tile != 0 && tile != 255 && fromPlayer)
+            if (tile != 0 && tile != 255)
             {
-                npcs[tile - 1].getHit(this, m);
+                if (fromPlayer) npcs[tile - 1].getHit(this, m);
                 return true;
             }
             return false;
         }
 
+        //bullet - player collision
         private bool collision(Player p, Mission m)
         {
             if (!fromPlayer && xTile == p.xTile && zTile == p.zTile)
@@ -132,6 +150,7 @@ namespace TestsubjektV1
             }
             return false;
         }
+        #endregion
 
         public void draw(Camera camera)
         {

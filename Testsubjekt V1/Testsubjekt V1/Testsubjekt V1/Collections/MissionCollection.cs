@@ -10,7 +10,6 @@ namespace TestsubjektV1
         public Mission activeMission;
         public Mission mainMission;
         private byte level;
-        public bool isMissionActive;
         private World world;
         private NPCCollection npcs;
 
@@ -22,43 +21,51 @@ namespace TestsubjektV1
 
             level = 1;
             Random ran = new Random();
-            for (int i = 0; i < 3; ++i)
-                _content.Add(new Type1Mission());
-
-            _content.Add(new Type1Mission());
+            for (int i = 0; i < 4; ++i)
+                _content.Add(new Type1Mission(n));
 
             activeMission = this[0];
             mainMission = this[3];
         }
 
+        //generate new missions to replace completed/inactive ones
         public void generate(byte lv)
         {
-            level = lv;//(byte)new Random().Next(100);
+            level = lv;
 
             Random ran = new Random();
+
+            //replace all inactive regular missions by new ones
             for (int i = 0; i < 3; ++i)
             {
                 Mission m = this[i];
                 if (!m.active)
                 {
-                    byte kind = (byte)ran.Next(3);
-                    byte count = (byte)Math.Min((int)Constants.CAP_MISSION_NPCS, 2 + ran.Next((int)1.5 * level));
+                    byte mislv = (byte)((ran.Next(31) - 10) * level * 0.01f);
+                    mislv = (byte)Math.Min(Math.Max(mislv + level, 1), 50);
+                    byte kind = (byte)ran.Next(4);
+                    byte count = (byte)Math.Min((int)Constants.CAP_MISSION_NPCS, 2 + ran.Next((int)1.5 * mislv));
 
                     byte area = (byte)(ran.Next(world.Maps.Count-1) + 1);
-                    
-                    m.setup(level, kind, count, (byte) (i + 1), area, npcs.Labels, world.Labels);
+
+                    m.setup(mislv, kind, count, (byte) (i + 1), area, npcs.Labels, world.Labels);
                 }
             }
 
+            //generate new boss mission
             if (!this[3].active)
             {
-                byte kind = 3;
+                byte kind = Constants.NPC_BOSS;
                 byte zone = (byte)(ran.Next(3) + 1);
                 byte area = (byte)(ran.Next(world.Maps.Count-1) + 1);
                 this[3].setup((byte)(this[3].level+12), kind, 1, zone, area, npcs.Labels, world.Labels);
             }
         }
 
+
+        /// <summary>
+        /// blocks Missions with a too high level or unblocks them
+        /// </summary>
         public void update()
         {
             byte[] lvs = new byte[] { this[0].level, this[1].level, this[2].level };
@@ -72,9 +79,11 @@ namespace TestsubjektV1
             }
         }
 
+        /// <summary>
+        /// deactivates all contents so that new Missions can be generated
+        /// </summary>
         public override void clear()
         {
-            //TODO
             for (int i = 0; i < 4; i++)
                 this[i].active = false;
         }

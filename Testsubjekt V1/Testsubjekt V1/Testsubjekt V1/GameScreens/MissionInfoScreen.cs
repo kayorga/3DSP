@@ -11,7 +11,6 @@ namespace TestsubjektV1
 {
     class MissionInfoScreen : GameScreen
     {
-        int index;
         private SpriteFont menuFont1;
 
         private Rectangle exitRectangle;

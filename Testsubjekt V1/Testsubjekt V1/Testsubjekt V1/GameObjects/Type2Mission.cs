@@ -43,6 +43,11 @@ namespace TestsubjektV1
             throw new NotImplementedException();
         }
 
+        public override void setStartLevel(int l)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void reward(Player player, ModCollection modCollection)
         {
             throw new NotImplementedException();

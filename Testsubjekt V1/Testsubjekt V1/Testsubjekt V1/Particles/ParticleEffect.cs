@@ -27,7 +27,13 @@ namespace TestsubjektV1
         private Color endColor;
         private float particleLifetime;
 
-        public float VelocityScaling { get; set; }        
+        public float VelocityScaling { get; set; }
+
+        public void setColors(Color start, Color end)
+        {
+            startColor = start;
+            endColor = end;
+        }
 
         public BasicEffect Effect
         { get { return billboardEngine.Effect; } }

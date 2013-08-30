@@ -11,7 +11,6 @@ namespace TestsubjektV1
 {
     class ModificationScreen : GameScreen
     {
-        int index;
         private SpriteFont modFont;
         private Rectangle loadRectangle;
         private Rectangle exitRectangle;
@@ -60,13 +59,10 @@ namespace TestsubjektV1
         {
             public Mod modification;
             public Texture2D icon;
-            private int intentoryPosition = 21; //21-24 Slot1-4, 1-20 Inventar 1-20
-
 
             public ModItem(Mod mod)
             {
                 modification = mod;
-                
             }
         }
 

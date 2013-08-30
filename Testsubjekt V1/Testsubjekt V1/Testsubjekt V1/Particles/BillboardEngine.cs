@@ -12,7 +12,6 @@ namespace TestsubjektV1
         public BasicEffect Effect { private set; get; }
 
         private VertexBuffer vb;
-        private int maxSpriteNumber;
         private int currentSpriteNumber = 0;
 
         public BillboardEngine(int maxSpriteNumber, GraphicsDevice device)
@@ -46,32 +45,39 @@ namespace TestsubjektV1
         /// </summary>
         public void AddBillboard(Vector3 position, Color color, float size)
         {
-            float halfsize = size * 0.5f;
-            
-            VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[6];
+            try
+            {
 
-            vertices[0].Color = vertices[1].Color = vertices[4].Color = vertices[2].Color = color;
+                float halfsize = size * 0.5f;
 
-            vertices[0].TextureCoordinate = new Vector2(0, 0);
-            vertices[1].TextureCoordinate = new Vector2(0, 1);
-            vertices[4].TextureCoordinate = new Vector2(1, 1);
-            vertices[2].TextureCoordinate = new Vector2(1, 0);
+                VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[6];
 
-            vertices[0].Position = position + (-camX - camY) * halfsize;    //0
-            vertices[1].Position = position + (-camX + camY) * halfsize;    //1
-            vertices[2].Position = position + (camX - camY) * halfsize;     //3
+                vertices[0].Color = vertices[1].Color = vertices[4].Color = vertices[2].Color = color;
 
-            vertices[3] = vertices[1];
-            vertices[4].Position = position + (camX + camY) * halfsize;
-            vertices[5] = vertices[2];
+                vertices[0].TextureCoordinate = new Vector2(0, 0);
+                vertices[1].TextureCoordinate = new Vector2(0, 1);
+                vertices[4].TextureCoordinate = new Vector2(1, 1);
+                vertices[2].TextureCoordinate = new Vector2(1, 0);
 
-            GraphicsDevice device = vb.GraphicsDevice;
+                vertices[0].Position = position + (-camX - camY) * halfsize;    //0
+                vertices[1].Position = position + (-camX + camY) * halfsize;    //1
+                vertices[2].Position = position + (camX - camY) * halfsize;     //3
 
-            device.SetVertexBuffers(null);
+                vertices[3] = vertices[1];
+                vertices[4].Position = position + (camX + camY) * halfsize;
+                vertices[5] = vertices[2];
 
-            vb.SetData<VertexPositionColorTexture>(currentSpriteNumber * VertexPositionColorTexture.VertexDeclaration.VertexStride * 6, vertices, 0, 6, VertexPositionColorTexture.VertexDeclaration.VertexStride);
-            currentSpriteNumber++;
+                GraphicsDevice device = vb.GraphicsDevice;
 
+                device.SetVertexBuffers(null);
+
+                vb.SetData<VertexPositionColorTexture>(currentSpriteNumber * VertexPositionColorTexture.VertexDeclaration.VertexStride * 6, vertices, 0, 6, VertexPositionColorTexture.VertexDeclaration.VertexStride);
+                currentSpriteNumber++;
+            }
+            catch (Exception)
+            {
+                return;
+            }
         }
 
         /// <summary>

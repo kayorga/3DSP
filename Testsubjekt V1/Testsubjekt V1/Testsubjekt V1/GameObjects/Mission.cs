@@ -24,7 +24,9 @@ namespace TestsubjektV1
         protected byte[] kinds;
         public byte[] Kinds { get { return kinds; } }
         public bool blocked;
-
+        protected string rewardLabel;
+        public string Reward { get { return rewardLabel; } }
+        protected byte startLv;
 
         public TimeSpan timeSpent;
 
@@ -37,6 +39,8 @@ namespace TestsubjektV1
         public abstract bool update(byte kind, int exp);
 
         public abstract void setup(byte level, byte kind, byte count, byte zone, byte area, string[] nl, string[] zl);
+
+        public abstract void setStartLevel(int l);
 
         public abstract void reward(Player player, ModCollection modCollection);
 

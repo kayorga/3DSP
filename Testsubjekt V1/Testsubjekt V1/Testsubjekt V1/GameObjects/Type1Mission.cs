@@ -7,7 +7,9 @@ namespace TestsubjektV1
 {
     class Type1Mission : Mission
     {
-        public Type1Mission()
+
+        NPCCollection npcs;
+        public Type1Mission(NPCCollection n)
         {
             //TODO
             kinds = null;
@@ -21,8 +23,10 @@ namespace TestsubjektV1
             dmgIn = 0;
             zone = 1;
             area = 0;
+            startLv = 0;
             active = false;
             blocked = false;
+            npcs = n;
         }
 
         public Type1Mission(byte lv, byte tKind, byte tCount, byte z, byte a, string[] nl, string[] zl, bool state)
@@ -48,15 +52,19 @@ namespace TestsubjektV1
             else return label;
         }
 
+        public override void setStartLevel(int l)
+        {
+            startLv = (byte)l;
+        }
+
         public override string getShortLabel()
         {
-            string l = actCount + " / " + tarCount + " Type" + target + " Enemies down";
+            string l = actCount + " / " + tarCount + " " + npcs.Labels[target] + " down";
             return l;
         }
 
         public override bool update(byte kind, int exp)
         {
-            //TODO
             if (kind == target)
             {
                 actCount = (byte)Math.Min(actCount + 1, tarCount);
@@ -109,8 +117,15 @@ namespace TestsubjektV1
             int exp = (int)(25 * (float)level / (float)player.level);
                 exp = Math.Min(exp, 40);
                 exp = Math.Max(exp, 1);
-            player.getEXP(exp);
-            mods.generate(Math.Min(player.level, level));
+
+            if (player.lv == 50) player.getEXP(exp);
+
+            if (startLv < player.level)
+            {
+                mods.generate(Math.Min(player.level, level));
+                rewardLabel = mods.lastMod;
+            }
+            else rewardLabel = "-";
         }
 
         public override void reset()

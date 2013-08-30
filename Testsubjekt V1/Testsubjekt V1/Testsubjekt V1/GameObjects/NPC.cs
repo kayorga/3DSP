@@ -10,6 +10,7 @@ namespace TestsubjektV1
 {
     class NPC : Character
     {
+        #region attributes
         int cooldown;
         int maxCooldn;
         public byte kind;
@@ -19,6 +20,54 @@ namespace TestsubjektV1
         private bool moving;
         public bool newTarget;
         public bool isMoving { get { return moving; } }
+        private byte strength;
+        private byte element;
+        private byte elWeakness
+        {
+            get
+            {
+                switch (element)
+                {
+                    case Constants.ELM_PLA: return Constants.ELM_ICE;
+                    case Constants.ELM_HEA: return Constants.ELM_PLA;
+                    case Constants.ELM_ICE: return Constants.ELM_HEA;
+                    default: return Constants.ELM_NIL;
+                }
+            }
+        }
+
+        private byte typeWeakness
+        {
+            get
+            {
+                switch (element)
+                {
+                    case Constants.ELM_PLA: return Constants.TYP_TRI;
+                    case Constants.ELM_HEA: return Constants.TYP_BLA;
+                    case Constants.ELM_ICE: return Constants.TYP_WAV;
+                    default: return Constants.ELM_NIL;
+                }
+            }
+        }
+
+        private byte typeResistance
+        {
+            get
+            {
+                switch (element)
+                {
+                    case Constants.ELM_PLA: return Constants.TYP_WAV;
+                    case Constants.ELM_HEA: return Constants.TYP_TRI;
+                    case Constants.ELM_ICE: return Constants.TYP_BLA;
+                    default: return Constants.ELM_NIL;
+                }
+            }
+        }
+
+
+        private int lastDmg;
+        private byte dmgNumberCounter;
+        private bool crit;
 
         public Vector3 target;
 
@@ -29,10 +78,17 @@ namespace TestsubjektV1
         private Explosion explosion;
         private bool isDead;
         private float playerDistance;
+        #endregion
 
+        /// <summary>
+        /// creates empty NPC with placeholder attributes
+        /// </summary>
+        /// <param name="Content"></param>
+        /// <param name="graphicsDevice"></param>
+        /// <param name="world"></param>
+        /// <param name="bilbo"></param>
         public NPC(ContentManager Content, GraphicsDevice graphicsDevice, World world, BillboardEngine bilbo)
         {
-            //TODO
             model = null;
             position = Vector3.Zero;
             direction = Vector3.Zero;
@@ -46,10 +102,13 @@ namespace TestsubjektV1
             XP = 0;
             cooldown = 0;
             maxCooldn = 0;
+            element = 0;
             kind = 0;
+            strength = 0;
             pathFinder = null;
             target = Vector3.Zero;
             isHit = false;
+            crit = false;
             hitTimer = 0;
             isDead = false;
             billboardEngine = bilbo;
@@ -67,7 +126,7 @@ namespace TestsubjektV1
         /// <param name="l">level</param>
         /// <param name="pl">Player</param>
         /// <param name="npcs">parent NPCCollection (should always be "this")</param>
-        public void setup(byte k, ModelObject m, Vector3 p, Vector3 d, int l, Player pl, NPCCollection npcs)
+        public void setup(byte k, ModelObject m, Vector3 p, Vector3 d, int l, Player pl, NPCCollection npcs, byte elem = Constants.ELM_NIL)
         {
             kind = k;
             model = m;
@@ -75,34 +134,55 @@ namespace TestsubjektV1
             direction = d;
             level = l;
 
+            if (kind == Constants.NPC_BOSS)
+                level = Math.Min(60, Math.Max(1, level));
+            else level = Math.Min(50, Math.Max(1, level));
+
             playerDistance = (pl.Position - this.Position).Length();
 
+            #region kind specific stats
             switch (kind)
             {
-                case 0:
-                    speed = 0.025f;
-                    maxHealth = 50 * ((int)Math.Pow(1.06f, level));
-                    XP = 5;
-                    maxCooldn = 60;
+                case Constants.NPC_NONE:
+                    speed = 0.04f;
+                    maxHealth = (int)(50 * Math.Pow(1.06f, level - 1));
+                    XP = 1;
+                    maxCooldn = 70;
+                    element = Constants.ELM_NIL;
+                    strength = (byte)(25 * Math.Pow(1.04f, level - 1));
                     break;
-                case 1:
-                    speed = 0.1f;
-                    maxHealth = 50 * ((int)Math.Pow(1.05f, level));
-                    XP = 6;
-                    maxCooldn = 40;
+                case Constants.NPC_PLAS:
+                    speed = 0.05f;
+                    maxHealth = (int)(50 * Math.Pow(1.05f, level - 1));
+                    XP = 2;
+                    maxCooldn = 80;
+                    element = Constants.ELM_PLA;
+                    strength = (byte)(12 * Math.Pow(1.06f, level - 1));
                     break;
-                case 2:
-                    speed = 0.09f;
-                    maxHealth = 50 * ((int)Math.Pow(1.07f, level));
-                    XP = 7;
+                case Constants.NPC_HEAT:
+                    speed = 0.06f;
+                    maxHealth = (int)(50 * Math.Pow(1.04f, level - 1));
+                    XP = 2;
                     maxCooldn = 75;
+                    element = Constants.ELM_HEA;
+                    strength = (byte)(20 * Math.Pow(1.05f, level - 1));
                     break;
-                case 3:
-                    speed = 0.01f;
-                    maxHealth = 200 * ((int)Math.Pow(1.07f, level));
-                    XP = 100;
+                case Constants.NPC_ICE:
+                    speed = 0.05f;
+                    maxHealth = (int)(50 * Math.Pow(1.07f, level - 1));
+                    XP = 2;
+                    maxCooldn = 90;
+                    element = Constants.ELM_ICE;
+                    strength = (byte)Math.Min((15 * Math.Pow(1.06f, level - 1)), 255);
+                    break;                
+                case Constants.NPC_BOSS:
+                    speed = 0.03f;
+                    maxHealth = (int)(200 * Math.Pow(1.07f, level - 1));
+                    XP = 70;
                     maxCooldn = 50;
                     model.Scaling = new Vector3(3,3,3);
+                    element = elem;
+                    strength = (byte)(14 * Math.Pow(1.06f, level - 1));
                     break;
                 default:
                     speed = 0.001f;
@@ -111,6 +191,7 @@ namespace TestsubjektV1
                     maxCooldn = 1000;
                     break;
             }
+            #endregion
 
             health = maxHealth;
             active = true;
@@ -120,19 +201,20 @@ namespace TestsubjektV1
             isHit = false;
             hitTimer = 0;
             isDead = false;
-            //pathFinder = new AStar(world, pl, new Point((int)Math.Round((-1 * position.X + world.size - 1) * 3.0f / 2.0f), (int)Math.Round((-1 * position.Z + world.size - 1) * 3.0f / 2.0f)), npcs);
             pathFinder = npcs.PathFinder;
         }
 
-        public /*override*/ bool update(GameTime gameTime, BulletCollection bullets, Camera camera, Player p, Mission m)
+        public bool update(GameTime gameTime, BulletCollection bullets, Camera camera, Player p, Mission m)
         {
-            //TODO
+            #region npc death
+            //die and grant xp
             if (health <= 0 && !isDead)
             {
                 int exp = (int)(XP * (float)level / (float)p.level);
                 exp = Math.Min(exp,(int) (XP * 1.5f));
                 exp = Math.Max(exp, 1);
-                p.getEXP(exp);
+                if (p.lv == 50) exp = 0;
+                else p.getEXP(exp);
                 m.update(kind, exp);
                 isDead = true;
                 isHit = false;
@@ -154,31 +236,34 @@ namespace TestsubjektV1
                     return false;
                 }
             }
+            #endregion
 
-            float dist = (p.position - position).Length();
+            #region shoot
 
-            if (dist <= world.shootDistance && cooldown == 0)
+            //shoot if player is within shooting distance and not on cooldown
+            if (playerDistance <= world.shootDistance && cooldown == 0)
             {
                 cooldown = maxCooldn;
                 Vector3 dir = (p.position - position);
                 dir.Normalize();
-                bullets.generate(false, position + dir, dir, 1, world.shootDistance * 2, 1);
+                bullets.generate(false, position + dir, dir, 1, world.shootDistance * 2, strength, element);
             }
 
             if (cooldown > 0) cooldown--;
+            #endregion
 
+            #region move
             if (moving)
                 move();
             else
             {
-                if (dist < 4)
+                if (playerDistance < 4)
                 {
                     target = position;
                     direction = p.Position - this.Position;
                 }
                 else
                 {
-                    //pathFinder.setup(new Point((int)Math.Round((-1 * position.X + world.size - 1) * 3.0f / 2.0f), (int)Math.Round((-1 * position.Z + world.size - 1) * 3.0f / 2.0f)), p);
                     pathFinder.setup(new Point((int)Math.Round((-1 * position.X + world.size - 1)), (int)Math.Round((-1 * position.Z + world.size - 1))), p);
                     target = pathFinder.findPath();
                     newTarget = true;
@@ -188,8 +273,9 @@ namespace TestsubjektV1
                     move();
                 }
             }
+            #endregion
 
-
+            #region get hit billboard and dmg number
             //Hit Notification
             if (isHit)
             {
@@ -202,13 +288,15 @@ namespace TestsubjektV1
                 }
             }
 
+            if (dmgNumberCounter > 0)
+                dmgNumberCounter--;
+            else crit = false;
+            #endregion
 
             //Rotate Model
             double rotationAngle = Math.Acos((Vector3.Dot(direction, -1 * Vector3.UnitX)) / (direction.Length()));
             rotationAngle = (p.Position.Z < this.Position.Z) ? rotationAngle * -1.0f : rotationAngle;
             model.Rotation = new Vector3(0, (float)rotationAngle, 0);
-
-            //Console.WriteLine("act move dist: " + direction.Length() + "x: " + direction.X + " y: " + direction.Y + " z: " + direction.Z + " * " + speed);
 
             //Update PlayerDistance
             playerDistance = (p.Position - this.Position).Length();
@@ -216,7 +304,7 @@ namespace TestsubjektV1
             return true;
         }
 
-
+        #region move
         private void move()
         {
             //Console.WriteLine("pre move : " + position.X + " ; " + position.Z + " ; direction: " + direction.X + " ; " + direction.Z);
@@ -254,43 +342,91 @@ namespace TestsubjektV1
             }
             return true;
         }
+        #endregion
 
+        #region get hit
         public void getHit(Bullet b, Mission m)
         {
-            //TODO/////
-            if (!isDead)
+            if (!isDead && b.fromPlayer)
             {
-                int dmg = 100;
-                ///////////
+                int dmg = b.Strength;
 
-                health = Math.Max(health - dmg, 0);
+                Random ran = new Random();
+
+                dmg = (byte) (ran.Next(9*dmg, 11*dmg) * 0.1f);
+
+                //apply weakness and resistance
+                if (b.Element != Constants.ELM_NIL && b.Element == elWeakness) dmg = (int) (dmg * 1.5f); 
+                else if (b.Element != Constants.ELM_NIL && b.Element == element) dmg = (int) (dmg / 1.5f);
+
+                if (b.Type != Constants.TYP_NIL && b.Type == typeWeakness) dmg = (int)(dmg * 1.5f);
+                else if (b.Type != Constants.TYP_NIL && b.Type == typeResistance) dmg = (int)(dmg / 1.5f);
+
+                if (ran.Next(100) < 8)
+                {
+                    crit = true;
+                    dmg *= 2;
+                }
+
+                //cap damage between 1 and health
+                dmg = Math.Max(dmg, 1);
+                dmg = Math.Min(dmg, health);
+
+                //apply damage and add to dmg out
+                health -= dmg;
                 m.dmgOut += dmg;
 
+                //knockback effect
                 Vector3 push = b.Direction;
                 push.Normalize();
                 this.position += push * 0.5f;
                 moving = false;
-                isHit = true;
+                //isHit = true;
+
+                lastDmg = dmg;
+                dmgNumberCounter = 30;
             }
         }
         
         public void getHit(Player p)
         {
-            //TODO/////
             if (!isDead)
             {
                 int dmg = p.lv;
-                ///////////
 
                 health = Math.Max(health - dmg, 0);
             }
         }
+        #endregion
 
-        public String getLabel()
+        public override void draw(Camera camera, SpriteBatch spriteBatch, SpriteFont font)
         {
-            switch (kind)
+            if (!active)
+                return;
+            if (isDead && active)
+                explosion.Draw(camera);
+            else
+                base.draw(camera);
+
+            if (dmgNumberCounter > 0)
             {
-                default: return "Enemies";
+                Vector2 dmgNumPos;
+                Vector3 dmgNumPos3 = graphicsDevice.Viewport.Project(Vector3.Zero,
+                                                                        camera.ProjectionMatrix,
+                                                                        camera.ViewMatrix,
+                                                                        Matrix.CreateTranslation(position + new Vector3(0, 2, 0)));
+                dmgNumPos.X = dmgNumPos3.X;
+                dmgNumPos.Y = dmgNumPos3.Y;
+
+                Color color = (crit) ? Color.Gold : Color.White;
+
+                spriteBatch.Begin();
+                spriteBatch.DrawString(font, lastDmg.ToString(), dmgNumPos, color);
+                spriteBatch.End();
+                graphicsDevice.BlendState = BlendState.Opaque;
+                graphicsDevice.DepthStencilState = DepthStencilState.Default;
+                graphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+                graphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             }
         }
 
@@ -303,6 +439,7 @@ namespace TestsubjektV1
             else base.draw(camera);
         }
 
+        #region sorting
         public float DistanceToPlayer
         {
             get { return this.playerDistance; }
@@ -319,6 +456,6 @@ namespace TestsubjektV1
             if (npc2.active && !npc1.active) return 1;
             else return npc2.DistanceToPlayer.CompareTo(npc1.DistanceToPlayer);
         }
-        
+        #endregion
     }
 }

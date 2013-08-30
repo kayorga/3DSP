@@ -11,7 +11,6 @@ namespace TestsubjektV1
 {
     class TitleScreen : GameScreen
     {
-        int index;
         private SpriteFont menuFont1;
         private Rectangle newGameRectangle;
         private Rectangle loadRectangle;

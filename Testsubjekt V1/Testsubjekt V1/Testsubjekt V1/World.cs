@@ -27,7 +27,6 @@ namespace TestsubjektV1
         public int[] player_start;
         public NPCSpawner[] spawners;
         private byte spawner_count;
-        //private byte sDistance;
         public byte shootDistance { get { return maps[_mapID].attackDistance; } }
         private List<Map> maps;
         public IList<Map> Maps { get { return maps.AsReadOnly(); } }
@@ -98,15 +97,15 @@ namespace TestsubjektV1
             #endregion
 
             #region Objects theme 2
-            groundObs[2] = content.Load<Model>("Models\\grass");
-            wallObs[2] = content.Load<Model>("Models\\stone");
-            wall2Obs[2] = content.Load<Model>("Models\\tree1");
+            groundObs[2] = content.Load<Model>("Models\\wasted");
+            wallObs[2] = content.Load<Model>("Models\\rock_w");
+            wall2Obs[2] = content.Load<Model>("Models\\cactus");
             #endregion
 
             #region Objects theme 3
-            groundObs[3] = content.Load<Model>("Models\\grass");
+            groundObs[3] = content.Load<Model>("Models\\arctical");
             wallObs[3] = content.Load<Model>("Models\\stone");
-            wall2Obs[3] = content.Load<Model>("Models\\tree1");
+            wall2Obs[3] = content.Load<Model>("Models\\stalagmit");
             #endregion
 
             _mapID = 0;
@@ -155,10 +154,10 @@ namespace TestsubjektV1
             get { return moveData; }
         }
 
-        public void update(NPCCollection npcs, Player p, Mission m)
+        public void update(NPCCollection npcs, Player p, Mission m, bool isMainMission = false)
         {
             foreach (NPCSpawner spawner in spawners)
-                spawner.update(npcs, p, m);
+                spawner.update(npcs, p, m, isMainMission);
         }
 
         /// <summary>
@@ -263,9 +262,12 @@ namespace TestsubjektV1
             }
         }
 
+        /// <summary>
+        /// configures npc spawners to match the mission data
+        /// </summary>
         public void setupSpawners(Mission m)
         {
-            if (m.Kinds[0] == 3)
+            if (m.Kinds[0] == Constants.NPC_BOSS)
                 spawners[0].setup(m.Kinds[0], Constants.SPAWN_ONCE);
             else
                 spawners[0].setup(m.Kinds[0], Constants.SPAWN_INFINITE);
@@ -295,18 +297,10 @@ namespace TestsubjektV1
                     fileContents[i] = new char[Constants.MAP_SIZE];
                 }
 
+                //skip first line
                 reader.ReadLine();
 
-                //string d = "";
-                //while (true)
-                //{
-                //    char c = (char)reader.Read();
-                //    if (c == '\n')
-                //        break;
-                //}
-
-                //sDistance = Byte.Parse(d);
-
+                //read map array
                 for (int a = Constants.MAP_SIZE - 1; a >= 0; --a)
                 {
                     for (int b = Constants.MAP_SIZE - 1; b >= 0; --b)
@@ -317,7 +311,8 @@ namespace TestsubjektV1
                     }
                 }
                 reader.Close();
-                //return the results
+
+                //assign contents
                 mapData = fileContents;
             }
             catch
@@ -327,6 +322,11 @@ namespace TestsubjektV1
             }
         }
 
+        /// <summary>
+        /// loads and generates a new map from file
+        /// </summary>
+        /// <param name="id">map id to load</param>
+        /// <param name="th">zone theme</param>
         public void warp(byte id, byte th)
         {
             loadMap(id);
@@ -347,12 +347,6 @@ namespace TestsubjektV1
                     if (g != null) g.Draw(camera);
                     ModelObject m = mapObjects[i][j];
 
-                    //if (mapData[i][j] == '#' && m != null)
-                    //{
-                    //    device.DepthStencilState = DepthStencilState.None;
-                    //    m.Draw(camera);
-                    //    device.DepthStencilState = DepthStencilState.Default;
-                    //}
                     if (m != null) m.Draw(camera);
                 }
             }

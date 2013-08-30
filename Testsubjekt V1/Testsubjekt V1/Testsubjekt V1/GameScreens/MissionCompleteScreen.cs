@@ -11,7 +11,6 @@ namespace TestsubjektV1
 {
     class MissionCompleteScreen : GameScreen
     {
-        int index;
         private SpriteFont menuFont1;
 
         private Rectangle exitRectangle;
@@ -134,6 +133,7 @@ namespace TestsubjektV1
             spriteBatch.DrawString(menuFont1, data.missions.activeMission.countXPGained.ToString(), new Vector2(693, 355), Color.LemonChiffon);
             spriteBatch.DrawString(menuFont1, data.missions.activeMission.dmgOut.ToString(), new Vector2(693, 265), Color.LemonChiffon);
             spriteBatch.DrawString(menuFont1, data.missions.activeMission.dmgIn.ToString(), new Vector2(693, 295), Color.LemonChiffon);
+            spriteBatch.DrawString(menuFont1, data.missions.activeMission.Reward, new Vector2(693, 385), Color.LemonChiffon);
             if (world.theme == 1)
                 spriteBatch.Draw(forestImg, imageRectangle, Color.White);
 

@@ -31,5 +31,9 @@ namespace TestsubjektV1
             model.Draw(camera);
         }
 
+        public virtual void draw(Camera camera, SpriteBatch spriteBatch, SpriteFont font)
+        {
+            model.Draw(camera);
+        }
     }
 }
