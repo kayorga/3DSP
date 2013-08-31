@@ -42,7 +42,7 @@ namespace TestsubjektV1
         private void onNewGameClick()
         {
             if (newGameRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
-                screenReturnValue = Constants.CMD_NEW;
+                screenReturnValue = Constants.CMD_INTRO;
         }
 
         private void onExitClick()

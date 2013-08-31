@@ -106,6 +106,8 @@ namespace TestsubjektV1
                     screen = myAction; break;
                 case Constants.CMD_MISSIONINFO: 
                     screen = new MissionInfoScreen(Content, GraphicsDevice, data, world, camera); break;
+                case Constants.CMD_INTRO:
+                    screen = new IntroductionScreen(Content, spriteBatch ,GraphicsDevice, data); break;
                 default: break;
             }
 

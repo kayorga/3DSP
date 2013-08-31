@@ -20,6 +20,8 @@ namespace TestsubjektV1
         public byte xTile { get { return (byte)Math.Round(-1 * (position.X) + (Constants.MAP_SIZE - 1)); } }
         public byte zTile { get { return (byte)Math.Round(-1 * (position.Z) + (Constants.MAP_SIZE - 1)); } }
 
+        public bool gotHit { get; set; }
+
         Weapon weapon;
 
         public Player(World world, ContentManager Content)
@@ -53,6 +55,7 @@ namespace TestsubjektV1
             invincibleTimer = 0;
             health = maxHealth;
             weapon.reload();
+            gotHit = false;
         }
 
         public void setPosition(Vector3 X) { this.position = X; }
@@ -129,7 +132,7 @@ namespace TestsubjektV1
             //TODO///////
             int dmg = b.Strength;
             /////////////
-
+            gotHit = true;
             health = Math.Max(health - dmg, 0);
             m.dmgIn += dmg;
             invincibleTimer = maxInvincibility;
@@ -140,7 +143,7 @@ namespace TestsubjektV1
             //TODO/////
             int dmg = 1 + (int)(npc.lv * npc.speed * 50);
             ///////////
-
+            gotHit = true;
             health = Math.Max(health - dmg, 0);
             invincibleTimer = maxInvincibility;
         }

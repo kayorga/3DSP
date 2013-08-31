@@ -126,6 +126,7 @@
     <Compile Include="GameObjects\Mission.cs" />
     <Compile Include="GameObjects\Mod.cs" />
     <Compile Include="GameObjects\NPCSpawner.cs" />
+    <Compile Include="GameScreens\IntroductionScreen.cs" />
     <Compile Include="GameScreens\MissionCompleteScreen.cs" />
     <Compile Include="GameScreens\MissionInfoScreen.cs" />
     <Compile Include="GameScreens\ModificationScreen.cs" />
@@ -141,8 +142,10 @@
     <Compile Include="GameScreens\PauseScreen.cs" />
     <Compile Include="GameScreens\TitleScreen.cs" />
     <Compile Include="Particles\BillboardEngine.cs" />
+    <Compile Include="Particles\BlurEffect.cs" />
     <Compile Include="Particles\Explosion.cs" />
     <Compile Include="Particles\Particle.cs" />
+    <Compile Include="Particles\Particle2D.cs" />
     <Compile Include="Particles\ParticleEffect.cs" />
     <Compile Include="PathNode.cs" />
     <Compile Include="PathNoteEqualityComparer.cs" />
@@ -150,6 +153,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="SaveData.cs" />
+    <Compile Include="Skybox.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>

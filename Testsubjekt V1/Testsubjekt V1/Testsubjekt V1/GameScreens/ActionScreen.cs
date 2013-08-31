@@ -39,6 +39,8 @@ namespace TestsubjektV1
         private SpriteFont font;
         private bool spawnNewEnemies;
         private TimeSpan timeInMission;
+        private Skybox skybox;
+        private BlurEffect blurEffect;
 
         public ActionScreen(ContentManager content, GraphicsDevice gD, GameData gameData, Camera cam, World w)
         {
@@ -72,6 +74,10 @@ namespace TestsubjektV1
             spawnNewEnemies = false;
             timeInMission = new TimeSpan(0);
             data.missions.activeMission.timeSpent = timeInMission;
+
+            skybox = new Skybox(graphicsDevice, content, 1);
+
+            blurEffect = new BlurEffect(graphicsDevice, content);
         }
 
         public void reset()
@@ -86,6 +92,13 @@ namespace TestsubjektV1
         public override int update(GameTime gameTime)
         {
             //TODO
+            if (data.player.gotHit)
+            {
+                blurEffect.AddBlur();
+                data.player.gotHit = false;
+            }
+            blurEffect.Update(gameTime);
+
             if (world.mapID != 0)
                 timeInMission+=gameTime.ElapsedGameTime;
             camera.Update(gameTime, data.player.Position);
@@ -193,10 +206,12 @@ namespace TestsubjektV1
         public override void draw()
         {
             //TODO
+            skybox.Draw(graphicsDevice, camera, data.player.Position);
             world.draw(camera, graphicsDevice);
             data.player.draw(camera);
             data.npcs.draw(camera, spriteBatch, font);
             data.bullets.draw(camera);
+            blurEffect.Draw(spriteBatch);
             drawHUD();
         }
 

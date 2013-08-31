@@ -57,6 +57,8 @@ namespace TestsubjektV1
                         BasicEffect basicEffect = (BasicEffect)effect;
                         basicEffect.AmbientLightColor = new Vector3(0.5f, 0.5f, 0.5f);
                         basicEffect.DirectionalLight0.Enabled = true;
+                        basicEffect.DirectionalLight0.Direction = new Vector3(0, -1.0f , 0);
+                        basicEffect.DirectionalLight0.DiffuseColor = new Vector3(1.0f, 1.0f, 1.0f);
                         basicEffect.DirectionalLight1.Enabled = false;
                         basicEffect.DirectionalLight2.Enabled = false;
                         basicEffect.LightingEnabled = true;

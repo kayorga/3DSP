@@ -30,6 +30,8 @@ namespace TestsubjektV1
         public const int CMD_MISSIONCOMPLETE = 8;
         public const int CMD_BACK = 9;
         public const int CMD_MISSIONINFO = 10;
+        public const int CMD_INTRO = 11;
+        public const int CMD_DEX = 12;
 
         //NPC and Bullet elements
         public const byte ELM_NIL = 0;
