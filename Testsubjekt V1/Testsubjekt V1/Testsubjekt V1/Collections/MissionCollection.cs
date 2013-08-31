@@ -22,7 +22,7 @@ namespace TestsubjektV1
             level = 1;
             Random ran = new Random();
             for (int i = 0; i < 4; ++i)
-                _content.Add(new Type1Mission(n));
+                _content.Add(new Type1Mission());
 
             activeMission = this[0];
             mainMission = this[3];

@@ -9,11 +9,6 @@ namespace TestsubjektV1
 {
     class ParticleEffect
     {
-        /*private int particleLifespan;
-        private int emitAmount;
-        private float particleSpeed;
-        private Queue<Particle> freeParticles;*/
-
         private Random random;
         private GraphicsDevice graphicsDevice;
 

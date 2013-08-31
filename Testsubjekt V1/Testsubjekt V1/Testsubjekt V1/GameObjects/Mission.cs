@@ -30,7 +30,7 @@ namespace TestsubjektV1
 
         public TimeSpan timeSpent;
 
-        public abstract string getShortLabel();
+        public abstract string getShortLabel(NPCCollection npcs);
 
         public abstract bool complete();
         
@@ -40,7 +40,7 @@ namespace TestsubjektV1
 
         public abstract void setup(byte level, byte kind, byte count, byte zone, byte area, string[] nl, string[] zl);
 
-        public abstract void setStartLevel(int l);
+        public abstract void reset(int l);
 
         public abstract void reward(Player player, ModCollection modCollection);
 

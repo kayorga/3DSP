@@ -55,7 +55,7 @@ namespace TestsubjektV1
             {
                 cooldown = maxCooldn - mod_cdn;
 
-                bullets.generate(true, position + direction * .5f, direction, 1 + mod_spd, 20, 20 + mod_str, (byte)mod_elm);
+                bullets.generate(true, position + direction * .5f, direction, 1 + mod_spd, 20, 20 + mod_str, (byte)mod_elm, Constants.TYP_WAV);
                 ammo--;
             }
 

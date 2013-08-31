@@ -124,7 +124,7 @@ namespace TestsubjektV1
                 world.warp(m.Area, m.Zone);
                 world.setupSpawners(m);
                 data.player.myWeapon.reload();
-                data.missions.activeMission.setStartLevel(data.player.lv);
+                data.missions.activeMission.reset(data.player.lv);
                 screenReturnValue = Constants.CMD_NEW;
             }
         }

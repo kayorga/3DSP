@@ -221,7 +221,7 @@ namespace TestsubjektV1
             spriteBatch.DrawString(font, time, new Vector2(894,43), Color.LemonChiffon);
 
             if (world.theme != 0 && data.missions.activeMission != null)
-                spriteBatch.DrawString(font, data.missions.activeMission.getShortLabel(), new Vector2(800, 450), Color.LemonChiffon);
+                spriteBatch.DrawString(font, data.missions.activeMission.getShortLabel(data.npcs), new Vector2(800, 450), Color.LemonChiffon);
             if (isConsoleInFront()==Constants.CMD_NEW)
                 spriteBatch.DrawString(font, "Press 'E' Button", new Vector2(800, 450), Color.LemonChiffon);
 

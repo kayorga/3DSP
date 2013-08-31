@@ -146,7 +146,7 @@ namespace TestsubjektV1
                 case Constants.NPC_NONE:
                     speed = 0.04f;
                     maxHealth = (int)(50 * Math.Pow(1.06f, level - 1));
-                    XP = 1;
+                    XP = 2;
                     maxCooldn = 70;
                     element = Constants.ELM_NIL;
                     strength = (byte)(25 * Math.Pow(1.04f, level - 1));
@@ -154,7 +154,7 @@ namespace TestsubjektV1
                 case Constants.NPC_PLAS:
                     speed = 0.05f;
                     maxHealth = (int)(50 * Math.Pow(1.05f, level - 1));
-                    XP = 2;
+                    XP = 3;
                     maxCooldn = 80;
                     element = Constants.ELM_PLA;
                     strength = (byte)(12 * Math.Pow(1.06f, level - 1));
@@ -162,7 +162,7 @@ namespace TestsubjektV1
                 case Constants.NPC_HEAT:
                     speed = 0.06f;
                     maxHealth = (int)(50 * Math.Pow(1.04f, level - 1));
-                    XP = 2;
+                    XP = 3;
                     maxCooldn = 75;
                     element = Constants.ELM_HEA;
                     strength = (byte)(20 * Math.Pow(1.05f, level - 1));
@@ -170,7 +170,7 @@ namespace TestsubjektV1
                 case Constants.NPC_ICE:
                     speed = 0.05f;
                     maxHealth = (int)(50 * Math.Pow(1.07f, level - 1));
-                    XP = 2;
+                    XP = 3;
                     maxCooldn = 90;
                     element = Constants.ELM_ICE;
                     strength = (byte)Math.Min((15 * Math.Pow(1.06f, level - 1)), 255);

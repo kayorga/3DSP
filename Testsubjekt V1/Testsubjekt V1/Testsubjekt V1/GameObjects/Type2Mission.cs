@@ -33,7 +33,7 @@ namespace TestsubjektV1
             throw new NotImplementedException();
         }
 
-        public override string getShortLabel()
+        public override string getShortLabel(NPCCollection npcs)
         {
             throw new NotImplementedException();
         }
@@ -43,7 +43,7 @@ namespace TestsubjektV1
             throw new NotImplementedException();
         }
 
-        public override void setStartLevel(int l)
+        public override void reset(int l)
         {
             throw new NotImplementedException();
         }

@@ -103,7 +103,6 @@ namespace TestsubjektV1
 
         public void getEXP(int xp)
         {
-            //Console.WriteLine("got " + xp + " xp");
             exp += xp;
             while (exp >= 100)
             {
