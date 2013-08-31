@@ -27,6 +27,10 @@ namespace TestsubjektV1
                 generate((int)Constants.ELM_HEA, Constants.MOD_ELM);
                 generate((int)Constants.ELM_ICE, Constants.MOD_ELM);
                 generate((int)Constants.ELM_PLA, Constants.MOD_ELM);
+
+                generate((int)Constants.TYP_BLA, Constants.MOD_TYP);
+                generate((int)Constants.TYP_WAV, Constants.MOD_TYP);
+                generate((int)Constants.TYP_TRI, Constants.MOD_TYP);
             }
         }
 

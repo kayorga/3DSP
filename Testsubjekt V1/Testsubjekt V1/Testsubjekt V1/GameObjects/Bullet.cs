@@ -88,8 +88,8 @@ namespace TestsubjektV1
                 default: break;
                 case Constants.ELM_PLA: particleEffect.setColors(Color.Green, Color.DarkGreen); break;
                 case Constants.ELM_HEA: particleEffect.setColors(Color.Gold, Color.Red); break;
-                case Constants.ELM_ICE: particleEffect.setColors(Color.Black, Color.DarkSlateBlue); break;
-                case Constants.ELM_NIL: particleEffect.setColors(Color.Blue, Color.DarkBlue); break;
+                case Constants.ELM_ICE: particleEffect.setColors(Color.White, Color.DarkBlue); break;
+                case Constants.ELM_NIL: particleEffect.setColors(Color.Crimson, Color.Blue); break;
             }
         }
 

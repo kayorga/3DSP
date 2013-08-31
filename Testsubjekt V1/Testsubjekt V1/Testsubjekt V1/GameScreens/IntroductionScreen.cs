@@ -44,9 +44,9 @@ namespace TestsubjektV1
             
             font = Content.Load<SpriteFont>("Fonts/MenuFont1");
             userInterface = Content.Load<Texture2D>("Introduction");
-            heatIcon = Content.Load<Texture2D>("Icons/mod_spd");
-            plasmaIcon = Content.Load<Texture2D>("Icons/mod_str");
-            iceIcon = Content.Load<Texture2D>("Icons/mod_rcg");
+            heatIcon = Content.Load<Texture2D>("Icons/mod_hea");
+            plasmaIcon = Content.Load<Texture2D>("Icons/mod_pla");
+            iceIcon = Content.Load<Texture2D>("Icons/mod_ice");
             cursor = Content.Load<Texture2D>("cursor");
 
             time = new TimeSpan();
@@ -196,7 +196,7 @@ namespace TestsubjektV1
             spriteBatch.Begin();
             spriteBatch.Draw(userInterface, interfaceRectangle, Color.White);
             if (voiceDraw == null) voiceDraw = " ";
-            spriteBatch.DrawString(font, voiceDraw, new Vector2(150, 635), Color.LemonChiffon);
+            spriteBatch.DrawString(font, voiceDraw, new Vector2(150, 605), Color.LemonChiffon);
             if (time.TotalSeconds > 8)
             {
                 spriteBatch.Draw(heatIcon, heatRectangle, Color.White);

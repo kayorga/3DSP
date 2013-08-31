@@ -56,9 +56,10 @@ namespace TestsubjektV1
         {
             switch (value)
             {
-                case 0: return "Plasma ";
-                case 1: return "Photon ";
-                case 2: return "Phazon ";
+                case Constants.ELM_NIL: return "";
+                case Constants.ELM_PLA: return "Plasma ";
+                case Constants.ELM_HEA: return "Heat ";
+                case Constants.ELM_ICE: return "Ice ";
                 default: return "";
             }
         }
@@ -67,9 +68,10 @@ namespace TestsubjektV1
         {
             switch (value)
             {
-                case 0: return "Charge";
-                case 1: return "Blast";
-                case 2: return "Cannon";
+                case Constants.TYP_NIL: return "Beam";
+                case Constants.TYP_BLA: return "Blast";
+                case Constants.TYP_WAV: return "Wave";
+                case Constants.TYP_TRI: return "Triplet";
                 default: return "Beam";
             }
         }

@@ -5,7 +5,7 @@ using System.Text;
 using TestsubjektV1;
 using Microsoft.Xna.Framework;
 
-namespace Testsubjekt_V1
+namespace TestsubjektV1
 {
     class NPCSpawner
     {
@@ -32,6 +32,7 @@ namespace Testsubjekt_V1
         {
             this.kind = kind;
             this.rate = rate;
+            cooldown = 0;
         }
 
         public void setPos(int i, int j)

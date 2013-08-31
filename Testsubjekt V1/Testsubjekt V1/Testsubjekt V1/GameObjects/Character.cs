@@ -31,7 +31,7 @@ namespace TestsubjektV1
             model.Draw(camera);
         }
 
-        public virtual void draw(Camera camera, SpriteBatch spriteBatch, SpriteFont font)
+        public virtual void draw(Camera camera, Queue<DmgNumber> queue)
         {
             model.Draw(camera);
         }

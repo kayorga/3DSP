@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
-using Testsubjekt_V1;
 
 namespace TestsubjektV1
 {
@@ -30,6 +29,7 @@ namespace TestsubjektV1
         public byte shootDistance { get { return maps[_mapID].attackDistance; } }
         private List<Map> maps;
         public IList<Map> Maps { get { return maps.AsReadOnly(); } }
+        public char getMapData(int x, int z) { return mapData[x][z]; }
 
         public class Map
         {

@@ -30,6 +30,7 @@ namespace TestsubjektV1
         private ModItem slot2Item;
         private ModItem slot3Item;
         private ModItem slot4Item;
+        private ModItem[] slotItems;
 
         private Texture2D cursor;
         private Texture2D userInterface;
@@ -39,6 +40,12 @@ namespace TestsubjektV1
         private Texture2D i_mod_spd;
         private Texture2D i_mod_rcg;
         private Texture2D i_mod_acp;
+        private Texture2D i_mod_bla;
+        private Texture2D i_mod_wav;
+        private Texture2D i_mod_tri;
+        private Texture2D i_mod_pla;
+        private Texture2D i_mod_hea;
+        private Texture2D i_mod_ice;
 
 
         private SpriteBatch spriteBatch;
@@ -83,11 +90,23 @@ namespace TestsubjektV1
             cursor = content.Load<Texture2D>("cursor");
             userInterface = content.Load<Texture2D>("mod_interface");
             frame = content.Load<Texture2D>("briefing_frame");
+
+            //stat mod icons
             i_mod_nil = content.Load<Texture2D>("Icons/mod_nil");
             i_mod_str = content.Load<Texture2D>("Icons/mod_str");
             i_mod_spd = content.Load<Texture2D>("Icons/mod_spd");
             i_mod_rcg = content.Load<Texture2D>("Icons/mod_rcg");
             i_mod_acp = content.Load<Texture2D>("Icons/mod_acp");
+
+            //type mod icons
+            i_mod_bla = content.Load<Texture2D>("Icons/mod_bla");
+            i_mod_wav = content.Load<Texture2D>("Icons/mod_wav");
+            i_mod_tri = content.Load<Texture2D>("Icons/mod_tri");
+
+            //element mod icons
+            i_mod_pla = content.Load<Texture2D>("Icons/mod_pla");
+            i_mod_hea = content.Load<Texture2D>("Icons/mod_hea");
+            i_mod_ice = content.Load<Texture2D>("Icons/mod_ice");
 
             interfaceRectangle = new Rectangle(0, 0, 1024, 768);
             frameRectangle = new Rectangle(174, 334, 105, 105);
@@ -123,8 +142,22 @@ namespace TestsubjektV1
                     switch (data.mods[i + j * 4].type)
                     {
                         case Constants.MOD_NIL: inventoryItems[i][j].icon = i_mod_nil; break;
-                        case Constants.MOD_ELM: inventoryItems[i][j].icon = i_mod_nil; break;
-                        case Constants.MOD_TYP: inventoryItems[i][j].icon = i_mod_nil; break;
+                        case Constants.MOD_ELM:
+                            switch (data.mods[i + j * 4].value)
+                            {
+                                case Constants.ELM_PLA: inventoryItems[i][j].icon = i_mod_pla; break;
+                                case Constants.ELM_HEA: inventoryItems[i][j].icon = i_mod_hea; break;
+                                case Constants.ELM_ICE: inventoryItems[i][j].icon = i_mod_ice; break;
+                                default: inventoryItems[i][j].icon = i_mod_nil; break;
+                            } break;
+                        case Constants.MOD_TYP:
+                            switch (data.mods[i + j * 4].value)
+                            {
+                                case Constants.TYP_BLA: inventoryItems[i][j].icon = i_mod_bla; break;
+                                case Constants.TYP_WAV: inventoryItems[i][j].icon = i_mod_wav; break;
+                                case Constants.TYP_TRI: inventoryItems[i][j].icon = i_mod_tri; break;
+                                default: inventoryItems[i][j].icon = i_mod_nil; break;
+                            } break;
                         case Constants.MOD_STR: inventoryItems[i][j].icon = i_mod_str; break;
                         case Constants.MOD_SPD: inventoryItems[i][j].icon = i_mod_spd; break;
                         case Constants.MOD_RCG: inventoryItems[i][j].icon = i_mod_rcg; break;
@@ -132,57 +165,150 @@ namespace TestsubjektV1
                         default: inventoryItems[i][j].icon = i_mod_nil; break;
                     }
                 }
+
+            slotItems = new ModItem[4];
             if (data.player.myWeapon.mods != null)
             {
-                slot1Item = new ModItem(data.player.myWeapon.mods[0]);
-                switch (slot1Item.modification.type)
+                for (int i = 0; i < 4; i++)
                 {
-                    case Constants.MOD_NIL: slot1Item.icon = i_mod_nil; break;
-                    case Constants.MOD_ELM: slot1Item.icon = i_mod_nil; break;
-                    case Constants.MOD_TYP: slot1Item.icon = i_mod_nil; break;
-                    case Constants.MOD_STR: slot1Item.icon = i_mod_str; break;
-                    case Constants.MOD_SPD: slot1Item.icon = i_mod_spd; break;
-                    case Constants.MOD_RCG: slot1Item.icon = i_mod_rcg; break;
-                    case Constants.MOD_ACP: slot1Item.icon = i_mod_acp; break;
-                    default: slot1Item.icon = i_mod_nil; break;
+                    slotItems[i] = new ModItem(data.player.myWeapon.mods[i]);
+                    switch (slotItems[i].modification.type)
+                    {
+                        case Constants.MOD_NIL: slotItems[i].icon = i_mod_nil; break;
+                        case Constants.MOD_ELM:
+                            switch (slotItems[i].modification.value)
+                            {
+                                case Constants.ELM_PLA: slotItems[i].icon = i_mod_pla; break;
+                                case Constants.ELM_HEA: slotItems[i].icon = i_mod_hea; break;
+                                case Constants.ELM_ICE: slotItems[i].icon = i_mod_ice; break;
+                                default: slotItems[i].icon = i_mod_nil; break;
+                            } break;
+                        case Constants.MOD_TYP:
+                            switch (slotItems[i].modification.value)
+                            {
+                                case Constants.TYP_BLA: slotItems[i].icon = i_mod_bla; break;
+                                case Constants.TYP_WAV: slotItems[i].icon = i_mod_wav; break;
+                                case Constants.TYP_TRI: slotItems[i].icon = i_mod_tri; break;
+                                default: slotItems[i].icon = i_mod_nil; break;
+                            } break;
+                        case Constants.MOD_STR: slotItems[i].icon = i_mod_str; break;
+                        case Constants.MOD_SPD: slotItems[i].icon = i_mod_spd; break;
+                        case Constants.MOD_RCG: slotItems[i].icon = i_mod_rcg; break;
+                        case Constants.MOD_ACP: slotItems[i].icon = i_mod_acp; break;
+                        default: slotItems[i].icon = i_mod_nil; break;
+                    }
                 }
-                slot2Item = new ModItem(data.player.myWeapon.mods[1]);
-                switch (slot2Item.modification.type)
-                {
-                    case Constants.MOD_NIL: slot2Item.icon = i_mod_nil; break;
-                    case Constants.MOD_ELM: slot2Item.icon = i_mod_nil; break;
-                    case Constants.MOD_TYP: slot2Item.icon = i_mod_nil; break;
-                    case Constants.MOD_STR: slot2Item.icon = i_mod_str; break;
-                    case Constants.MOD_SPD: slot2Item.icon = i_mod_spd; break;
-                    case Constants.MOD_RCG: slot2Item.icon = i_mod_rcg; break;
-                    case Constants.MOD_ACP: slot2Item.icon = i_mod_acp; break;
-                    default: slot2Item.icon = i_mod_nil; break;
-                }
-                slot3Item = new ModItem(data.player.myWeapon.mods[2]);
-                switch (slot3Item.modification.type)
-                {
-                    case Constants.MOD_NIL: slot3Item.icon = i_mod_nil; break;
-                    case Constants.MOD_ELM: slot3Item.icon = i_mod_nil; break;
-                    case Constants.MOD_TYP: slot3Item.icon = i_mod_nil; break;
-                    case Constants.MOD_STR: slot3Item.icon = i_mod_str; break;
-                    case Constants.MOD_SPD: slot3Item.icon = i_mod_spd; break;
-                    case Constants.MOD_RCG: slot3Item.icon = i_mod_rcg; break;
-                    case Constants.MOD_ACP: slot3Item.icon = i_mod_acp; break;
-                    default: slot3Item.icon = i_mod_nil; break;
-                }
-                slot4Item = new ModItem(data.player.myWeapon.mods[3]);
-                switch (slot4Item.modification.type)
-                {
-                    case Constants.MOD_NIL: slot4Item.icon = i_mod_nil; break;
-                    case Constants.MOD_ELM: slot4Item.icon = i_mod_nil; break;
-                    case Constants.MOD_TYP: slot4Item.icon = i_mod_nil; break;
-                    case Constants.MOD_STR: slot4Item.icon = i_mod_str; break;
-                    case Constants.MOD_SPD: slot4Item.icon = i_mod_spd; break;
-                    case Constants.MOD_RCG: slot4Item.icon = i_mod_rcg; break;
-                    case Constants.MOD_ACP: slot4Item.icon = i_mod_acp; break;
-                    default: slot4Item.icon = i_mod_nil; break;
-                }
+
+                #region
+                //slot1Item = new ModItem(data.player.myWeapon.mods[0]);
+                //switch (slot1Item.modification.type)
+                //{
+                //    case Constants.MOD_NIL: slot1Item.icon = i_mod_nil; break;
+                //    case Constants.MOD_ELM: 
+                //        switch(slot1Item.modification.value) {
+                //            case Constants.ELM_PLA: slot1Item.icon = i_mod_pla; break;
+                //            case Constants.ELM_HEA: slot1Item.icon = i_mod_hea; break;
+                //            case Constants.ELM_ICE: slot1Item.icon = i_mod_ice; break;
+                //            default: slot1Item.icon = i_mod_nil; break;
+                //        } break;
+                //    case Constants.MOD_TYP:
+                //        switch(slot1Item.modification.value) {
+                //            case Constants.TYP_BLA: slot1Item.icon = i_mod_bla; break;
+                //            case Constants.TYP_WAV: slot1Item.icon = i_mod_wav; break;
+                //            case Constants.TYP_TRI: slot1Item.icon = i_mod_tri; break;
+                //            default: slot1Item.icon = i_mod_nil; break;
+                //        } break;
+                //    case Constants.MOD_STR: slot1Item.icon = i_mod_str; break;
+                //    case Constants.MOD_SPD: slot1Item.icon = i_mod_spd; break;
+                //    case Constants.MOD_RCG: slot1Item.icon = i_mod_rcg; break;
+                //    case Constants.MOD_ACP: slot1Item.icon = i_mod_acp; break;
+                //    default: slot1Item.icon = i_mod_nil; break;
+                //}
+                //slot2Item = new ModItem(data.player.myWeapon.mods[1]);
+                //switch (slot2Item.modification.type)
+                //{
+                //    case Constants.MOD_NIL: slot2Item.icon = i_mod_nil; break;
+                //    case Constants.MOD_ELM:
+                //        switch (slot2Item.modification.value)
+                //        {
+                //            case Constants.ELM_PLA: slot2Item.icon = i_mod_pla; break;
+                //            case Constants.ELM_HEA: slot2Item.icon = i_mod_hea; break;
+                //            case Constants.ELM_ICE: slot2Item.icon = i_mod_ice; break;
+                //            default: slot2Item.icon = i_mod_nil; break;
+                //        } break;
+                //    case Constants.MOD_TYP:
+                //        switch (slot2Item.modification.value)
+                //        {
+                //            case Constants.TYP_BLA: slot2Item.icon = i_mod_bla; break;
+                //            case Constants.TYP_WAV: slot2Item.icon = i_mod_wav; break;
+                //            case Constants.TYP_TRI: slot2Item.icon = i_mod_tri; break;
+                //            default: slot2Item.icon = i_mod_nil; break;
+                //        } break;
+                //    case Constants.MOD_STR: slot2Item.icon = i_mod_str; break;
+                //    case Constants.MOD_SPD: slot2Item.icon = i_mod_spd; break;
+                //    case Constants.MOD_RCG: slot2Item.icon = i_mod_rcg; break;
+                //    case Constants.MOD_ACP: slot2Item.icon = i_mod_acp; break;
+                //    default: slot2Item.icon = i_mod_nil; break;
+                //}
+                //slot3Item = new ModItem(data.player.myWeapon.mods[2]);
+                //switch (slot3Item.modification.type)
+                //{
+                //    case Constants.MOD_NIL: slot3Item.icon = i_mod_nil; break;
+                //    case Constants.MOD_ELM:
+                //        switch (slot3Item.modification.value)
+                //        {
+                //            case Constants.ELM_PLA: slot3Item.icon = i_mod_pla; break;
+                //            case Constants.ELM_HEA: slot3Item.icon = i_mod_hea; break;
+                //            case Constants.ELM_ICE: slot3Item.icon = i_mod_ice; break;
+                //            default: slot3Item.icon = i_mod_nil; break;
+                //        } break;
+                //    case Constants.MOD_TYP:
+                //        switch (slot3Item.modification.value)
+                //        {
+                //            case Constants.TYP_BLA: slot3Item.icon = i_mod_bla; break;
+                //            case Constants.TYP_WAV: slot3Item.icon = i_mod_wav; break;
+                //            case Constants.TYP_TRI: slot3Item.icon = i_mod_tri; break;
+                //            default: slot3Item.icon = i_mod_nil; break;
+                //        } break;
+                //    case Constants.MOD_STR: slot3Item.icon = i_mod_str; break;
+                //    case Constants.MOD_SPD: slot3Item.icon = i_mod_spd; break;
+                //    case Constants.MOD_RCG: slot3Item.icon = i_mod_rcg; break;
+                //    case Constants.MOD_ACP: slot3Item.icon = i_mod_acp; break;
+                //    default: slot3Item.icon = i_mod_nil; break;
+                //}
+                //slot4Item = new ModItem(data.player.myWeapon.mods[3]);
+                //switch (slot4Item.modification.type)
+                //{
+                //    case Constants.MOD_NIL: slot4Item.icon = i_mod_nil; break;
+                //    case Constants.MOD_ELM:
+                //        switch (slot4Item.modification.value)
+                //        {
+                //            case Constants.ELM_PLA: slot4Item.icon = i_mod_pla; break;
+                //            case Constants.ELM_HEA: slot4Item.icon = i_mod_hea; break;
+                //            case Constants.ELM_ICE: slot4Item.icon = i_mod_ice; break;
+                //            default: slot4Item.icon = i_mod_nil; break;
+                //        } break;
+                //    case Constants.MOD_TYP:
+                //        switch (slot4Item.modification.value)
+                //        {
+                //            case Constants.TYP_BLA: slot4Item.icon = i_mod_bla; break;
+                //            case Constants.TYP_WAV: slot4Item.icon = i_mod_wav; break;
+                //            case Constants.TYP_TRI: slot4Item.icon = i_mod_tri; break;
+                //            default: slot4Item.icon = i_mod_nil; break;
+                //        } break;
+                //    case Constants.MOD_STR: slot4Item.icon = i_mod_str; break;
+                //    case Constants.MOD_SPD: slot4Item.icon = i_mod_spd; break;
+                //    case Constants.MOD_RCG: slot4Item.icon = i_mod_rcg; break;
+                //    case Constants.MOD_ACP: slot4Item.icon = i_mod_acp; break;
+                //    default: slot4Item.icon = i_mod_nil; break;
+                //}
+                #endregion
             }
+
+            slot1Item = slotItems[0];
+            slot2Item = slotItems[1];
+            slot3Item = slotItems[2];
+            slot4Item = slotItems[3];
 
             #endregion
 
@@ -363,6 +489,11 @@ namespace TestsubjektV1
             }
         }
 
+        private void updateKeyboardInput()
+        {
+            //if (Keyboard.GetState().IsKeyDown(Keys.M))
+        }
+
         public override int update(GameTime gameTime)
         {                      
             onExitClick();
@@ -373,6 +504,7 @@ namespace TestsubjektV1
             onSlot3Click();
             onSlot4Click();
             updateDragDrop();
+            updateKeyboardInput();
 
             lastMouseState = Mouse.GetState().LeftButton;
             return screenReturnValue;

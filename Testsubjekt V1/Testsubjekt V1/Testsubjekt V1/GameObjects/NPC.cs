@@ -399,7 +399,7 @@ namespace TestsubjektV1
         }
         #endregion
 
-        public override void draw(Camera camera, SpriteBatch spriteBatch, SpriteFont font)
+        public override void draw(Camera camera, Queue<DmgNumber> queue)
         {
             if (!active)
                 return;
@@ -418,15 +418,17 @@ namespace TestsubjektV1
                 dmgNumPos.X = dmgNumPos3.X;
                 dmgNumPos.Y = dmgNumPos3.Y;
 
-                Color color = (crit) ? Color.Gold : Color.White;
+                queue.Enqueue(new DmgNumber(lastDmg, crit, dmgNumPos));
 
-                spriteBatch.Begin();
-                spriteBatch.DrawString(font, lastDmg.ToString(), dmgNumPos, color);
-                spriteBatch.End();
-                graphicsDevice.BlendState = BlendState.Opaque;
-                graphicsDevice.DepthStencilState = DepthStencilState.Default;
-                graphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-                graphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+                //Color color = (crit) ? Color.Gold : Color.White;
+
+                //spriteBatch.Begin();
+                //spriteBatch.DrawString(font, lastDmg.ToString(), dmgNumPos, color);
+                //spriteBatch.End();
+                //graphicsDevice.BlendState = BlendState.Opaque;
+                //graphicsDevice.DepthStencilState = DepthStencilState.Default;
+                //graphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+                //graphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             }
         }
 

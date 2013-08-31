@@ -24,6 +24,12 @@ namespace TestsubjektV1
         private Texture2D violet;
         private Texture2D red;
         private Texture2D blue;
+        private Texture2D darkblue;
+        private Texture2D lightgreen;
+        private Texture2D foxred;
+        private Texture2D white;
+        private Texture2D cyan;
+        private Texture2D orange;
 
         private Rectangle hudRectangle;
         private Rectangle HP1Rectangle;
@@ -32,6 +38,7 @@ namespace TestsubjektV1
         private Rectangle Mod2Rectangle;
         private Rectangle Mod3Rectangle;
         private Rectangle Mod4Rectangle;
+        private Rectangle[] ModRectangles;
         
         private SpriteBatch spriteBatch;
         private GraphicsDevice graphicsDevice;
@@ -61,15 +68,28 @@ namespace TestsubjektV1
             HPRectangle = new Rectangle(67, 56, 200, 17);
             spriteBatch = new SpriteBatch(graphicsDevice);
 
+            //stat mod icons
             red = content.Load<Texture2D>("Icons/redslot");
             blue = content.Load<Texture2D>("Icons/blueslot");
             violet = content.Load<Texture2D>("Icons/violetslot");
             green = content.Load<Texture2D>("Icons/greenslot");
 
+            //type mod icons
+            cyan = content.Load<Texture2D>("Icons/cyanslot");
+            darkblue = content.Load<Texture2D>("Icons/darkblueslot");
+            orange = content.Load<Texture2D>("Icons/orangeslot");
+            
+            //element mod icons
+            lightgreen = content.Load<Texture2D>("Icons/lightgreenslot");
+            foxred = content.Load<Texture2D>("Icons/foxredslot");
+            white = content.Load<Texture2D>("Icons/whiteslot");
+
+
             Mod1Rectangle = new Rectangle(52, 676, 40, 39);
             Mod2Rectangle = new Rectangle(91, 649, 40, 39);
             Mod3Rectangle = new Rectangle(134, 672, 40, 39);
             Mod4Rectangle = new Rectangle(93, 699, 40, 39);
+            ModRectangles = new Rectangle[] {Mod1Rectangle, Mod2Rectangle, Mod3Rectangle, Mod4Rectangle};
 
             spawnNewEnemies = false;
             timeInMission = new TimeSpan(0);
@@ -87,6 +107,7 @@ namespace TestsubjektV1
             data.bullets.clear();
             timeInMission = new TimeSpan(0);
             data.missions.activeMission.timeSpent = timeInMission;
+            blurEffect = new BlurEffect(graphicsDevice, contentManager);
         }
 
         public override int update(GameTime gameTime)
@@ -133,17 +154,21 @@ namespace TestsubjektV1
                         spawnNewEnemies = true;
             }
 
-            
-            if (isConsoleInFront() == Constants.CMD_JOURNAL) return Constants.CMD_JOURNAL;
+            return updateKeyboardInput();
+        }
+
+        private int updateKeyboardInput()
+        {
+            int cState = consoleState();
+            if (cState != Constants.CMD_NEW && cState != Constants.CMD_NONE)
+                return cState;
 
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 return Constants.CMD_PAUSE;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.J))
+            if (Keyboard.GetState().IsKeyDown(Keys.J) && world.mapID != 0)
                 return Constants.CMD_MISSIONINFO;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.M))
-                return Constants.CMD_MOD;
             #region DEBUG commands
             if (Constants.DEBUG)
             {
@@ -178,25 +203,30 @@ namespace TestsubjektV1
                 }
             }
             #endregion
-            
+
             return Constants.CMD_NONE;
         }
 
-        private int isConsoleInFront()
+        private int consoleState()
         {
             if (world.theme == 0)
             {
-                data.npcs.clear();
-                int xtile = (int)Math.Round((-1 * data.player.position.X + Constants.MAP_SIZE - 1) / 2.0f);
-                int ztile = (int)Math.Round((-1 * data.player.position.Z + Constants.MAP_SIZE - 1) / 2.0f);
+                //data.npcs.clear();
+                Vector3 camDir = new Vector3(camera.Direction.X, 0, camera.Direction.Z);
+                camDir.Normalize();
+                float dx = camDir.X;
+                float dz = camDir.Z;
+                int xtile = (int)Math.Round((-1 * data.player.position.X - dx + Constants.MAP_SIZE - 1) / 2.0f);
+                int ztile = (int)Math.Round((-1 * data.player.position.Z - dz + Constants.MAP_SIZE - 1) / 2.0f);
 
-                //int xtile = data.player.xTile;
-                //int ztile = data.player.zTile;
-
-                if (ztile == 14 && (xtile == 11 || xtile == 12 || xtile == 13))
+                if (world.getMapData(xtile, ztile) == '#')//ztile == 14 && xtile == 12)//(xtile == 11 || xtile == 12 || xtile == 13))
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.E))
                         return Constants.CMD_JOURNAL; // activate Journal
+                    if (Keyboard.GetState().IsKeyDown(Keys.Q))
+                        return Constants.CMD_MOD; // activate Modscreen
+                    if (Keyboard.GetState().IsKeyDown(Keys.R))
+                        return Constants.CMD_MOD; // activate NPC screen
                     return Constants.CMD_NEW; // console is only in front but nothing done
                 }
             }
@@ -237,9 +267,13 @@ namespace TestsubjektV1
 
             if (world.theme != 0 && data.missions.activeMission != null)
                 spriteBatch.DrawString(font, data.missions.activeMission.getShortLabel(data.npcs), new Vector2(800, 450), Color.LemonChiffon);
-            if (isConsoleInFront()==Constants.CMD_NEW)
-                spriteBatch.DrawString(font, "Press 'E' Button", new Vector2(800, 450), Color.LemonChiffon);
-
+            if (consoleState() == Constants.CMD_NEW)
+            {
+                spriteBatch.DrawString(font, "Mods: Press Q", new Vector2(315, 200), Color.LemonChiffon);
+                spriteBatch.DrawString(font, "Missions: Press E", new Vector2(435, 190), Color.LemonChiffon);
+                spriteBatch.DrawString(font, "Enemy Dex: Press R", new Vector2(580, 200), Color.LemonChiffon);
+                //spriteBatch.DrawString(font, "Press 'E' Button", new Vector2(800, 450), Color.LemonChiffon);
+            }
 
             spriteBatch.End();
         }
@@ -247,57 +281,36 @@ namespace TestsubjektV1
         private void drawMods()
         {
             Texture2D icon = null;
-            switch (data.player.myWeapon.mods[0].type)
-            {
-                case Constants.MOD_NIL: icon = null; break;
-                case Constants.MOD_ELM: icon = null; break;
-                case Constants.MOD_TYP: icon = null; break;
-                case Constants.MOD_STR: icon = red; break;
-                case Constants.MOD_SPD: icon = blue; break;
-                case Constants.MOD_RCG: icon = green; break;
-                case Constants.MOD_ACP: icon = violet; break;
-                default: icon = null; break;
-            }
-            if (icon != null) spriteBatch.Draw(icon, Mod1Rectangle, Color.White);
-            
-            switch (data.player.myWeapon.mods[1].type)
-            {
-                case Constants.MOD_NIL: icon = null; break;
-                case Constants.MOD_ELM: icon = null; break;
-                case Constants.MOD_TYP: icon = null; break;
-                case Constants.MOD_STR: icon = red; break;
-                case Constants.MOD_SPD: icon = blue; break;
-                case Constants.MOD_RCG: icon = green; break;
-                case Constants.MOD_ACP: icon = violet; break;
-                default: icon = null; break;
-            }
-            if (icon != null) spriteBatch.Draw(icon, Mod2Rectangle, Color.White);
-            
-            switch (data.player.myWeapon.mods[2].type)
-            {
-                case Constants.MOD_NIL: icon = null; break;
-                case Constants.MOD_ELM: icon = null; break;
-                case Constants.MOD_TYP: icon = null; break;
-                case Constants.MOD_STR: icon = red; break;
-                case Constants.MOD_SPD: icon = blue; break;
-                case Constants.MOD_RCG: icon = green; break;
-                case Constants.MOD_ACP: icon = violet; break;
-                default: icon = null; break;
-            }
-            if (icon != null) spriteBatch.Draw(icon, Mod3Rectangle, Color.White);
 
-            switch (data.player.myWeapon.mods[3].type)
+            for (int i = 0; i < 4; i++)
             {
-                case Constants.MOD_NIL: icon = null; break;
-                case Constants.MOD_ELM: icon = null; break;
-                case Constants.MOD_TYP: icon = null; break;
-                case Constants.MOD_STR: icon = red; break;
-                case Constants.MOD_SPD: icon = blue; break;
-                case Constants.MOD_RCG: icon = green; break;
-                case Constants.MOD_ACP: icon = violet; break;
-                default: icon = null; break;
+                switch (data.player.myWeapon.mods[i].type)
+                {
+                    case Constants.MOD_NIL: icon = null; break;
+                    case Constants.MOD_ELM:
+                        switch (data.player.myWeapon.mods[i].value)
+                        {
+                            case Constants.ELM_PLA: icon = lightgreen; break;
+                            case Constants.ELM_HEA: icon = foxred; break;
+                            case Constants.ELM_ICE: icon = white; break;
+                            default: icon = null; break;
+                        } break;
+                    case Constants.MOD_TYP:
+                        switch (data.player.myWeapon.mods[i].value)
+                        {
+                            case Constants.TYP_BLA: icon = orange; break;
+                            case Constants.TYP_WAV: icon = darkblue; break;
+                            case Constants.TYP_TRI: icon = cyan; break;
+                            default: icon = null; break;
+                        } break;
+                    case Constants.MOD_STR: icon = red; break;
+                    case Constants.MOD_SPD: icon = blue; break;
+                    case Constants.MOD_RCG: icon = green; break;
+                    case Constants.MOD_ACP: icon = violet; break;
+                    default: icon = null; break;
+                }
+                if (icon != null) spriteBatch.Draw(icon, ModRectangles[i], Color.White);
             }
-            if (icon != null) spriteBatch.Draw(icon, Mod4Rectangle, Color.White);
         }
     }
 }

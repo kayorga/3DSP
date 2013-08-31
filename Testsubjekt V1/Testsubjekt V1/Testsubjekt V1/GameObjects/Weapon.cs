@@ -55,7 +55,7 @@ namespace TestsubjektV1
             {
                 cooldown = maxCooldn - mod_cdn;
 
-                bullets.generate(true, position + direction * .5f, direction, 1 + mod_spd, 20, 20 + mod_str, (byte)mod_elm, Constants.TYP_WAV);
+                bullets.generate(true, position + direction * .5f, direction, 1 + mod_spd, 20, 20 + mod_str, (byte)mod_elm, (byte) mod_typ);
                 ammo--;
             }
 
@@ -98,15 +98,7 @@ namespace TestsubjektV1
             {
                 case Constants.MOD_NIL: break;
                 case Constants.MOD_ELM: mod_elm  = m.value; break;
-                case Constants.MOD_TYP:
-                    {
-                        mod_typ = m.value;
-                        switch (m.value)
-                        {
-                            default: mod_cdn = 0; break;
-                        }
-                        break;
-                    }
+                case Constants.MOD_TYP: mod_typ  = m.value; break;
                 case Constants.MOD_STR: mod_str += m.value * 2; break;
                 case Constants.MOD_SPD: mod_spd += m.value * .1f; break;
                 case Constants.MOD_RCG: mod_rcg += m.value * 4; break;

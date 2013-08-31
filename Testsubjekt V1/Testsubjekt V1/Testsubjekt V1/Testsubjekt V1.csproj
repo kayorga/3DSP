@@ -120,6 +120,7 @@
     <Compile Include="Collections\ModCollection.cs" />
     <Compile Include="Collections\NPCCollection.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="GameObjects\DmgNumber.cs" />
     <Compile Include="GameData.cs" />
     <Compile Include="GameObjects\Bullet.cs" />
     <Compile Include="GameObjects\Character.cs" />

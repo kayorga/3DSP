@@ -26,6 +26,8 @@ namespace TestsubjektV1
 
         private GraphicsDevice graphicsDevice;
 
+        private Queue<DmgNumber> queue;
+
         public NPCCollection(World w, ContentManager Content, Player pl, GraphicsDevice graphicsDevice)
             : base(Constants.CAP_NPCS)
         {
@@ -56,6 +58,8 @@ namespace TestsubjektV1
             models[3] = Content.Load<Model>("Models/enemy2");
             models[4] = Content.Load<Model>("cube_rounded");
             #endregion
+
+            queue = new Queue<DmgNumber>();
 
             //model0 = new ModelObject("cube");
             pathFinder = new AStar(world, pl, new Point(1,1), this);
@@ -148,7 +152,23 @@ namespace TestsubjektV1
             graphicsDevice.DepthStencilState = DepthStencilState.Default;
             
             foreach (NPC npc in _content)
-                npc.draw(camera, spriteBatch, font);
+                npc.draw(camera, queue);
+
+            while (queue.Count > 0)
+            {
+                DmgNumber num = queue.Dequeue();
+                Color color = (num.crit) ? Color.Gold : Color.White;
+
+                spriteBatch.Begin();
+                spriteBatch.DrawString(font, num.dmg.ToString(), num.position, color);
+                spriteBatch.End();
+                
+            }
+
+            graphicsDevice.BlendState = BlendState.Opaque;
+            graphicsDevice.DepthStencilState = DepthStencilState.Default;
+            graphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            graphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
         }
 
         public void draw(Camera camera)

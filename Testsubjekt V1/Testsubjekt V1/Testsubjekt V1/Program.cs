@@ -1,7 +1,7 @@
 using System;
 using TestsubjektV1;
 
-namespace Testsubjekt_V1
+namespace TestsubjektV1
 {
 #if WINDOWS || XBOX
     static class Program
