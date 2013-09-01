@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace TestsubjektV1
 {
@@ -55,9 +56,13 @@ namespace TestsubjektV1
         {
             if (loadRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                screenReturnValue = Constants.CMD_NEW;
-                audio.playClick();
-                loadGame(data);
+                try
+                {
+                    screenReturnValue = Constants.CMD_NEW;
+                    audio.playClick();
+                    loadGame(data);
+                }
+                catch(Exception) {}
             }
 
         }
