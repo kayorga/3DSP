@@ -124,6 +124,7 @@ namespace TestsubjektV1
         {
             foreach (NPC n in _content)
                 n.active = false;
+            queue.Clear();
         }
 
         public void generate(byte k, Vector3 p, Vector3 d, int l)

@@ -128,9 +128,26 @@ namespace TestsubjektV1
                 camera.reset(); 
                 world.warp(m.Area, m.Zone);
                 world.setupSpawners(m);
+                data.npcs.clear();
+                data.bullets.clear();
                 data.player.myWeapon.reload();
                 data.missions.activeMission.reset(data.player.lv);
                 screenReturnValue = Constants.CMD_NEW;
+                audio.playClick();
+            }
+        }
+
+        private void onKeyboard()
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.Q))
+            {
+                screenReturnValue = Constants.CMD_MOD;
+                audio.playClick();
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.R))
+            {
+                screenReturnValue = Constants.CMD_MOD;
                 audio.playClick();
             }
         }
@@ -145,6 +162,7 @@ namespace TestsubjektV1
             onArcticClick();
             onBossClick();
             onStartClick();
+            onKeyboard();
             return screenReturnValue;
         }
 

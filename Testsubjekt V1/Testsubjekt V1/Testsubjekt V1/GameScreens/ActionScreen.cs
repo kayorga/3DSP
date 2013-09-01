@@ -122,6 +122,8 @@ namespace TestsubjektV1
             {
                 world.warp(0, 0);
                 camera.reset();
+                data.npcs.clear();
+                data.bullets.clear();
                 return Constants.CMD_NONE;
             }
 

@@ -70,6 +70,8 @@ namespace TestsubjektV1
                     screenReturnValue = Constants.CMD_NEW;
                     data.npcs.clear();
                     world.warp(0, 0);
+                    data.npcs.clear();
+                    data.bullets.clear();
                     camera.reset();
                 }
             }

@@ -485,9 +485,19 @@ namespace TestsubjektV1
             }
         }
 
-        private void updateKeyboardInput()
+        private void onKeyboard()
         {
-            //if (Keyboard.GetState().IsKeyDown(Keys.M))
+            if (Keyboard.GetState().IsKeyDown(Keys.E))
+            {
+                screenReturnValue = Constants.CMD_JOURNAL;
+                audio.playClick();
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.R))
+            {
+                screenReturnValue = Constants.CMD_JOURNAL;
+                audio.playClick();
+            }
         }
 
         public override int update(GameTime gameTime)
@@ -500,7 +510,7 @@ namespace TestsubjektV1
             onSlot3Click();
             onSlot4Click();
             updateDragDrop();
-            updateKeyboardInput();
+            onKeyboard();
 
             lastMouseState = Mouse.GetState().LeftButton;
             return screenReturnValue;

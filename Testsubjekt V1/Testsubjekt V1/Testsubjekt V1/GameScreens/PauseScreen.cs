@@ -100,6 +100,8 @@ namespace TestsubjektV1
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed)
                 {
                     world.warp(0, 0);
+                    data.npcs.clear();
+                    data.bullets.clear();
                     camera.reset();
                     screenReturnValue = Constants.CMD_NEW;
                 }

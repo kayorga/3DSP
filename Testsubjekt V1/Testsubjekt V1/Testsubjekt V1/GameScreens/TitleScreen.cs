@@ -38,13 +38,19 @@ namespace TestsubjektV1
         private void onNewGameClick()
         {
             if (newGameRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
                 screenReturnValue = Constants.CMD_INTRO;
+                audio.playClick();
+            }
         }
 
         private void onExitClick()
         {
             if (exitRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
                 screenReturnValue = Constants.CMD_EXIT;
+                audio.playClick();
+            }
         }
 
         private void onLoadClick()
@@ -52,6 +58,7 @@ namespace TestsubjektV1
             if (loadRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 screenReturnValue = Constants.CMD_NEW;
+                audio.playClick();
                 loadGame(data);
             }
 

@@ -28,7 +28,21 @@ namespace TestsubjektV1
 
         public AudioManager(ContentManager Content)
         {
-            return;
+            playerShootSound = Content.Load<SoundEffect>("Audio/shoot1");
+            npcShootSound = Content.Load<SoundEffect>("Audio/shoot1");
+            npcNeutralHitSound = Content.Load<SoundEffect>("Audio/hit1");
+            npcStrongHitSound = Content.Load<SoundEffect>("Audio/hit1");
+            npcWeakHitSound = Content.Load<SoundEffect>("Audio/hit1");
+            npcCritHitSound = Content.Load<SoundEffect>("Audio/hit1");
+            playerHitSound = Content.Load<SoundEffect>("Audio/hit1");
+
+            clickSound = Content.Load<SoundEffect>("Audio/click");
+
+            backgroundSound0 = Content.Load<SoundEffect>("Audio/shoot1");
+            backgroundSound1 = Content.Load<SoundEffect>("Audio/shoot1");
+            backgroundSound2 = Content.Load<SoundEffect>("Audio/shoot1");
+            backgroundSound3 = Content.Load<SoundEffect>("Audio/shoot1");
+
             backgroundSounds = new SoundEffect[] {backgroundSound0, backgroundSound1, backgroundSound2, backgroundSound3};
         }
 
@@ -43,7 +57,6 @@ namespace TestsubjektV1
 
         public void playNPCHit(float dmgModifier)
         {
-            return;
             if (dmgModifier > 1)
                 npcStrongHitSound.CreateInstance().Play();
             else if (dmgModifier == 1)
@@ -54,13 +67,11 @@ namespace TestsubjektV1
 
         public void playCrit()
         {
-            return;
             npcCritHitSound.CreateInstance().Play();
         }
 
         public void playShoot(bool fromPlayer)
         {
-            return;
             if (fromPlayer)
                 playerShootSound.CreateInstance().Play();
             else npcShootSound.CreateInstance().Play();
@@ -68,7 +79,6 @@ namespace TestsubjektV1
 
         public void playClick()
         {
-            return;
             clickSound.CreateInstance().Play();
         }
     }
