@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace TestsubjektV1
@@ -21,7 +18,7 @@ namespace TestsubjektV1
             this.mapX = X; this.mapY = Y;
             this.hCosts = Math.Max(Math.Abs(goal.X - this.mapX), Math.Abs(goal.Y - this.mapY));
             this.previousNode = prev;
-            if (this.previousNode == null) this.gCosts = 1;
+            if (this.previousNode == null) this.gCosts = constantG;
             else this.gCosts = this.previousNode.G + constantG;
             this.fCosts = this.hCosts + this.gCosts;
             //worldPosition = new Vector3(X * -2.0f/3.0f + Constants.MAP_SIZE - 1, 0, -2.0f * Y / 3.0f + Constants.MAP_SIZE - 1);

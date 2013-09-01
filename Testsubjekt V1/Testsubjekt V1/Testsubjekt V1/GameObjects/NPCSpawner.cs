@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using TestsubjektV1;
 using Microsoft.Xna.Framework;
 
 namespace TestsubjektV1

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
@@ -56,7 +54,7 @@ namespace TestsubjektV1
             models[1] = Content.Load<Model>("Models/enemy3");
             models[2] = Content.Load<Model>("Models/enemy1");
             models[3] = Content.Load<Model>("Models/enemy2");
-            models[4] = Content.Load<Model>("Models/boss");
+            models[4] = Content.Load<Model>("cube_rounded");
             #endregion
 
             queue = new Queue<DmgNumber>();
@@ -91,15 +89,7 @@ namespace TestsubjektV1
                     continue;
 
                 bool k = n.update(gameTime, bullets, camera, p, m);
-                if (!k)
-                {
-                    //p.getEXP(n.XP);
-                    //if (m != null && n.kind == m.target)
-                    //{
-                    //    m.actCount--;
-                    //}
-                }
-                else
+                if (k)
                 {
                     float nx = n.position.X;
                     float nz = n.position.Z;
@@ -111,11 +101,21 @@ namespace TestsubjektV1
 
                     int X = (int)Math.Round((-1 * nx + world.size - 1));
                     int Z = (int)Math.Round((-1 * nz + world.size - 1));
-                    //for (int l = -1; i < 2; ++i)
-                    //{
-                        //for (int j = -1; j < 2; ++j )
-                            moveData[X][Z] = (byte) (i + 1);
-                    //}
+
+                    if (n.kind == Constants.NPC_BOSS)
+                    {
+                        moveData[X][Z] = (byte)(i + 1);
+                        for (int j = -1; j < 2; ++j)
+                            for (int l = -1; l < 2; ++l)
+                                try
+                                {
+                                    if (moveData[X][Z] == 0)
+                                        moveData[X + j][Z + l] = (byte)(i + 1);
+                                }
+                                catch (IndexOutOfRangeException) { continue; }
+                    }
+                    else
+                        moveData[X][Z] = (byte)(i + 1);
                 }
             }
         }

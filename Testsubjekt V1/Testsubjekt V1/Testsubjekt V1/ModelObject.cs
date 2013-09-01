@@ -113,10 +113,10 @@ namespace TestsubjektV1
                         basicEffect.World = worldMatrix;
                         basicEffect.View = viewMatrix;
                         basicEffect.Projection = projectionMatrix;
+                        basicEffect.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
                     }
                     else
                     {
-                        // unknown effect!
                         AlphaTestEffect e = (AlphaTestEffect)effect;
                         e.World = worldMatrix;
                         e.View = viewMatrix;

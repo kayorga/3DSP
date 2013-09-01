@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace TestsubjektV1
 {
@@ -17,12 +14,14 @@ namespace TestsubjektV1
         private NPCCollection npcs;
         public List<Vector3> list;
         private Point origin;
+        private bool isBoss;
         
         public AStar(World w, Player p, Point o, NPCCollection col){
             world = w;
             npcs = col;
             origin = o;            
             list = new List<Vector3>();
+            isBoss = false;
             PathNoteEqualityComparer comparer = new PathNoteEqualityComparer();
             openList = new SortedList<ulong, PathNode>();
             closedList = new HashSet<PathNode>(comparer);
@@ -45,8 +44,9 @@ namespace TestsubjektV1
             closedList.Clear();
         }
 
-        public Vector3 findPath()
+        public Vector3 findPath(bool isBoss = false)
         {
+            this.isBoss = isBoss;
             PathNode activeNode;
             do
             {
@@ -86,14 +86,35 @@ namespace TestsubjektV1
                     if (i == 0 && j == 0) continue;
                     /*if(currentNode.X+i>=0 && currentNode.Y+j>=0 && currentNode.X+i<world.MoveData.Length*3 && currentNode.Y+i<world.MoveData.Length*3
                         && world.MoveData[(currentNode.X+i)/3][(currentNode.Y+j)/3]==0 && npcs.npcMoveData[currentNode.X+i][currentNode.Y+j]!=true)*/
-                    if (currentNode.X + i >= 0 && currentNode.Y + j >= 0 && currentNode.X + i < world.MoveData.Length * 2 && currentNode.Y + i < world.MoveData.Length * 2
-                        && world.MoveData[(currentNode.X + i) / 2][(currentNode.Y + j) / 2] == 0 && npcs.npcMoveData[currentNode.X + i][currentNode.Y + j] == 0)
+                    try
                     {
-                        PathNode succNode = new PathNode(currentNode, currentNode.X + i, currentNode.Y + j, new Point(goal.X, goal.Y), (Math.Abs(i)+Math.Abs(j)==2? 1.4f:1));
-                        if (isNodeInClosedList(succNode)) continue;
+                        bool condition =
+                            currentNode.X + i >= 0 &&
+                            currentNode.Y + j >= 0 &&
+                            currentNode.X + i < world.MoveData.Length * 2 &&
+                            currentNode.Y + i < world.MoveData.Length * 2 &&
+                            npcs.npcMoveData[currentNode.X + i][currentNode.Y + j] == 0 &&
+                            world.MoveData[(currentNode.X + i) / 2][(currentNode.Y + j) / 2] != 1;
 
-                        if (!isNodeInOpenList(succNode)) openList.Add(succNode.key, succNode);
+                        //if (isBoss)
+                        //{
+                        //    condition = condition &&
+                        //        (npcs.npcMoveData[currentNode.X + i][currentNode.Y + j] == 0 || npcs.npcMoveData[currentNode.X + i][currentNode.Y + j] == 1);
+                        //}
+                        //else
+                        //    condition = condition && npcs.npcMoveData[currentNode.X + i][currentNode.Y + j] == 0;
+
+                        if (condition)
+                        {
+                            float cost = (Math.Abs(i) + Math.Abs(j) == 2 ? 1.4f : 1);
+                            cost = (world.MoveData[(currentNode.X + i) / 2][(currentNode.Y + j) / 2] != 2) ? cost : 100 * cost;
+                            PathNode succNode = new PathNode(currentNode, currentNode.X + i, currentNode.Y + j, new Point(goal.X, goal.Y), cost);
+                            if (isNodeInClosedList(succNode)) continue;
+
+                            if (!isNodeInOpenList(succNode)) openList.Add(succNode.key, succNode);
+                        }
                     }
+                    catch (IndexOutOfRangeException) { continue; }
                 }
             }
         }

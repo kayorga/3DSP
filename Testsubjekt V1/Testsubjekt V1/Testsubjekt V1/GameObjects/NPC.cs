@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
@@ -203,6 +201,7 @@ namespace TestsubjektV1
             hitTimer = 0;
             isDead = false;
             pathFinder = npcs.PathFinder;
+            target = new Vector3(position.X, position.Y, position.Z);
         }
 
         public bool update(GameTime gameTime, BulletCollection bullets, Camera camera, Player p, Mission m)
@@ -256,24 +255,25 @@ namespace TestsubjektV1
             #endregion
 
             #region move
-            if (moving)
-                move();
-            else
+            //if (moving)
+                //move();
+            //else
+
+            if (playerDistance < 4)
             {
-                if (playerDistance < 4)
-                {
-                    target = position;
-                    direction = p.Position - this.Position;
-                }
-                else
+                target = position;
+                direction = p.Position - this.Position;
+            }
+            if (!move())
+            {
                 {
                     pathFinder.setup(new Point((int)Math.Round((-1 * position.X + world.size - 1)), (int)Math.Round((-1 * position.Z + world.size - 1))), p);
-                    target = pathFinder.findPath();
+                    target = pathFinder.findPath(kind == Constants.NPC_BOSS);
                     newTarget = true;
                     direction = target - position;
                     if (direction.Length() != 0) direction.Normalize();
                     moving = true;
-                    move();
+                    //move();
                 }
             }
             #endregion
@@ -304,9 +304,17 @@ namespace TestsubjektV1
         }
 
         #region move
-        private void move()
+        private bool move()
         {
             //Console.WriteLine("pre move : " + position.X + " ; " + position.Z + " ; direction: " + direction.X + " ; " + direction.Z);
+
+            int xTile = (int)Math.Round((-1 * target.X + Constants.MAP_SIZE - 1) / 2);
+            int zTile = (int)Math.Round((-1 * target.Z + Constants.MAP_SIZE - 1) / 2);
+            //if (kind == Constants.NPC_BOSS && world.MoveData[xTile][zTile] == 2)
+            //{
+            //    moving = false;
+            //    return;
+            //}
 
             int factor = (int)Math.Ceiling(speed / .025f);
 
@@ -317,18 +325,18 @@ namespace TestsubjektV1
                 spd = Math.Min(spd, remainingSpeed);
                 bool u = moveCycle(factor, spd);
                 remainingSpeed -= spd;
-                if (!u || remainingSpeed == 0) break;
+                //if (!u || remainingSpeed == 0) break;
+
+                if (!u) return false;
+                else if (remainingSpeed == 0) return true;
             }
 
-            
+            return true;
             //Console.WriteLine("post move : " + position.X + " ; " + position.Z);
         }
 
         private bool moveCycle(int factor, float spd)
         {
-            this.position += spd * direction;
-            model.Position = this.position;
-
             //if (float.IsNaN(position.X)) Console.WriteLine("X is NaN cause direction is");
 
             if ((this.position - target).Length() < 0.02f)
@@ -339,6 +347,9 @@ namespace TestsubjektV1
                 return false;
                 //Console.WriteLine("done: " + position.X + "/" + position.Z);
             }
+
+            this.position += spd * direction;
+            model.Position = this.position;
             return true;
         }
         #endregion

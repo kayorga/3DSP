@@ -1,6 +1,3 @@
-using System;
-using TestsubjektV1;
-
 namespace TestsubjektV1
 {
 #if WINDOWS || XBOX

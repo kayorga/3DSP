@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace TestsubjektV1
 {
@@ -97,6 +94,9 @@ namespace TestsubjektV1
             Random ran = new Random();
             for (int i = 1; i < 4; i++)
                 kinds[i] = (byte)ran.Next(3);
+
+            if (kind == Constants.NPC_BOSS)
+                area = 1;
 
             active = true;
         }

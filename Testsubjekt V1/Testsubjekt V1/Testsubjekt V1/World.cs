@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -225,6 +223,10 @@ namespace TestsubjektV1
                         case '-':
                             mapObjects[i][j] = null;
                             moveData[i][j] = 1;
+                            break;
+                        case '.':
+                            mapObjects[i][j] = null;
+                            moveData[i][j] = 2;
                             break;
                         case 'x':
                             player_start[0] = i;
