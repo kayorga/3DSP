@@ -26,16 +26,17 @@ namespace TestsubjektV1
             this.audio = audio;
         }
 
-        public void loadData(int loadedPlayerLevel, int loadedPlayerXP, List<Mod> loadedWeaponMods, List<Mod> loadedMods, byte[] loadedMissionLevels, byte[] loadedMissionTKinds, byte[] loadedMissionTCounts, byte[] loadedMissionZones, byte[] loadedMissionAreas, bool[] loadedMissionStates)
+        public void loadData(int loadedPlayerLevel, int loadedPlayerXP, List<Mod> loadedWeaponMods, List<Mod> loadedMods, byte[] loadedMissionLevels, byte[] loadedMissionTKinds, byte[] loadedMissionTCounts, byte[] loadedMissionZones, byte[] loadedMissionAreas, bool[] loadedMissionStates, byte[][] loadedMissionKinds, int firstModValue)
         {
             this.player.level = loadedPlayerLevel;
             this.player.XP = loadedPlayerXP;
             this.player.myWeapon.mods = loadedWeaponMods;
             this.mods._content = loadedMods;
+            this.mods.firstMod = new Mod(Constants.MOD_ELM, firstModValue);
 
             for (int i = 0; i < 4; i++)
             {
-                this.missions[i] = new Type1Mission(loadedMissionLevels[i], loadedMissionTKinds[i], loadedMissionTCounts[i], loadedMissionZones[i], loadedMissionAreas[i], npcs.Labels, world.Labels, loadedMissionStates[i]);
+                this.missions[i] = new Type1Mission(loadedMissionLevels[i], loadedMissionTKinds[i], loadedMissionTCounts[i], loadedMissionZones[i], loadedMissionAreas[i], npcs.Labels, world.Labels, loadedMissionStates[i], loadedMissionKinds[i]);
             }
         }
 

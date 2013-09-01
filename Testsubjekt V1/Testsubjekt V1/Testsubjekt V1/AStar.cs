@@ -96,13 +96,13 @@ namespace TestsubjektV1
                             npcs.npcMoveData[currentNode.X + i][currentNode.Y + j] == 0 &&
                             world.MoveData[(currentNode.X + i) / 2][(currentNode.Y + j) / 2] != 1;
 
-                        //if (isBoss)
-                        //{
-                        //    condition = condition &&
-                        //        (npcs.npcMoveData[currentNode.X + i][currentNode.Y + j] == 0 || npcs.npcMoveData[currentNode.X + i][currentNode.Y + j] == 1);
-                        //}
-                        //else
-                        //    condition = condition && npcs.npcMoveData[currentNode.X + i][currentNode.Y + j] == 0;
+                        if (isBoss)
+                        {
+                            condition = condition &&
+                                (npcs.npcMoveData[currentNode.X + i][currentNode.Y + j] == 0 || npcs.npcMoveData[currentNode.X + i][currentNode.Y + j] == 1);
+                        }
+                        else
+                            condition = condition && npcs.npcMoveData[currentNode.X + i][currentNode.Y + j] == 0;
 
                         if (condition)
                         {

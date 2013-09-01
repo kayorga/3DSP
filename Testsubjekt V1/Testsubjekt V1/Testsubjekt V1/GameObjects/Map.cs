@@ -62,6 +62,8 @@ namespace TestsubjektV1
                     if (world.getMapData(Constants.MAP_SIZE - i / 2 - 1, Constants.MAP_SIZE - j / 2 - 1) == '1' || world.getMapData(Constants.MAP_SIZE - i / 2 - 1, Constants.MAP_SIZE - j / 2 - 1) == '#') spriteBatch.Draw(obstacle, mapRectangle[i][j], Color.White);
 
                     if (data.npcs.npcMoveData[Constants.MAP_SIZE * 2 - i - 1][Constants.MAP_SIZE * 2 - j - 1] != 0 && data.npcs.npcMoveData[Constants.MAP_SIZE * 2 - i - 1][Constants.MAP_SIZE * 2 - j - 1] != 255) spriteBatch.Draw(enemy, mapRectangle[i][j], Color.White);
+
+                    if (data.npcs.npcMoveData[Constants.MAP_SIZE * 2 - i - 1][Constants.MAP_SIZE * 2 - j - 1] == 255) spriteBatch.Draw(enemy, mapRectangle[i][j], Color.Black);
                 }
             }
 

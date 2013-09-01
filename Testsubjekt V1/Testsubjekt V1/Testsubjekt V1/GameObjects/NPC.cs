@@ -147,6 +147,7 @@ namespace TestsubjektV1
                     maxHealth = (int)(50 * Math.Pow(1.06f, level - 1));
                     XP = 2;
                     maxCooldn = 70;
+                    model.Scaling = new Vector3(0.75f, 0.75f, 0.75f);
                     element = Constants.ELM_NIL;
                     strength = (byte)(25 * Math.Pow(1.04f, level - 1));
                     break;
@@ -155,6 +156,7 @@ namespace TestsubjektV1
                     maxHealth = (int)(50 * Math.Pow(1.05f, level - 1));
                     XP = 3;
                     maxCooldn = 80;
+                    model.Scaling = new Vector3(0.75f, 0.75f, 0.75f);
                     element = Constants.ELM_PLA;
                     strength = (byte)(12 * Math.Pow(1.06f, level - 1));
                     break;
@@ -163,6 +165,7 @@ namespace TestsubjektV1
                     maxHealth = (int)(50 * Math.Pow(1.04f, level - 1));
                     XP = 3;
                     maxCooldn = 75;
+                    model.Scaling = new Vector3(0.5f, 0.5f, 0.5f);
                     element = Constants.ELM_HEA;
                     strength = (byte)(20 * Math.Pow(1.05f, level - 1));
                     break;
@@ -171,6 +174,7 @@ namespace TestsubjektV1
                     maxHealth = (int)(50 * Math.Pow(1.07f, level - 1));
                     XP = 3;
                     maxCooldn = 90;
+                    model.Scaling = new Vector3(0.75f, 0.75f, 0.75f);
                     element = Constants.ELM_ICE;
                     strength = (byte)Math.Min((15 * Math.Pow(1.06f, level - 1)), 255);
                     break;                
@@ -179,7 +183,7 @@ namespace TestsubjektV1
                     maxHealth = (int)(200 * Math.Pow(1.07f, level - 1));
                     XP = 70;
                     maxCooldn = 50;
-                    //model.Scaling = new Vector3(3,3,3);
+                    model.Scaling = new Vector3(0.75f, 0.75f, 0.75f);
                     element = elem;
                     strength = (byte)(14 * Math.Pow(1.06f, level - 1));
                     break;
@@ -259,11 +263,8 @@ namespace TestsubjektV1
                 //move();
             //else
 
-            if (playerDistance < 4)
-            {
-                target = position;
-                direction = p.Position - this.Position;
-            }
+            
+
             if (!move())
             {
                 {
@@ -276,6 +277,7 @@ namespace TestsubjektV1
                     //move();
                 }
             }
+
             #endregion
 
             #region get hit billboard/dmg number
@@ -300,6 +302,12 @@ namespace TestsubjektV1
             //Update PlayerDistance
             playerDistance = (p.Position - this.Position).Length();
 
+            if (playerDistance < 4)
+            {
+                target = position;
+                direction = p.Position - this.Position;
+            }
+
             return true;
         }
 
@@ -321,6 +329,15 @@ namespace TestsubjektV1
             float remainingSpeed = speed;
             for (int i = 0; i < factor; i++)
             {
+                if ((this.position - target).Length() < 0.02f)
+                {
+                    this.position = target;
+                    //if (float.IsNaN(position.X)) Console.WriteLine("X is NaN cause target is");
+                    //moving = false;
+                    return false;
+                    //Console.WriteLine("done: " + position.X + "/" + position.Z);
+                }
+
                 float spd = speed / (float)factor;
                 spd = Math.Min(spd, remainingSpeed);
                 bool u = moveCycle(factor, spd);
@@ -339,14 +356,14 @@ namespace TestsubjektV1
         {
             //if (float.IsNaN(position.X)) Console.WriteLine("X is NaN cause direction is");
 
-            if ((this.position - target).Length() < 0.02f)
-            {
-                this.position = target;
-                //if (float.IsNaN(position.X)) Console.WriteLine("X is NaN cause target is");
-                moving = false;
-                return false;
-                //Console.WriteLine("done: " + position.X + "/" + position.Z);
-            }
+            //if ((this.position - target).Length() < 0.02f)
+            //{
+            //    this.position = target;
+            //    //if (float.IsNaN(position.X)) Console.WriteLine("X is NaN cause target is");
+            //    //moving = false;
+            //    return false;
+            //    //Console.WriteLine("done: " + position.X + "/" + position.Z);
+            //}
 
             this.position += spd * direction;
             model.Position = this.position;

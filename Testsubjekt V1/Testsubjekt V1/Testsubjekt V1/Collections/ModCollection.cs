@@ -6,13 +6,14 @@ namespace TestsubjektV1
 {
     class ModCollection : Collection<Mod>
     {
+        private Mod[] specials;
         private int[] count;
         private Mod lastGenerated;
+        public Mod firstMod;
         public string lastMod { get { return lastGenerated.getLabel(); } }
         public ModCollection()
             : base(Constants.CAP_MODS)
         {
-            //TODO
             for (int i = 0; i < Constants.CAP_MODS; i++)
             {
                 _content.Add(new Mod(Constants.MOD_NIL));
@@ -20,6 +21,12 @@ namespace TestsubjektV1
 
             count = new int[4];
             count.Initialize();
+
+            specials = new Mod[6];
+
+            specials[1] = new Mod(Constants.MOD_TYP, Constants.TYP_WAV);
+            specials[3] = new Mod(Constants.MOD_TYP, Constants.TYP_BLA);
+            specials[5] = new Mod(Constants.MOD_TYP, Constants.TYP_TRI);
 
             if (Constants.DEBUG)
             {
@@ -33,6 +40,25 @@ namespace TestsubjektV1
             }
         }
 
+        public void setupESpecials()
+        {
+            switch (firstMod.value)
+            {
+                case Constants.ELM_HEA:
+                    specials[1] = new Mod(Constants.MOD_ELM, Constants.ELM_ICE);
+                    specials[3] = new Mod(Constants.MOD_ELM, Constants.ELM_PLA);
+                    break;
+                case Constants.ELM_ICE:
+                    specials[1] = new Mod(Constants.MOD_ELM, Constants.ELM_PLA);
+                    specials[3] = new Mod(Constants.MOD_ELM, Constants.ELM_HEA);
+                    break;
+                case Constants.ELM_PLA:
+                    specials[1] = new Mod(Constants.MOD_ELM, Constants.ELM_HEA);
+                    specials[3] = new Mod(Constants.MOD_ELM, Constants.ELM_ICE);
+                    break;
+            }
+        }
+
         public void update(int level)
         {
             //TODO
@@ -41,6 +67,13 @@ namespace TestsubjektV1
         public override void clear()
         {
             //TODO
+        }
+
+        public void add(byte lv)
+        {
+            lv -= 2;
+            if (lv > 24) return;
+            generate(specials[lv / 4 - 1].value, specials[lv / 4 - 1].type);
         }
 
         public void generate(int level, int t = 0)

@@ -144,6 +144,11 @@ namespace TestsubjektV1
                         spawnNewEnemies = false;
                         data.missions.activeMission.timeSpent = timeInMission;
                         data.missions.activeMission.reward(data.player, data.mods);
+                        if (data.missions.activeMission.level > data.missions.nextModLevel)
+                        {
+                            data.mods.add(data.missions.nextModLevel);
+                            data.missions.nextModLevel += 4;
+                        }
                         return Constants.CMD_MISSIONCOMPLETE;
                     }
                 }

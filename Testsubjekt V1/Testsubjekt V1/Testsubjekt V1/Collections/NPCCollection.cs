@@ -54,7 +54,7 @@ namespace TestsubjektV1
             models[1] = Content.Load<Model>("Models/enemy3");
             models[2] = Content.Load<Model>("Models/enemy1");
             models[3] = Content.Load<Model>("Models/enemy2");
-            models[4] = Content.Load<Model>("cube_rounded");
+            models[4] = Content.Load<Model>("Models/boss");
             #endregion
 
             queue = new Queue<DmgNumber>();
@@ -109,7 +109,7 @@ namespace TestsubjektV1
                             for (int l = -1; l < 2; ++l)
                                 try
                                 {
-                                    if (moveData[X][Z] == 0)
+                                    if (moveData[X + j][Z + l] == 0)
                                         moveData[X + j][Z + l] = (byte)(i + 1);
                                 }
                                 catch (IndexOutOfRangeException) { continue; }

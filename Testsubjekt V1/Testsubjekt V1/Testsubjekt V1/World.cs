@@ -274,7 +274,7 @@ namespace TestsubjektV1
             else
                 spawners[0].setup(m.Kinds[0], Constants.SPAWN_INFINITE);
 
-            for (int i = 1; i < 4; i++)
+            for (int i = 1; i < m.Kinds.Length; i++)
                 spawners[i].setup(m.Kinds[i], Constants.SPAWN_INFINITE);
         }
 

@@ -7,7 +7,7 @@ namespace TestsubjektV1
         public Type1Mission()
         {
             //TODO
-            kinds = null;
+            kinds = new byte[4];
             label = "";
             target = 0;
             tarCount = 0;
@@ -23,12 +23,11 @@ namespace TestsubjektV1
             blocked = false;
         }
 
-        public Type1Mission(byte lv, byte tKind, byte tCount, byte z, byte a, string[] nl, string[] zl, bool state)
+        public Type1Mission(byte lv, byte tKind, byte tCount, byte z, byte a, string[] nl, string[] zl, bool state, byte[] kinds)
         {
             //TODO
-            kinds = null;
             if (state)
-                setup(lv, tKind, tCount, z, a, nl, zl);
+                setup(lv, tKind, tCount, z, a, kinds, nl, zl);
             else
                 active = state;
             countKilledEnemies = 0;
@@ -79,12 +78,13 @@ namespace TestsubjektV1
             return false;
         }
 
-        public override void setup(byte lv, byte kind, byte count, byte z, byte a, string[] nl, string[] zl)
+        public override void setup(byte lv, byte kind, byte count, byte z, byte a, byte[] kinds, string[] nl, string[] zl)
         {
             level = lv;
             target = kind;
             tarCount = count;
             actCount = 0;
+            this.kinds = kinds;
             zone = z;
             area = a;
             makeLabel(nl, zl);
@@ -106,6 +106,10 @@ namespace TestsubjektV1
             label = "Level " + level;
             label += "\n\nTarget: " + ((tarCount == 1) ? nl[target] : tarCount + " " + nl[target]);
             label += "\nZone: " + zl[zone-1] + " Area " + area;
+            label += "\nEnemies: \n";
+
+            for (int i = 0; i < kinds.Length; i++)
+                label += "   " + nl[kinds[i]];
 
             return label;
         }
@@ -121,6 +125,8 @@ namespace TestsubjektV1
                     player.getEXP(exp);
                     countXPGained += exp;
                 }
+
+                
 
             if (startLv < player.level)
             {

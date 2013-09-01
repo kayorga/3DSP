@@ -116,6 +116,8 @@ namespace TestsubjektV1
                     case 2: data.mods.generate((int)Constants.ELM_ICE, Constants.MOD_ELM); break;
                     default: break;
                 }
+                data.mods.firstMod = data.mods[0];
+                data.mods.setupESpecials();
                 return Constants.CMD_NEW;
             }
             return Constants.CMD_NONE;

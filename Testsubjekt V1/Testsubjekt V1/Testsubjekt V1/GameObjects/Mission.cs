@@ -35,7 +35,7 @@ namespace TestsubjektV1
 
         public abstract bool update(byte kind, int exp);
 
-        public abstract void setup(byte level, byte kind, byte count, byte zone, byte area, string[] nl, string[] zl);
+        public abstract void setup(byte level, byte kind, byte count, byte zone, byte area, byte[] kinds, string[] nl, string[] zl);
 
         public abstract void reset(int l);
 

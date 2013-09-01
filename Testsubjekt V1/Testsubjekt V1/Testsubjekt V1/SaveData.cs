@@ -8,11 +8,13 @@ namespace TestsubjektV1
         public int playerXP;
         public List<Mod> weaponMods;
         public List<Mod> mods;
+        public int firstModValue;
         public byte[] missionLevels;
         public byte[] missionTKinds;
         public byte[] missionTCounts;
         public byte[] missionZones;
         public byte[] missionAreas;
+        public byte[][] missionKinds;
         public bool[] missionStates;
         //public byte[][] missionKinds;
 

@@ -35,7 +35,7 @@ namespace TestsubjektV1
             throw new NotImplementedException();
         }
 
-        public override void setup(byte level, byte kind, byte count, byte zone, byte area, string[] nl, string[] zl)
+        public override void setup(byte level, byte kind, byte count, byte zone, byte area, byte[] kinds, string[] nl, string[] zl)
         {
             throw new NotImplementedException();
         }

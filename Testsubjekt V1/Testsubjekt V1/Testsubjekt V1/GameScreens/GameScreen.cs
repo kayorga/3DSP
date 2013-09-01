@@ -39,12 +39,14 @@ namespace TestsubjektV1
             saveData.playerXP = data.player.XP;
             saveData.weaponMods = data.player.myWeapon.mods;
             saveData.mods = data.mods._content;
+            saveData.firstModValue = data.mods.firstMod.value;
             saveData.missionLevels = new byte[4];
             saveData.missionTKinds = new byte[4];
             saveData.missionTCounts = new byte[4];
             saveData.missionZones = new byte[4];
             saveData.missionAreas = new byte[4];
             saveData.missionStates = new bool[4];
+            saveData.missionKinds = new byte[4][];
 
 
             for (int i = 0; i < 4; i++)
@@ -56,6 +58,7 @@ namespace TestsubjektV1
                 saveData.missionZones[i] = data.missions[i].Zone;
                 saveData.missionAreas[i] = data.missions[i].Area;
                 saveData.missionStates[i] = data.missions[i].active;
+                saveData.missionKinds[i] = data.missions[i].Kinds;
             }
 
             string filename = "doNotTouchThis.Never";
@@ -85,9 +88,11 @@ namespace TestsubjektV1
                 saveData = IntermediateSerializer.Deserialize<SaveData>(reader, null);
             }
 
+            byte[][] kinds = saveData.missionKinds;
+
             data.loadData(saveData.playerLevel, saveData.playerXP, saveData.weaponMods,
                 saveData.mods, saveData.missionLevels, saveData.missionTKinds, saveData.missionTCounts,
-                saveData.missionZones, saveData.missionAreas, saveData.missionStates);
+                saveData.missionZones, saveData.missionAreas, saveData.missionStates, saveData.missionKinds, saveData.firstModValue);
         }
 
     }

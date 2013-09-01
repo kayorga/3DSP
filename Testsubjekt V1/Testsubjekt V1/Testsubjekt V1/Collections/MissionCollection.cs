@@ -10,6 +10,7 @@ namespace TestsubjektV1
         private byte level;
         private World world;
         private NPCCollection npcs;
+        public byte nextModLevel;
 
         public MissionCollection(World w, NPCCollection n)
             : base(4)
@@ -24,6 +25,8 @@ namespace TestsubjektV1
 
             activeMission = this[0];
             mainMission = this[3];
+
+            nextModLevel = 6;
         }
 
         //generate new missions to replace completed/inactive ones
@@ -46,7 +49,14 @@ namespace TestsubjektV1
 
                     byte area = (byte)(ran.Next(world.Maps.Count-1) + 1);
 
-                    m.setup(mislv, kind, count, (byte) (i + 1), area, npcs.Labels, world.Labels);
+                    byte[] kinds = new byte[world.Maps[area].spawnerCount];
+                    kinds[0] = kind;
+
+                    for (int j = 1; j < kinds.Length; j++)
+                        kinds[j] = (byte)(ran.Next(Constants.NPC_BOSS));
+
+
+                    m.setup(mislv, kind, count, (byte)(i + 1), area, kinds, npcs.Labels, world.Labels);
                 }
             }
 
@@ -56,7 +66,14 @@ namespace TestsubjektV1
                 byte kind = Constants.NPC_BOSS;
                 byte zone = (byte)(ran.Next(3) + 1);
                 byte area = (byte)(ran.Next(world.Maps.Count-1) + 1);
-                this[3].setup((byte)(this[3].level+12), kind, 1, zone, area, npcs.Labels, world.Labels);
+
+                byte[] kinds = new byte[world.Maps[area].spawnerCount];
+                kinds[0] = kind;
+
+                for (int j = 1; j < kinds.Length; j++)
+                    kinds[j] = (byte)(ran.Next(Constants.NPC_BOSS));
+
+                this[3].setup((byte)(this[3].level+12), kind, 1, zone, area, kinds, npcs.Labels, world.Labels);
             }
         }
 
