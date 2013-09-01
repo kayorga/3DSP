@@ -44,7 +44,7 @@ namespace TestsubjektV1
             data = new GameData(Content, GraphicsDevice, audio, world);
             screen = new TitleScreen(Content, GraphicsDevice, audio, data);
             myAction = new ActionScreen(Content, GraphicsDevice, audio, data, camera, world);
-
+            
             base.Initialize();
         }
 
@@ -103,6 +103,12 @@ namespace TestsubjektV1
                     screen = new MissionInfoScreen(Content, GraphicsDevice, audio, data, world, camera); break;
                 case Constants.CMD_INTRO:
                     screen = new IntroductionScreen(Content, GraphicsDevice, audio, data, spriteBatch); break;
+                case Constants.CMD_DEX:
+                    screen = new DexScreen(Content, GraphicsDevice, data, audio, world, camera); break;
+                case Constants.CMD_CREDITS:
+                    screen = new CreditsScreen(Content, GraphicsDevice, audio, data); break;
+                case Constants.CMD_TITLE:
+                    screen = new TitleScreen(Content, GraphicsDevice, audio, data); break;
                 default: break;
             }
 
@@ -123,7 +129,7 @@ namespace TestsubjektV1
             Color clear = Color.DarkSlateBlue;
             switch (world.theme)
             {
-                case 0: clear = Color.DarkSlateGray; break;
+                case 0: clear = new Color(90, 101, 137); break;
                 case 1: clear = Color.DarkSlateBlue; break;
                 case 2: clear = Color.Yellow; break;
                 case 3: clear = Color.LightBlue; break;
@@ -137,7 +143,7 @@ namespace TestsubjektV1
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-            GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             base.Draw(gameTime);
         }

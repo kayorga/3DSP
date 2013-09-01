@@ -130,7 +130,6 @@ namespace TestsubjektV1
             else if (time.TotalSeconds < 4) voiceDraw = voice[1];
             else if (time.TotalSeconds < 6) voiceDraw = voice[2];
             else if (time.TotalSeconds < 8) voiceDraw = voice[3];
-            else if (time.TotalSeconds < 10) voiceDraw = voice[4];
             else
             {
                 if (!isElementSelected) voiceDraw = voice[4];
@@ -143,7 +142,7 @@ namespace TestsubjektV1
                 }
             }
 
-            if (time.TotalSeconds < 10)
+            if (time.TotalSeconds < 8)
             {
                 if (onesAndZeroesDrawTimer % 80 > 20) voiceDraw += ".";
                 if (onesAndZeroesDrawTimer % 80 > 40) voiceDraw += ".";

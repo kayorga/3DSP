@@ -27,6 +27,8 @@
         public const int CMD_MISSIONINFO = 10;
         public const int CMD_INTRO = 11;
         public const int CMD_DEX = 12;
+        public const int CMD_CREDITS = 13;
+        public const int CMD_TITLE = 14;
 
         //NPC and Bullet elements
         public const byte ELM_NIL = 0;

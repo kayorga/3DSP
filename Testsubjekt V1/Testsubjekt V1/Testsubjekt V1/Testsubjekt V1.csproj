@@ -129,6 +129,7 @@
     <Compile Include="GameObjects\Mission.cs" />
     <Compile Include="GameObjects\Mod.cs" />
     <Compile Include="GameObjects\NPCSpawner.cs" />
+    <Compile Include="GameScreens\CreditsScreen.cs" />
     <Compile Include="GameScreens\DexScreen.cs" />
     <Compile Include="GameScreens\IntroductionScreen.cs" />
     <Compile Include="GameScreens\MissionCompleteScreen.cs" />

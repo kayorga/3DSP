@@ -11,6 +11,7 @@ namespace TestsubjektV1
         private Rectangle newGameRectangle;
         private Rectangle loadRectangle;
         private Rectangle exitRectangle;
+        private Rectangle creditsRectangle;
 
         Texture2D cursor;
 
@@ -25,6 +26,7 @@ namespace TestsubjektV1
             newGameRectangle = new Rectangle(358, 290, 286, 45);
             loadRectangle = new Rectangle(402, 390, 214, 45);
             exitRectangle = new Rectangle(409, 490, 187, 45);
+            creditsRectangle = new Rectangle(368, 590, 270, 45);
 
             spriteBatch = new SpriteBatch(device);
             cursor = content.Load<Texture2D>("cursor");
@@ -37,6 +39,7 @@ namespace TestsubjektV1
             {
                 screenReturnValue = Constants.CMD_INTRO;
                 audio.playClick();
+                saveGame(data);
             }
         }
 
@@ -59,6 +62,16 @@ namespace TestsubjektV1
             }
 
         }
+
+        private void onCreditsClick()
+        {
+            if (creditsRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                screenReturnValue = Constants.CMD_CREDITS;
+                audio.playClick();
+            }
+
+        }
        
         public override int update(GameTime gameTime)
         {
@@ -66,6 +79,7 @@ namespace TestsubjektV1
             onExitClick();
             onLoadClick();
             onNewGameClick();
+            onCreditsClick();
             return screenReturnValue;
         }
 
@@ -94,6 +108,8 @@ namespace TestsubjektV1
                                    (loadRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y)) ? Color.Orange : Color.LemonChiffon);
             spriteBatch.DrawString(menuFont1, "Exit Game", new Vector2(424, 495),
                                    (exitRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y)) ? Color.Orange : Color.LemonChiffon);
+            spriteBatch.DrawString(menuFont1, "Show Credits", new Vector2(396, 595),
+                                   (creditsRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y)) ? Color.Orange : Color.LemonChiffon);
 
             spriteBatch.End();
         }
