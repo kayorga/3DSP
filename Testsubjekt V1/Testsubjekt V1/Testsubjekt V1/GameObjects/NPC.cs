@@ -181,7 +181,7 @@ namespace TestsubjektV1
                     maxHealth = (int)(200 * Math.Pow(1.07f, level - 1));
                     XP = 70;
                     maxCooldn = 50;
-                    model.Scaling = new Vector3(3,3,3);
+                    //model.Scaling = new Vector3(3,3,3);
                     element = elem;
                     strength = (byte)(14 * Math.Pow(1.06f, level - 1));
                     break;

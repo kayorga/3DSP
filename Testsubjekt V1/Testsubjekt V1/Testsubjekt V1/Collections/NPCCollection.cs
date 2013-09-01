@@ -56,7 +56,7 @@ namespace TestsubjektV1
             models[1] = Content.Load<Model>("Models/enemy3");
             models[2] = Content.Load<Model>("Models/enemy1");
             models[3] = Content.Load<Model>("Models/enemy2");
-            models[4] = Content.Load<Model>("cube_rounded");
+            models[4] = Content.Load<Model>("Models/boss");
             #endregion
 
             queue = new Queue<DmgNumber>();
