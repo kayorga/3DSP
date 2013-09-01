@@ -26,26 +26,21 @@ namespace TestsubjektV1
         private Texture2D forestImg;
 
         private SpriteBatch spriteBatch;
-        private ContentManager contentManager;
-        private GraphicsDevice graphicsDevice;
 
         private World world;
-        private GameData data;
         private Camera camera;
 
         private int screenReturnValue = Constants.CMD_NONE;
 
 
-        public MissionCompleteScreen(ContentManager content, GraphicsDevice gD, GameData gameD, World w, Camera cam)
+        public MissionCompleteScreen(ContentManager content, GraphicsDevice device, AudioManager audio, GameData data, World w, Camera cam)
+            : base(content, device, audio, data)
         {
             //Mouse.SetPosition(512, 384);
-            data = gameD;
             world = w;
             camera = cam;
             menuFont1 = content.Load<SpriteFont>("Fonts/MenuFont1");
-            graphicsDevice = gD;
-            spriteBatch = new SpriteBatch(graphicsDevice);
-            contentManager = content;
+            spriteBatch = new SpriteBatch(device);
             cursor = content.Load<Texture2D>("cursor");
             userInterface = content.Load<Texture2D>("missionCompleteInterface");
             frame = content.Load<Texture2D>("briefing_frame");
@@ -105,7 +100,7 @@ namespace TestsubjektV1
         public override void draw()
         {
             //TODO
-            world.draw(camera, graphicsDevice);
+            world.draw(camera, device);
             data.player.draw(camera);
             data.npcs.draw(camera);
             data.bullets.draw(camera);

@@ -23,6 +23,7 @@ namespace TestsubjektV1
         GameData data;
         GameScreen screen;
         ActionScreen myAction;
+        AudioManager audio;
 
         Camera camera;
 
@@ -44,11 +45,12 @@ namespace TestsubjektV1
         {
             // TODO: Add your initialization logic here
 
+            audio = new AudioManager(Content);
             camera = new Camera(GraphicsDevice.Viewport.AspectRatio);
             world = new World(Content, GraphicsDevice);
-            data = new GameData(GraphicsDevice, Content, world);
-            screen = new TitleScreen(Content, GraphicsDevice, data);
-            myAction = new ActionScreen(Content, GraphicsDevice, data, camera, world);
+            data = new GameData(Content, GraphicsDevice, audio, world);
+            screen = new TitleScreen(Content, GraphicsDevice, audio, data);
+            myAction = new ActionScreen(Content, GraphicsDevice, audio, data, camera, world);
 
             base.Initialize();
         }
@@ -95,19 +97,19 @@ namespace TestsubjektV1
                 case Constants.CMD_NEW:
                     screen = myAction; myAction.reset(); break;
                 case Constants.CMD_PAUSE: 
-                    screen = new PauseScreen(Content, GraphicsDevice, data, world, camera); break;
+                    screen = new PauseScreen(Content, GraphicsDevice, audio, data, world, camera); break;
                 case Constants.CMD_JOURNAL: 
-                    screen = new BriefingScreen(Content, GraphicsDevice, data, world, camera); break;
+                    screen = new BriefingScreen(Content, GraphicsDevice, audio, data, world, camera); break;
                 case Constants.CMD_MOD: 
-                    screen = new ModificationScreen(Content, GraphicsDevice, data, world, camera); break;
+                    screen = new ModificationScreen(Content, GraphicsDevice, audio, data, world, camera); break;
                 case Constants.CMD_MISSIONCOMPLETE: 
-                    screen = new MissionCompleteScreen(Content, GraphicsDevice, data, world, camera); break;
+                    screen = new MissionCompleteScreen(Content, GraphicsDevice, audio, data, world, camera); break;
                 case Constants.CMD_BACK: 
                     screen = myAction; break;
                 case Constants.CMD_MISSIONINFO: 
-                    screen = new MissionInfoScreen(Content, GraphicsDevice, data, world, camera); break;
+                    screen = new MissionInfoScreen(Content, GraphicsDevice, audio, data, world, camera); break;
                 case Constants.CMD_INTRO:
-                    screen = new IntroductionScreen(Content, spriteBatch ,GraphicsDevice, data); break;
+                    screen = new IntroductionScreen(Content, GraphicsDevice, audio, data, spriteBatch); break;
                 default: break;
             }
 

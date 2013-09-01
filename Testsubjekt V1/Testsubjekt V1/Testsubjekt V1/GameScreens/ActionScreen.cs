@@ -13,7 +13,6 @@ namespace TestsubjektV1
 
     class ActionScreen : GameScreen
     {
-        GameData data;
         Camera camera;
         World world;
         private const int MAX_HP_WIDTH = 200;
@@ -41,22 +40,18 @@ namespace TestsubjektV1
         private Rectangle[] ModRectangles;
         
         private SpriteBatch spriteBatch;
-        private GraphicsDevice graphicsDevice;
-        private ContentManager contentManager;
         private SpriteFont font;
         private bool spawnNewEnemies;
         private TimeSpan timeInMission;
         private Skybox skybox;
         private BlurEffect blurEffect;
 
-        public ActionScreen(ContentManager content, GraphicsDevice gD, GameData gameData, Camera cam, World w)
+        public ActionScreen(ContentManager content, GraphicsDevice device, AudioManager audio, GameData data, Camera cam, World w)
+            : base(content, device, audio, data)
         {
             Mouse.SetPosition(512, 384);
-            data = gameData;
             camera = cam;
             world = w;
-            contentManager = content;
-            graphicsDevice = gD;
 
             font = content.Load<SpriteFont>("Fonts/ModFont");
 
@@ -66,7 +61,7 @@ namespace TestsubjektV1
             HP1Rectangle = new Rectangle(37, 49, 30, 30);
             HP = content.Load<Texture2D>("hp");
             HPRectangle = new Rectangle(67, 56, 200, 17);
-            spriteBatch = new SpriteBatch(graphicsDevice);
+            spriteBatch = new SpriteBatch(device);
 
             //stat mod icons
             red = content.Load<Texture2D>("Icons/redslot");
@@ -95,9 +90,9 @@ namespace TestsubjektV1
             timeInMission = new TimeSpan(0);
             data.missions.activeMission.timeSpent = timeInMission;
 
-            skybox = new Skybox(graphicsDevice, content, 1);
+            skybox = new Skybox(device, content, 1);
 
-            blurEffect = new BlurEffect(graphicsDevice, content);
+            blurEffect = new BlurEffect(device, content);
         }
 
         public void reset()
@@ -107,7 +102,7 @@ namespace TestsubjektV1
             data.bullets.clear();
             timeInMission = new TimeSpan(0);
             data.missions.activeMission.timeSpent = timeInMission;
-            blurEffect = new BlurEffect(graphicsDevice, contentManager);
+            blurEffect = new BlurEffect(device, content);
         }
 
         public override int update(GameTime gameTime)
@@ -236,8 +231,8 @@ namespace TestsubjektV1
         public override void draw()
         {
             //TODO
-            skybox.Draw(graphicsDevice, camera, data.player.Position);
-            world.draw(camera, graphicsDevice);
+            skybox.Draw(device, camera, data.player.Position);
+            world.draw(camera, device);
             data.player.draw(camera);
             data.npcs.draw(camera, spriteBatch, font);
             data.bullets.draw(camera);

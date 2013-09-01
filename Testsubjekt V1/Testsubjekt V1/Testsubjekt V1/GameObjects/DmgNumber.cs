@@ -22,6 +22,7 @@ namespace TestsubjektV1
             this.position = Vector2.Zero;
             this.dx = dx;
             this.dy = dy;
+
             lifetime = 30;
         }
 

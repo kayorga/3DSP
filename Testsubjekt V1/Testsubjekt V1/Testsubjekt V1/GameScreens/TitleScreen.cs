@@ -19,22 +19,18 @@ namespace TestsubjektV1
         Texture2D cursor;
 
         private SpriteBatch spriteBatch;
-        private ContentManager contentManager;
-        private GraphicsDevice graphicsDevice;
         private int screenReturnValue=Constants.CMD_NONE;
-        private GameData data;
 
-
-        public TitleScreen(ContentManager content, GraphicsDevice gD, GameData data)
+        public TitleScreen(ContentManager content, GraphicsDevice device, AudioManager audio, GameData data)
+            : base(content, device, audio, data)
         {
             //Mouse.SetPosition(512, 384);
             menuFont1 = content.Load<SpriteFont>("Fonts/MenuFont1");
             newGameRectangle = new Rectangle(358, 290, 286, 45);
             loadRectangle = new Rectangle(402, 390, 214, 45);
             exitRectangle = new Rectangle(409, 490, 187, 45);
-            graphicsDevice = gD;
-            spriteBatch = new SpriteBatch(graphicsDevice);
-            contentManager = content;
+
+            spriteBatch = new SpriteBatch(device);
             cursor = content.Load<Texture2D>("cursor");
             this.data = data;
         }

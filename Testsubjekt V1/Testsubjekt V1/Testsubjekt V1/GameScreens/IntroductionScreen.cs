@@ -11,14 +11,12 @@ namespace TestsubjektV1
 {
     class IntroductionScreen : GameScreen
     {
-
         private TimeSpan time;
         private String[] onesAndZeroes;
         private String onesAndZeroesDraw;
         private String voiceDraw;
         private String[] voice;
         private SpriteBatch spriteBatch;
-        private GraphicsDevice graphicsDevice;
         private int onesAndZeroesDrawTimer;
         private SpriteFont font;
         private Texture2D userInterface;
@@ -33,21 +31,19 @@ namespace TestsubjektV1
         private Texture2D cursor;
         private bool isElementSelected;
         private byte selectedElement; //0 heat, 1 plasma, 2 ice
-        private GameData data;
 
 
-        public IntroductionScreen(ContentManager Content, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, GameData data)
+        public IntroductionScreen(ContentManager content, GraphicsDevice device, AudioManager audio, GameData data, SpriteBatch spriteBatch)
+            : base(content, device, audio, data)
         {
             this.spriteBatch = spriteBatch;
-            this.graphicsDevice = graphicsDevice;
-            this.data = data;
             
-            font = Content.Load<SpriteFont>("Fonts/MenuFont1");
-            userInterface = Content.Load<Texture2D>("Introduction");
-            heatIcon = Content.Load<Texture2D>("Icons/mod_hea");
-            plasmaIcon = Content.Load<Texture2D>("Icons/mod_pla");
-            iceIcon = Content.Load<Texture2D>("Icons/mod_ice");
-            cursor = Content.Load<Texture2D>("cursor");
+            font = content.Load<SpriteFont>("Fonts/MenuFont1");
+            userInterface = content.Load<Texture2D>("Introduction");
+            heatIcon = content.Load<Texture2D>("Icons/mod_hea");
+            plasmaIcon = content.Load<Texture2D>("Icons/mod_pla");
+            iceIcon = content.Load<Texture2D>("Icons/mod_ice");
+            cursor = content.Load<Texture2D>("cursor");
 
             time = new TimeSpan();
             interfaceRectangle = new Rectangle(0, 0, 1024, 768);
@@ -88,6 +84,7 @@ namespace TestsubjektV1
                 isElementSelected = true;
                 selectedElement = 0;
                 voiceDraw = voice[5];
+                audio.playClick();
             }
         }
         private void onPlasmaClick()
@@ -97,6 +94,7 @@ namespace TestsubjektV1
                 isElementSelected = true;
                 selectedElement = 1;
                 voiceDraw = voice[6];
+                audio.playClick();
             }
         }
         private void onIceClick()
@@ -106,12 +104,14 @@ namespace TestsubjektV1
                 isElementSelected = true;
                 selectedElement = 2;
                 voiceDraw = voice[7];
+                audio.playClick();
             }
         }
         private int onStartClick()
         {
             if (startRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
+                audio.playClick();
                 switch (selectedElement)
                 {
                     case 0: data.mods.generate((int)Constants.ELM_HEA, Constants.MOD_ELM); break;
@@ -174,7 +174,7 @@ namespace TestsubjektV1
 
         public override void draw()
         {
-            graphicsDevice.Clear(Color.DarkSlateBlue);
+            device.Clear(Color.DarkSlateBlue);
             drawBackground();
             drawInterface();
             spriteBatch.Begin();

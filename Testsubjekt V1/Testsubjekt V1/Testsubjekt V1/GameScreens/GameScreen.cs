@@ -6,11 +6,25 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Xml;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
+using Microsoft.Xna.Framework.Content;
 
 namespace TestsubjektV1
 {
     abstract class GameScreen
     {
+        protected ContentManager content;
+        protected GraphicsDevice device;
+        protected AudioManager audio;
+        protected GameData data;
+
+        public GameScreen(ContentManager content, GraphicsDevice device, AudioManager audio, GameData data)
+        {
+            this.content = content;
+            this.device = device;
+            this.audio = audio;
+            this.data = data;
+        }
+
         public virtual int update(GameTime gameTime)
         {
             return 0;
@@ -27,7 +41,7 @@ namespace TestsubjektV1
             saveData = new SaveData();
             saveData.playerLevel = data.player.level;
             saveData.playerXP = data.player.XP;
-            saveData.playerWeapon = data.player.myWeapon;
+            saveData.weaponMods = data.player.myWeapon.mods;
             saveData.mods = data.mods._content;
             saveData.missionLevels = new byte[4];
             saveData.missionTKinds = new byte[4];
@@ -75,7 +89,7 @@ namespace TestsubjektV1
                 saveData = IntermediateSerializer.Deserialize<SaveData>(reader, null);
             }
 
-            data.loadData(saveData.playerLevel, saveData.playerXP, saveData.playerWeapon,
+            data.loadData(saveData.playerLevel, saveData.playerXP, saveData.weaponMods,
                 saveData.mods, saveData.missionLevels, saveData.missionTKinds, saveData.missionTCounts,
                 saveData.missionZones, saveData.missionAreas, saveData.missionStates);
         }

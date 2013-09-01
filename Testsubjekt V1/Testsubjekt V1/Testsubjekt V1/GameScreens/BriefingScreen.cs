@@ -28,29 +28,24 @@ namespace TestsubjektV1
         private Texture2D frame;
 
         private SpriteBatch spriteBatch;
-        private ContentManager contentManager;
-        private GraphicsDevice graphicsDevice;
         private int screenReturnValue = Constants.CMD_NONE;
         private int activeStage = 0; //0 - forest, 1 - arctic, 2 - cave
 
         private World world;
-        private GameData data;
         private Camera camera;
 
 
-        public BriefingScreen(ContentManager content, GraphicsDevice gD, GameData gameD, World w, Camera cam)
+        public BriefingScreen(ContentManager content, GraphicsDevice device, AudioManager audio, GameData data, World w, Camera cam)
+            : base(content, device, audio, data)
         {
             //Mouse.SetPosition(512, 384);
-            data = gameD;
             world = w;
             camera = cam;
             menuFont1 = content.Load<SpriteFont>("Fonts/MenuFont1");
             resumeRectangle = new Rectangle(234, 100, 246, 45);
             loadRectangle = new Rectangle(294, 200, 224, 45);
             exitRectangle = new Rectangle(891, 78, 63, 55);
-            graphicsDevice = gD;
-            spriteBatch = new SpriteBatch(graphicsDevice);
-            contentManager = content;
+            spriteBatch = new SpriteBatch(device);
             cursor = content.Load<Texture2D>("cursor");
             userInterface = content.Load<Texture2D>("briefing_interface");
             frame = content.Load<Texture2D>("briefing_frame");
@@ -69,13 +64,19 @@ namespace TestsubjektV1
         private void onNewGameClick()
         {
             if (resumeRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
                 screenReturnValue = Constants.CMD_BACK;
+                audio.playClick();
+            }
         }
 
         private void onExitClick()
         {
             if (exitRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
                 screenReturnValue = Constants.CMD_BACK;
+                audio.playClick();
+            }
         }
 
 
@@ -85,6 +86,7 @@ namespace TestsubjektV1
             {
                 activeStage = 0;
                 frameRectangle = new Rectangle(144, 171, 203, 149);
+                audio.playClick();
             }
         }
         private void onArcticClick()
@@ -93,6 +95,7 @@ namespace TestsubjektV1
             {
                 activeStage = 1;
                 frameRectangle = new Rectangle(144, 327, 203, 149);
+                audio.playClick();
             }
         }
         private void onCaveClick()
@@ -101,6 +104,7 @@ namespace TestsubjektV1
             {
                 activeStage = 2;
                 frameRectangle = new Rectangle(144, 483, 203, 149);
+                audio.playClick();
             }
         }
         private void onBossClick()
@@ -109,6 +113,7 @@ namespace TestsubjektV1
             {
                 activeStage = 3;
                 frameRectangle = new Rectangle(378, 542, 544, 113);
+                audio.playClick();
             }
         }
         private void onStartClick()
@@ -126,6 +131,7 @@ namespace TestsubjektV1
                 data.player.myWeapon.reload();
                 data.missions.activeMission.reset(data.player.lv);
                 screenReturnValue = Constants.CMD_NEW;
+                audio.playClick();
             }
         }
 
@@ -146,7 +152,7 @@ namespace TestsubjektV1
         public override void draw()
         {
             //TODO
-            world.draw(camera, graphicsDevice);
+            world.draw(camera, device);
             data.player.draw(camera);
             data.npcs.draw(camera);
             data.bullets.draw(camera);

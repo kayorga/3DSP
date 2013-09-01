@@ -28,7 +28,7 @@ namespace TestsubjektV1
 
         private Queue<DmgNumber> queue;
 
-        public NPCCollection(World w, ContentManager Content, Player pl, GraphicsDevice graphicsDevice)
+        public NPCCollection(World w, ContentManager Content, Player pl, GraphicsDevice graphicsDevice, AudioManager audio)
             : base(Constants.CAP_NPCS)
         {
             //TODO
@@ -41,7 +41,7 @@ namespace TestsubjektV1
 
             this.graphicsDevice = graphicsDevice;
             for (int i = 0; i < Constants.CAP_NPCS; i++)
-                _content.Add(new NPC(Content, graphicsDevice, world, billboardEngine));
+                _content.Add(new NPC(Content, graphicsDevice, world, billboardEngine, audio));
 
             player = pl;
             moveData = new byte[world.size * 2][];

@@ -24,7 +24,7 @@ namespace TestsubjektV1
 
         Weapon weapon;
 
-        public Player(World world, ContentManager Content)
+        public Player(World world, ContentManager Content, AudioManager audio)
             : base()
         {
             this.world = world;
@@ -33,7 +33,7 @@ namespace TestsubjektV1
             this.level=1;
             this.maxHealth=100;
             this.health=100;
-            weapon = new Weapon();
+            weapon = new Weapon(audio);
             exp = 0;
 
             invincibleTimer = 0;

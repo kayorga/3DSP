@@ -16,22 +16,24 @@ namespace TestsubjektV1
         public ModCollection mods;
         public NPCCollection npcs;
         private World world;
+        private AudioManager audio;
 
-        public GameData(GraphicsDevice graphicsDevice, ContentManager Content, World world)
+        public GameData(ContentManager Content, GraphicsDevice device, AudioManager audio, World world)
         {
-            player = new Player(world, Content);
+            player = new Player(world, Content, audio);
             mods = new ModCollection();
-            npcs = new NPCCollection(world, Content, player, graphicsDevice);
-            bullets = new BulletCollection(Content, graphicsDevice);
+            npcs = new NPCCollection(world, Content, player, device, audio);
+            bullets = new BulletCollection(Content, device);
             missions = new MissionCollection(world, npcs);
             this.world = world;
+            this.audio = audio;
         }
 
-        public void loadData(int loadedPlayerLevel, int loadedPlayerXP, Weapon loadedWeapon, List<Mod> loadedMods, byte[] loadedMissionLevels, byte[] loadedMissionTKinds, byte[] loadedMissionTCounts, byte[] loadedMissionZones, byte[] loadedMissionAreas, bool[] loadedMissionStates)
+        public void loadData(int loadedPlayerLevel, int loadedPlayerXP, List<Mod> loadedWeaponMods, List<Mod> loadedMods, byte[] loadedMissionLevels, byte[] loadedMissionTKinds, byte[] loadedMissionTCounts, byte[] loadedMissionZones, byte[] loadedMissionAreas, bool[] loadedMissionStates)
         {
             this.player.level = loadedPlayerLevel;
             this.player.XP = loadedPlayerXP;
-            this.player.myWeapon = loadedWeapon;
+            this.player.myWeapon.mods = loadedWeaponMods;
             this.mods._content = loadedMods;
 
             for (int i = 0; i < 4; i++)

@@ -76,6 +76,7 @@ namespace TestsubjektV1
         private bool isDead;
         private float playerDistance;
 
+        private AudioManager audio;
         
         #endregion
 
@@ -86,7 +87,7 @@ namespace TestsubjektV1
         /// <param name="graphicsDevice"></param>
         /// <param name="world"></param>
         /// <param name="bilbo"></param>
-        public NPC(ContentManager Content, GraphicsDevice graphicsDevice, World world, BillboardEngine bilbo)
+        public NPC(ContentManager Content, GraphicsDevice graphicsDevice, World world, BillboardEngine bilbo, AudioManager audio)
         {
             model = null;
             position = Vector3.Zero;
@@ -111,6 +112,7 @@ namespace TestsubjektV1
             isDead = false;
             billboardEngine = bilbo;
             this.graphicsDevice = graphicsDevice;
+            this.audio = audio;
             explosion = new Explosion(Position, graphicsDevice, Content);
             dmgNumbers = new List<DmgNumber>();
         }
@@ -247,6 +249,7 @@ namespace TestsubjektV1
                 Vector3 dir = (p.position - position);
                 dir.Normalize();
                 bullets.generate(false, position + dir, dir, 1, world.shootDistance * 2, strength, element);
+                audio.playShoot(false);
             }
 
             if (cooldown > 0) cooldown--;
@@ -351,19 +354,26 @@ namespace TestsubjektV1
 
                 dmg = (byte) (ran.Next(9*dmg, 11*dmg) * 0.1f);
 
+                float dmgModifier = 1;
+
                 //apply weakness and resistance
-                if (b.Element != Constants.ELM_NIL && b.Element == elWeakness) dmg = (int) (dmg * 1.5f); 
-                else if (b.Element != Constants.ELM_NIL && b.Element == element) dmg = (int) (dmg / 1.5f);
+                if (b.Element != Constants.ELM_NIL && b.Element == elWeakness) dmgModifier *= 1.5f; 
+                else if (b.Element != Constants.ELM_NIL && b.Element == element) dmgModifier /= 1.5f;
 
-                if (b.Type != Constants.TYP_NIL && b.Type == typeWeakness) dmg = (int)(dmg * 1.5f);
-                else if (b.Type != Constants.TYP_NIL && b.Type == typeResistance) dmg = (int)(dmg / 1.5f);
+                if (b.Type != Constants.TYP_NIL && b.Type == typeWeakness) dmgModifier *= 1.5f;
+                else if (b.Type != Constants.TYP_NIL && b.Type == typeResistance) dmgModifier /= 1.5f;
 
+                dmg = (int)(dmg * dmgModifier);
+
+                //apply crit chance and play hit sound
                 bool crit = false;
                 if (ran.Next(100) < 8)
                 {
                     crit = true;
                     dmg *= 2;
+                    audio.playCrit();
                 }
+                else audio.playNPCHit(dmgModifier);
 
                 //cap damage between 1 and health
                 dmg = Math.Max(dmg, 1);
@@ -380,8 +390,9 @@ namespace TestsubjektV1
                 moving = false;
                 //isHit = true;
 
-                sbyte dx = (sbyte)(ran.Next(31) - 15);
-                sbyte dy = (sbyte)(ran.Next(31) - 15);
+                //add new dmg number for new dmg
+                sbyte dx = (sbyte)(ran.Next(41) - 20);
+                sbyte dy = (sbyte)(ran.Next(21) - 10);
                 dmgNumbers.Add(new DmgNumber(dmg, crit, dx, dy));
             }
         }

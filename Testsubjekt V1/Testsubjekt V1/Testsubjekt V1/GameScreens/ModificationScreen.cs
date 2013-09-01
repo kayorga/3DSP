@@ -49,13 +49,10 @@ namespace TestsubjektV1
 
 
         private SpriteBatch spriteBatch;
-        private ContentManager contentManager;
-        private GraphicsDevice graphicsDevice;
         private int screenReturnValue = Constants.CMD_NONE;
         private int activeMod = 21; //21-24 Slot1-4, 1-20 Inventar 1-20
 
         private World world;
-        private GameData data;
         private Camera camera;
 
         private ButtonState lastMouseState;
@@ -74,19 +71,18 @@ namespace TestsubjektV1
         }
 
 
-        public ModificationScreen(ContentManager content, GraphicsDevice gD, GameData gameD, World w, Camera cam)
+        public ModificationScreen(ContentManager content, GraphicsDevice device, AudioManager audio, GameData data, World w, Camera cam)
+            : base(content, device, audio, data)
         {
             //Mouse.SetPosition(512, 384);
-            data = gameD;
             world = w;
             camera = cam;
             lastMouseState = ButtonState.Released;
             modFont = content.Load<SpriteFont>("Fonts/ModFont");
             loadRectangle = new Rectangle(294, 200, 224, 45);
             exitRectangle = new Rectangle(891, 78, 63, 55);
-            graphicsDevice = gD;
-            spriteBatch = new SpriteBatch(graphicsDevice);
-            contentManager = content;
+
+            spriteBatch = new SpriteBatch(device);
             cursor = content.Load<Texture2D>("cursor");
             userInterface = content.Load<Texture2D>("mod_interface");
             frame = content.Load<Texture2D>("briefing_frame");
@@ -514,7 +510,7 @@ namespace TestsubjektV1
         public override void draw()
         {
             //TODO
-            world.draw(camera, graphicsDevice);
+            world.draw(camera, device);
             data.player.draw(camera);
             data.npcs.draw(camera);
             data.bullets.draw(camera);

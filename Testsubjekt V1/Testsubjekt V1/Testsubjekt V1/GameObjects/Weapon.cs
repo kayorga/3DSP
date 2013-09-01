@@ -25,9 +25,11 @@ namespace TestsubjektV1
         int mod_str;
         int mod_acp;
 
-        public Weapon()
+        private AudioManager audio;
+
+        public Weapon(AudioManager audio)
         {
-            //TODO
+            this.audio = audio;
             maxAmmo = 3;
             ammo = 3;
             maxRechrg = 40;
@@ -57,6 +59,8 @@ namespace TestsubjektV1
 
                 bullets.generate(true, position + direction * .5f, direction, 1 + mod_spd, 20, 20 + mod_str, (byte)mod_elm, (byte) mod_typ);
                 ammo--;
+
+                audio.playShoot(true);
             }
 
             cooldown = Math.Max(cooldown - 1, 0);

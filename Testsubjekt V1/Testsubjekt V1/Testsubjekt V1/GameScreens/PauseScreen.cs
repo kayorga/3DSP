@@ -29,19 +29,16 @@ namespace TestsubjektV1
         private Texture2D frame;
 
         private SpriteBatch spriteBatch;
-        private ContentManager contentManager;
-        private GraphicsDevice graphicsDevice;
         private int screenReturnValue=Constants.CMD_NONE;
 
         private World world;
-        private GameData data;
         private Camera camera;
 
 
-        public PauseScreen(ContentManager content, GraphicsDevice gD, GameData gameD, World w, Camera cam)
+        public PauseScreen(ContentManager content, GraphicsDevice device, AudioManager audio, GameData data, World w, Camera cam)
+            : base(content, device, audio, data)
         {
             //Mouse.SetPosition(512, 384);
-            data = gameD;
             world = w;
             camera = cam;
             menuFont1 = content.Load<SpriteFont>("Fonts/MenuFont1");
@@ -54,9 +51,7 @@ namespace TestsubjektV1
             baseRectangle = new Rectangle(402, 449, 228, 43);
             frameRectangle = saveRectangle;
             
-            graphicsDevice = gD;
-            spriteBatch = new SpriteBatch(graphicsDevice);
-            contentManager = content;
+            spriteBatch = new SpriteBatch(device);
             cursor = content.Load<Texture2D>("cursor");
             fadeRectangle = new Rectangle(0, 0, 1024, 768);
 
@@ -154,7 +149,7 @@ namespace TestsubjektV1
         public override void draw()
         {
             //TODO
-            world.draw(camera, graphicsDevice);
+            world.draw(camera, device);
             data.player.draw(camera);
             data.npcs.draw(camera);
             data.bullets.draw(camera);
@@ -174,7 +169,7 @@ namespace TestsubjektV1
 
         private void drawFade()
         {
-            Texture2D texture = new Texture2D(graphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            Texture2D texture = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
             Color[] color = {Color.FromNonPremultiplied(255, 255, 255, 180)};
             texture.SetData<Color>(color);
             spriteBatch.Draw(texture, fadeRectangle, Color.Black);

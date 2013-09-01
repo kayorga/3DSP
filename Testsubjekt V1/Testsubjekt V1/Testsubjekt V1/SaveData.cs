@@ -9,7 +9,7 @@ namespace TestsubjektV1
     {
         public int playerLevel;
         public int playerXP;
-        public Weapon playerWeapon;
+        public List<Mod> weaponMods;
         public List<Mod> mods;
         public byte[] missionLevels;
         public byte[] missionTKinds;
