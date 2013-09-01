@@ -492,7 +492,7 @@ namespace TestsubjektV1
 
             if (Keyboard.GetState().IsKeyDown(Keys.R))
             {
-                screenReturnValue = Constants.CMD_JOURNAL;
+                screenReturnValue = Constants.CMD_DEX;
                 audio.playClick();
             }
         }

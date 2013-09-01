@@ -228,7 +228,7 @@ namespace TestsubjektV1
                     if (Keyboard.GetState().IsKeyDown(Keys.Q))
                         return Constants.CMD_MOD; // activate Modscreen
                     if (Keyboard.GetState().IsKeyDown(Keys.R))
-                        return Constants.CMD_MOD; // activate NPC screen
+                        return Constants.CMD_DEX; // activate NPC screen
                     return Constants.CMD_NEW; // console is only in front but nothing done
                 }
             }

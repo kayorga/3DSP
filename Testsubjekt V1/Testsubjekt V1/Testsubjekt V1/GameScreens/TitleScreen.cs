@@ -39,7 +39,6 @@ namespace TestsubjektV1
             {
                 screenReturnValue = Constants.CMD_INTRO;
                 audio.playClick();
-                saveGame(data);
             }
         }
 

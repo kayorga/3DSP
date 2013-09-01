@@ -142,6 +142,19 @@ namespace TestsubjektV1
             onIceClick();
             onPlasmaClick();
             onNeutralClick();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Q))
+            {
+                
+                audio.playClick();
+                return Constants.CMD_MOD;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.E))
+            {
+                audio.playClick();
+                return Constants.CMD_JOURNAL;
+            }
             return Constants.CMD_NONE;
         }
 

@@ -118,6 +118,8 @@ namespace TestsubjektV1
                 }
                 data.mods.firstMod = data.mods[0];
                 data.mods.setupESpecials();
+
+                saveGame(data);
                 return Constants.CMD_NEW;
             }
             return Constants.CMD_NONE;
