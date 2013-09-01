@@ -42,6 +42,7 @@ namespace TestsubjektV1
         private TimeSpan timeInMission;
         private Skybox skybox;
         private BlurEffect blurEffect;
+        Map miniMap;
 
         public ActionScreen(ContentManager content, GraphicsDevice device, AudioManager audio, GameData data, Camera cam, World w)
             : base(content, device, audio, data)
@@ -90,6 +91,8 @@ namespace TestsubjektV1
             skybox = new Skybox(device, content, 1);
 
             blurEffect = new BlurEffect(device, content);
+
+            miniMap = new Map(data, world, device, content, new Point(750, 500));
         }
 
         public void reset()
@@ -237,6 +240,7 @@ namespace TestsubjektV1
             data.bullets.draw(camera);
             blurEffect.Draw(spriteBatch);
             drawHUD();
+            miniMap.Draw();
         }
 
         private void drawHUD()

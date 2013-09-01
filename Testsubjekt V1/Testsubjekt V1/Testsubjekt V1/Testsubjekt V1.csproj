@@ -125,9 +125,11 @@
     <Compile Include="GameData.cs" />
     <Compile Include="GameObjects\Bullet.cs" />
     <Compile Include="GameObjects\Character.cs" />
+    <Compile Include="GameObjects\Map.cs" />
     <Compile Include="GameObjects\Mission.cs" />
     <Compile Include="GameObjects\Mod.cs" />
     <Compile Include="GameObjects\NPCSpawner.cs" />
+    <Compile Include="GameScreens\DexScreen.cs" />
     <Compile Include="GameScreens\IntroductionScreen.cs" />
     <Compile Include="GameScreens\MissionCompleteScreen.cs" />
     <Compile Include="GameScreens\MissionInfoScreen.cs" />
