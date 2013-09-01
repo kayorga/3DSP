@@ -64,10 +64,7 @@ namespace TestsubjektV1
             }
         }
 
-
-        private int lastDmg;
-        private byte dmgNumberCounter;
-        private bool crit;
+        private List<DmgNumber> dmgNumbers;
 
         public Vector3 target;
 
@@ -78,6 +75,8 @@ namespace TestsubjektV1
         private Explosion explosion;
         private bool isDead;
         private float playerDistance;
+
+        
         #endregion
 
         /// <summary>
@@ -108,12 +107,12 @@ namespace TestsubjektV1
             pathFinder = null;
             target = Vector3.Zero;
             isHit = false;
-            crit = false;
             hitTimer = 0;
             isDead = false;
             billboardEngine = bilbo;
             this.graphicsDevice = graphicsDevice;
             explosion = new Explosion(Position, graphicsDevice, Content);
+            dmgNumbers = new List<DmgNumber>();
         }
 
         /// <summary>
@@ -233,6 +232,7 @@ namespace TestsubjektV1
                     active = false;
                     isDead = false;
                     this.explosion.Clear();
+                    dmgNumbers.Clear();
                     return false;
                 }
             }
@@ -275,7 +275,7 @@ namespace TestsubjektV1
             }
             #endregion
 
-            #region get hit billboard and dmg number
+            #region get hit billboard/dmg number
             //Hit Notification
             if (isHit)
             {
@@ -287,10 +287,6 @@ namespace TestsubjektV1
                     hitTimer = 0;
                 }
             }
-
-            if (dmgNumberCounter > 0)
-                dmgNumberCounter--;
-            else crit = false;
             #endregion
 
             //Rotate Model
@@ -362,6 +358,7 @@ namespace TestsubjektV1
                 if (b.Type != Constants.TYP_NIL && b.Type == typeWeakness) dmg = (int)(dmg * 1.5f);
                 else if (b.Type != Constants.TYP_NIL && b.Type == typeResistance) dmg = (int)(dmg / 1.5f);
 
+                bool crit = false;
                 if (ran.Next(100) < 8)
                 {
                     crit = true;
@@ -383,8 +380,9 @@ namespace TestsubjektV1
                 moving = false;
                 //isHit = true;
 
-                lastDmg = dmg;
-                dmgNumberCounter = 30;
+                sbyte dx = (sbyte)(ran.Next(31) - 15);
+                sbyte dy = (sbyte)(ran.Next(31) - 15);
+                dmgNumbers.Add(new DmgNumber(dmg, crit, dx, dy));
             }
         }
         
@@ -401,34 +399,27 @@ namespace TestsubjektV1
 
         public override void draw(Camera camera, Queue<DmgNumber> queue)
         {
-            if (!active)
-                return;
-            if (isDead && active)
-                explosion.Draw(camera);
-            else
-                base.draw(camera);
+            draw(camera);
 
-            if (dmgNumberCounter > 0)
+            //crit number position calculation
+            for (int i = 0; i < dmgNumbers.Count; i++ )
             {
-                Vector2 dmgNumPos;
+                DmgNumber dmgNum = dmgNumbers[i];
+                if (!dmgNum.update())
+                {
+                    dmgNumbers.Remove(dmgNum);
+                    i--;
+                    continue;
+                }
+
                 Vector3 dmgNumPos3 = graphicsDevice.Viewport.Project(Vector3.Zero,
                                                                         camera.ProjectionMatrix,
                                                                         camera.ViewMatrix,
                                                                         Matrix.CreateTranslation(position + new Vector3(0, 2, 0)));
-                dmgNumPos.X = dmgNumPos3.X;
-                dmgNumPos.Y = dmgNumPos3.Y;
+                
+                dmgNum.setPos(dmgNumPos3.X, dmgNumPos3.Y);
 
-                queue.Enqueue(new DmgNumber(lastDmg, crit, dmgNumPos));
-
-                //Color color = (crit) ? Color.Gold : Color.White;
-
-                //spriteBatch.Begin();
-                //spriteBatch.DrawString(font, lastDmg.ToString(), dmgNumPos, color);
-                //spriteBatch.End();
-                //graphicsDevice.BlendState = BlendState.Opaque;
-                //graphicsDevice.DepthStencilState = DepthStencilState.Default;
-                //graphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-                //graphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+                queue.Enqueue(dmgNum);
             }
         }
 

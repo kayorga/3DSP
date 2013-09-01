@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AStar.cs" />
+    <Compile Include="AudioManager.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Collections\BulletCollection.cs" />
     <Compile Include="Collections\Collection.cs" />
@@ -163,8 +164,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Testsubjekt V1Content\Testsubjekt V1Content.contentproj">
-      <Name>Testsubjekt_V1Content</Name>
+      <Name>Testsubjekt V1Content %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{91A3ACAD-E420-44B2-85BA-406A5ED1EAA5}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
