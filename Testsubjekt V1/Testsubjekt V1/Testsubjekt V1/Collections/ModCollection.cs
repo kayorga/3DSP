@@ -24,9 +24,9 @@ namespace TestsubjektV1
 
             specials = new Mod[6];
 
-            specials[1] = new Mod(Constants.MOD_TYP, Constants.TYP_WAV);
-            specials[3] = new Mod(Constants.MOD_TYP, Constants.TYP_BLA);
-            specials[5] = new Mod(Constants.MOD_TYP, Constants.TYP_TRI);
+            specials[0] = new Mod(Constants.MOD_TYP, Constants.TYP_WAV);
+            specials[2] = new Mod(Constants.MOD_TYP, Constants.TYP_BLA);
+            specials[4] = new Mod(Constants.MOD_TYP, Constants.TYP_TRI);
 
             if (Constants.DEBUG)
             {

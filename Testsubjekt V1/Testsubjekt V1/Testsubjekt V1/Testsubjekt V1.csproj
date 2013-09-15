@@ -112,30 +112,30 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AStar.cs" />
+    <Compile Include="Pathfinder\AStar.cs" />
     <Compile Include="AudioManager.cs" />
-    <Compile Include="Camera.cs" />
+    <Compile Include="World\Camera.cs" />
     <Compile Include="Collections\BulletCollection.cs" />
     <Compile Include="Collections\Collection.cs" />
     <Compile Include="Collections\MissionCollection.cs" />
     <Compile Include="Collections\ModCollection.cs" />
     <Compile Include="Collections\NPCCollection.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="GameObjects\DmgNumber.cs" />
-    <Compile Include="GameData.cs" />
+    <Compile Include="Data\Constants.cs" />
+    <Compile Include="HudObjects\DmgNumber.cs" />
+    <Compile Include="Data\GameData.cs" />
     <Compile Include="GameObjects\Bullet.cs" />
     <Compile Include="GameObjects\Character.cs" />
-    <Compile Include="GameObjects\Map.cs" />
+    <Compile Include="HudObjects\Map.cs" />
     <Compile Include="GameObjects\Mission.cs" />
     <Compile Include="GameObjects\Mod.cs" />
-    <Compile Include="GameObjects\NPCSpawner.cs" />
+    <Compile Include="World\NPCSpawner.cs" />
     <Compile Include="GameScreens\CreditsScreen.cs" />
     <Compile Include="GameScreens\DexScreen.cs" />
     <Compile Include="GameScreens\IntroductionScreen.cs" />
     <Compile Include="GameScreens\MissionCompleteScreen.cs" />
     <Compile Include="GameScreens\MissionInfoScreen.cs" />
     <Compile Include="GameScreens\ModificationScreen.cs" />
-    <Compile Include="ModelObject.cs" />
+    <Compile Include="GameObjects\ModelObject.cs" />
     <Compile Include="GameObjects\NPC.cs" />
     <Compile Include="GameObjects\Player.cs" />
     <Compile Include="GameObjects\Type1Mission.cs" />
@@ -152,14 +152,14 @@
     <Compile Include="Particles\Particle.cs" />
     <Compile Include="Particles\Particle2D.cs" />
     <Compile Include="Particles\ParticleEffect.cs" />
-    <Compile Include="PathNode.cs" />
-    <Compile Include="PathNoteEqualityComparer.cs" />
+    <Compile Include="Pathfinder\PathNode.cs" />
+    <Compile Include="Pathfinder\PathNoteEqualityComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="SaveData.cs" />
-    <Compile Include="Skybox.cs" />
-    <Compile Include="World.cs" />
+    <Compile Include="Data\SaveData.cs" />
+    <Compile Include="World\Skybox.cs" />
+    <Compile Include="World\World.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
