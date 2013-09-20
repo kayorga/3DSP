@@ -123,7 +123,14 @@ namespace TestsubjektV1
                     filecontents += c;
             }
 
-            return Byte.Parse(filecontents);
+            try
+            {
+                return Byte.Parse(filecontents);
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
         }
 
         private void scanFiles()

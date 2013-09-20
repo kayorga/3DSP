@@ -88,34 +88,37 @@ namespace TestsubjektV1
                 if (!n.active)
                     continue;
 
-                bool k = n.update(gameTime, bullets, camera, p, m);
-                if (k)
+                try
                 {
-                    float nx = n.position.X;
-                    float nz = n.position.Z;
+                    bool k = n.update(gameTime, bullets, camera, p, m);
+                    if (k)
+                    {
+                        float nx = n.position.X;
+                        float nz = n.position.Z;
                         float tx = n.target.X;
                         float tz = n.target.Z;
                         int TX = (int)Math.Round((-1 * tx + world.size - 1));
                         int TZ = (int)Math.Round((-1 * tz + world.size - 1));
                         moveData[TX][TZ] = 255;
 
-                    int X = (int)Math.Round((-1 * nx + world.size - 1));
-                    int Z = (int)Math.Round((-1 * nz + world.size - 1));
+                        int X = (int)Math.Round((-1 * nx + world.size - 1));
+                        int Z = (int)Math.Round((-1 * nz + world.size - 1));
 
-                    if (n.kind == Constants.NPC_BOSS)
-                    {
-                        moveData[X][Z] = (byte)(i + 1);
-                        for (int j = -1; j < 2; ++j)
-                            for (int l = -1; l < 2; ++l)
-                                try
-                                {
+                        if (n.kind == Constants.NPC_BOSS)
+                        {
+                            moveData[X][Z] = (byte)(i + 1);
+                            for (int j = -1; j < 2; ++j)
+                                for (int l = -1; l < 2; ++l)
                                     if (moveData[X + j][Z + l] == 0)
                                         moveData[X + j][Z + l] = (byte)(i + 1);
-                                }
-                                catch (IndexOutOfRangeException) { continue; }
+                        }
+                        else
+                            moveData[X][Z] = (byte)(i + 1);
                     }
-                    else
-                        moveData[X][Z] = (byte)(i + 1);
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    n.active = false;
                 }
             }
         }

@@ -14,6 +14,9 @@ namespace TestsubjektV1
         byte invincibleTimer;
         byte maxInvincibility;
 
+        byte restore;
+        byte maxRest;
+
         public byte xTile { get { return (byte)Math.Round(-1 * (position.X) + (Constants.MAP_SIZE - 1)); } }
         public byte zTile { get { return (byte)Math.Round(-1 * (position.Z) + (Constants.MAP_SIZE - 1)); } }
 
@@ -30,6 +33,8 @@ namespace TestsubjektV1
             this.level=1;
             this.maxHealth=100;
             this.health=100;
+            maxRest = 6;
+            restore = 0;
             weapon = new Weapon(audio);
             exp = 0;
 
@@ -78,6 +83,14 @@ namespace TestsubjektV1
             }
             
             if (health <= 0) return false;
+
+            restore = (byte) Math.Max(restore - 1, 0);
+
+            if (health < maxHealth && restore <= 0)
+            {
+                    health++;
+                    restore = maxRest;
+            }
 
             model.Rotation = new Vector3(0, -camera.Phi,0);
 

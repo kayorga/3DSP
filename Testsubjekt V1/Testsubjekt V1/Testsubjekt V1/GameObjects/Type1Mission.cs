@@ -95,9 +95,6 @@ namespace TestsubjektV1
             for (int i = 1; i < 4; i++)
                 kinds[i] = (byte)ran.Next(3);
 
-            if (kind == Constants.NPC_BOSS)
-                area = 1;
-
             active = true;
         }
 
