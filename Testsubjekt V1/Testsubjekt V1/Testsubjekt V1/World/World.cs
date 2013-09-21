@@ -28,6 +28,7 @@ namespace TestsubjektV1
         private List<Map> maps;
         public IList<Map> Maps { get { return maps.AsReadOnly(); } }
         public char getMapData(int x, int z) { return mapData[x][z]; }
+        private Skybox skybox;
 
         public class Map
         {
@@ -57,6 +58,7 @@ namespace TestsubjektV1
             moveData = new byte[SIZE][];
             ground = new ModelObject[SIZE][];
             player_start = new int[2];
+            skybox = new Skybox(gdev, Content, 2);
 
             maps = new List<Map>(1);
             scanFiles();
@@ -345,10 +347,19 @@ namespace TestsubjektV1
         {
             loadMap(id);
             setup(th);
+            switch (th)
+            {
+                case 0: skybox.changeTheme(2); break;
+                case 1: skybox.changeTheme(1); break;
+                case 2: skybox.changeTheme(3); break;
+                case 3: skybox.changeTheme(4); break;
+                default: break;
+            }
         }
 
         public void draw(Camera camera, GraphicsDevice device)
         {
+            skybox.Draw(device, camera);
             //device.DepthStencilState = DepthStencilState.None;
             device.BlendState = BlendState.AlphaBlend;
 

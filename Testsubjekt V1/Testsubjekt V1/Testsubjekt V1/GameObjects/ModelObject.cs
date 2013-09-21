@@ -68,6 +68,23 @@ namespace TestsubjektV1
             }
         }
 
+        public void changeLighting(Vector3 direction, Vector3 color)
+        {
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                foreach (Effect effect in mesh.Effects)
+                {
+                    if (effect is BasicEffect)
+                    {
+                        BasicEffect basicEffect = (BasicEffect)effect;
+                        basicEffect.AmbientLightColor = color;
+                        basicEffect.DirectionalLight0.Direction = direction;
+                        //basicEffect.DirectionalLight0.DiffuseColor = new Vector3(1.0f, 1.0f, 1.0f);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// performs a simple collision test with the bounding sphere (very inaccurate!)
         /// </summary>

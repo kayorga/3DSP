@@ -12,7 +12,6 @@ namespace TestsubjektV1
         protected GraphicsDevice device;
         protected AudioManager audio;
         protected GameData data;
-        protected Skybox skybox;
 
         public byte nextZone;
         public byte nextTheme;
@@ -24,7 +23,6 @@ namespace TestsubjektV1
             this.device = device;
             this.audio = audio;
             this.data = data;
-            skybox = new Skybox(device, content, 1);
             nextTheme = 0;
             nextZone = 0;
         }

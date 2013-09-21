@@ -166,7 +166,6 @@ namespace TestsubjektV1
 
         public override void draw()
         {
-            skybox.Draw(device, camera, data.player.Position);
             world.draw(camera, device);
             data.player.draw(camera);
 
