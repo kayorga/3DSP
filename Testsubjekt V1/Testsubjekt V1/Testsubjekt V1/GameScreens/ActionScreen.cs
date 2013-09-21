@@ -121,7 +121,7 @@ namespace TestsubjektV1
             if (world.mapID != 0)
                 timeInMission+=gameTime.ElapsedGameTime;
             camera.Update(gameTime, data.player.Position);
-            if (!data.player.update(data.npcs, data.bullets, camera, canShoot))
+            if (!data.player.update(gameTime, data.npcs, data.bullets, camera, canShoot))
             {
                 //TODO: DEATH SCREAM
                 prepareWarp(0, 0);

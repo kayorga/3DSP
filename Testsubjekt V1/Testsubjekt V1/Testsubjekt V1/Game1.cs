@@ -116,7 +116,7 @@ namespace TestsubjektV1
                             myAction.reset();
                             camera.reset();
                             myAction.update(gameTime);
-                            data.player.update(data.npcs, data.bullets, camera, false);
+                            data.player.update(gameTime, data.npcs, data.bullets, camera, false);
                         }
                         screen = nextScreen;
 

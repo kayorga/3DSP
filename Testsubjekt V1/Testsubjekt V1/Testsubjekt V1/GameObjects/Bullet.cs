@@ -70,13 +70,20 @@ namespace TestsubjektV1
             maxDist = mdist;
             strength = str;
             type = t;
+
+            if (type == Constants.TYP_BLA)
+            {
+                particleEffect.SizeScaling = 2.5f;
+            }
+            else particleEffect.SizeScaling = 0.8f;
+            
             if (type == Constants.TYP_WAV)
             {
                 this.mirror = mirror;
                 waveTime = new TimeSpan(0);
             }
-
             element = elem;
+            
             switch (elem)
             {
                 default: break;

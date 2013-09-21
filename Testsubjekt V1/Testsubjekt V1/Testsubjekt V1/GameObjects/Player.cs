@@ -24,9 +24,13 @@ namespace TestsubjektV1
 
         public bool gotHit { get; set; }
 
+        public bool charging;
+
         Weapon weapon;
 
-        public Player(World world, ContentManager Content, AudioManager audio)
+        private Charge charge;
+
+        public Player(World world, ContentManager Content, AudioManager audio, GraphicsDevice graphicsDevice)
             : base()
         {
             this.world = world;
@@ -40,11 +44,15 @@ namespace TestsubjektV1
             maxHitDelay = 45;
             hitDelay = 0;
 
+            charging = false;
+
             weapon = new Weapon(audio);
             exp = 0;
 
             invincibleTimer = 0;
             maxInvincibility = Constants.PLAYER_INVINCIBILITY;
+
+            this.charge = new Charge(this.position, graphicsDevice, Content);
 
             reset();
         }
@@ -63,6 +71,7 @@ namespace TestsubjektV1
             health = maxHealth;
             weapon.reload();
             gotHit = false;
+            charging = false;
         }
 
         public void setPosition(Vector3 X) { this.position = X; }
@@ -79,7 +88,7 @@ namespace TestsubjektV1
             set { exp = value; }
         }
 
-        public bool update(NPCCollection npcs, BulletCollection bullets, Camera camera, bool canShoot)
+        public bool update(GameTime gameTime, NPCCollection npcs, BulletCollection bullets, Camera camera, bool canShoot)
         {
             if (lastMapID != world.mapID)
             {
@@ -92,13 +101,25 @@ namespace TestsubjektV1
             restore = (byte) Math.Max(restore - 1, 0);
             hitDelay = (byte)Math.Max(hitDelay - 1, 0);
 
-            if (health < maxHealth && restore <= 0 && hitDelay == 0
+            if (health < maxHealth && hitDelay == 0
                 && Mouse.GetState().RightButton == ButtonState.Pressed)
             {
+                charging = true;
+                charge.Update(gameTime, camera, this.Position);
+                if (restore <= 0)
+                {
                     int h = Math.Max((int)(maxHealth * .01f), 1);
                     health = Math.Min(health + h, maxHealth);
                     restore = maxRest;
+                }
             }
+            else charging = false;
+
+            /*if (Mouse.GetState().RightButton == ButtonState.Pressed)
+            {
+                charging = true;
+                charge.Update(gameTime, camera, this.Position);
+            }*/
 
             model.Rotation = new Vector3(0, -camera.Phi,0);
 
@@ -343,6 +364,13 @@ namespace TestsubjektV1
             set
             {
             }
+        }
+
+
+        public override void draw(Camera camera)
+        {
+            base.draw(camera);
+            if (charging) charge.Draw(camera);
         }
 
     }

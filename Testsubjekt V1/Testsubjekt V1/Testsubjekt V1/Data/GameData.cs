@@ -17,7 +17,7 @@ namespace TestsubjektV1
 
         public GameData(ContentManager Content, GraphicsDevice device, AudioManager audio, World world)
         {
-            player = new Player(world, Content, audio);
+            player = new Player(world, Content, audio, device);
             mods = new ModCollection();
             npcs = new NPCCollection(world, Content, player, device, audio);
             bullets = new BulletCollection(Content, device);
