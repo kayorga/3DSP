@@ -43,7 +43,7 @@ namespace TestsubjektV1
             resetMods();
         }
 
-        public void update(BulletCollection bullets, Vector3 position, Vector3 direction)
+        public void update(BulletCollection bullets, Vector3 position, Vector3 direction, bool canShoot)
         {
             if (ammo < maxAmmo + mod_acp && recharge <= 0)
             {
@@ -51,7 +51,9 @@ namespace TestsubjektV1
                 recharge = maxRechrg - mod_rcg;
             }
 
-            if (cooldown <= 0 && (Keyboard.GetState().IsKeyDown(Keys.Space) || Mouse.GetState().LeftButton == ButtonState.Pressed) && ammo > 0)
+            if (cooldown <= 0 && ammo > 0
+                && (Keyboard.GetState().IsKeyDown(Keys.Space) || Mouse.GetState().LeftButton == ButtonState.Pressed)
+                && canShoot && Mouse.GetState().RightButton == ButtonState.Released)
             {
                 cooldown = maxCooldn - mod_cdn;
 

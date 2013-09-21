@@ -66,10 +66,11 @@ namespace TestsubjektV1
                 {
                     screenReturnValue = Constants.CMD_NEW;
                     data.npcs.clear();
-                    world.warp(0, 0);
+                    prepareWarp(0, 0);
                     data.npcs.clear();
                     data.bullets.clear();
-                    camera.reset();
+                    //camera.reset();
+                    saveGame(data);
                 }
             }
         }
@@ -87,18 +88,23 @@ namespace TestsubjektV1
 
         public override int update(GameTime gameTime)
         {
-            //TODO
-
             onExitClick();
             onBaseClick();
             onExploreClick();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                screenReturnValue = Constants.CMD_BACK;
+                audio.playClick();
+            }
+
             return screenReturnValue;
         }
 
 
         public override void draw()
         {
-            //TODO
+            skybox.Draw(device, camera, data.player.Position);
             world.draw(camera, device);
             data.player.draw(camera);
             data.npcs.draw(camera);

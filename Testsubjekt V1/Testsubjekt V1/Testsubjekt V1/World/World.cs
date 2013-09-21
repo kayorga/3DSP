@@ -204,6 +204,9 @@ namespace TestsubjektV1
             _theme = th;
             generateGround(th);
             spawner_count = 0;
+            foreach (NPCSpawner spawner in spawners)
+                spawner.active = false;
+            Random ran = new Random();
 
             for (int i = 0; i < Constants.MAP_SIZE; ++i)
             {
@@ -225,6 +228,8 @@ namespace TestsubjektV1
                             mapObjects[i][j] = new ModelObject(wall2Obs[th]);
                             mapObjects[i][j].Scaling = new Vector3(2.0f, 1.5f, 2.0f);
                             mapObjects[i][j].Position = new Vector3(i * -2.0f + Constants.MAP_SIZE - 1, 0.25f, -2.0f * j + Constants.MAP_SIZE - 1);
+                            if (th != 0)
+                                mapObjects[i][j].Rotation = new Vector3(0, (float)(ran.NextDouble() * Math.PI), 0);
                             moveData[i][j] = 1;
                             break;
                         case '-':

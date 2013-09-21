@@ -316,7 +316,11 @@ namespace TestsubjektV1
                 dragDropRectangle.X = Mouse.GetState().X-20;
                 dragDropRectangle.Y = Mouse.GetState().Y-20;
                 if (Mouse.GetState().LeftButton == ButtonState.Released
-                        && lastMouseState == ButtonState.Pressed) dragDropActive = false;
+                        && lastMouseState == ButtonState.Pressed)
+                {
+                    dragDropActive = false;
+                    //data.mods.sort();
+                }
             }
         }
 
@@ -477,6 +481,7 @@ namespace TestsubjektV1
                 data.player.myWeapon.mods.Add(slot4Item.modification);
 
                 data.player.myWeapon.setup(); //applies mods to weapon
+                data.mods.sort();
 
                 screenReturnValue = Constants.CMD_BACK;
             }
@@ -493,6 +498,12 @@ namespace TestsubjektV1
             if (Keyboard.GetState().IsKeyDown(Keys.R))
             {
                 screenReturnValue = Constants.CMD_DEX;
+                audio.playClick();
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                screenReturnValue = Constants.CMD_BACK;
                 audio.playClick();
             }
         }
@@ -516,7 +527,7 @@ namespace TestsubjektV1
 
         public override void draw()
         {
-            //TODO
+            skybox.Draw(device, camera, data.player.Position);
             world.draw(camera, device);
             data.player.draw(camera);
             data.npcs.draw(camera);

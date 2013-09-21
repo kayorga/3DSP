@@ -95,10 +95,11 @@ namespace TestsubjektV1
                 frameRectangle = baseRectangle;
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed)
                 {
-                    world.warp(0, 0);
+                    //world.warp(0, 0);
+                    prepareWarp(0, 0);
                     data.npcs.clear();
                     data.bullets.clear();
-                    camera.reset();
+                    //camera.reset();
                     screenReturnValue = Constants.CMD_NEW;
                 }
             }
@@ -146,7 +147,7 @@ namespace TestsubjektV1
 
         public override void draw()
         {
-            //TODO
+            skybox.Draw(device, camera, data.player.Position);
             world.draw(camera, device);
             data.player.draw(camera);
             data.npcs.draw(camera);
@@ -171,7 +172,6 @@ namespace TestsubjektV1
             Color[] color = {Color.FromNonPremultiplied(255, 255, 255, 180)};
             texture.SetData<Color>(color);
             spriteBatch.Draw(texture, fadeRectangle, Color.Black);
-            
         }
 
     }

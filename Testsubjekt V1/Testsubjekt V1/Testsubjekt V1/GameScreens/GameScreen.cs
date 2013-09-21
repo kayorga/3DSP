@@ -12,6 +12,11 @@ namespace TestsubjektV1
         protected GraphicsDevice device;
         protected AudioManager audio;
         protected GameData data;
+        protected Skybox skybox;
+
+        public byte nextZone;
+        public byte nextTheme;
+        
 
         public GameScreen(ContentManager content, GraphicsDevice device, AudioManager audio, GameData data)
         {
@@ -19,6 +24,15 @@ namespace TestsubjektV1
             this.device = device;
             this.audio = audio;
             this.data = data;
+            skybox = new Skybox(device, content, 1);
+            nextTheme = 0;
+            nextZone = 0;
+        }
+
+        public virtual void prepareWarp(byte id, byte th)
+        {
+            nextZone = id;
+            nextTheme = th;
         }
 
         public virtual int update(GameTime gameTime)

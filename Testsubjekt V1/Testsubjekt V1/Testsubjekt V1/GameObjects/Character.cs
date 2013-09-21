@@ -22,6 +22,17 @@ namespace TestsubjektV1
             get { return position; }
         }
 
+        internal ModelObject ModelObject
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
         public virtual void draw(Camera camera)
         {
             model.Draw(camera);

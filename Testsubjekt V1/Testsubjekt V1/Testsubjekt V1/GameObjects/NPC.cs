@@ -143,49 +143,49 @@ namespace TestsubjektV1
             switch (kind)
             {
                 case Constants.NPC_NONE:
-                    speed = 0.04f;
-                    maxHealth = (int)(50 * Math.Pow(1.06f, level - 1));
+                    speed = 0.03f;
+                    maxHealth = (int)(50 * Math.Pow(1.05f, level - 1));
                     XP = 2;
                     maxCooldn = 70;
                     model.Scaling = new Vector3(0.75f, 0.75f, 0.75f);
                     element = Constants.ELM_NIL;
-                    strength = (byte)(25 * Math.Pow(1.04f, level - 1));
+                    strength = (byte)(10 * Math.Pow(1.045f, level - 1));
                     break;
                 case Constants.NPC_PLAS:
-                    speed = 0.05f;
-                    maxHealth = (int)(50 * Math.Pow(1.05f, level - 1));
+                    speed = 0.035f;
+                    maxHealth = (int)(50 * Math.Pow(1.045f, level - 1));
                     XP = 3;
                     maxCooldn = 80;
                     model.Scaling = new Vector3(0.75f, 0.75f, 0.75f);
                     element = Constants.ELM_PLA;
-                    strength = (byte)(12 * Math.Pow(1.06f, level - 1));
+                    strength = (byte)(10 * Math.Pow(1.05f, level - 1));
                     break;
                 case Constants.NPC_HEAT:
-                    speed = 0.06f;
+                    speed = 0.04f;
                     maxHealth = (int)(50 * Math.Pow(1.04f, level - 1));
                     XP = 3;
                     maxCooldn = 75;
                     model.Scaling = new Vector3(0.5f, 0.5f, 0.5f);
                     element = Constants.ELM_HEA;
-                    strength = (byte)(20 * Math.Pow(1.05f, level - 1));
+                    strength = (byte)(10 * Math.Pow(1.055f, level - 1));
                     break;
                 case Constants.NPC_ICE:
-                    speed = 0.05f;
-                    maxHealth = (int)(50 * Math.Pow(1.07f, level - 1));
+                    speed = 0.03f;
+                    maxHealth = (int)(50 * Math.Pow(1.055f, level - 1));
                     XP = 3;
                     maxCooldn = 90;
                     model.Scaling = new Vector3(0.75f, 0.75f, 0.75f);
                     element = Constants.ELM_ICE;
-                    strength = (byte)Math.Min((15 * Math.Pow(1.06f, level - 1)), 255);
+                    strength = (byte)(10 * Math.Pow(1.04f, level - 1));
                     break;                
                 case Constants.NPC_BOSS:
-                    speed = 0.03f;
+                    speed = 0.02f;
                     maxHealth = (int)(200 * Math.Pow(1.07f, level - 1));
                     XP = 70;
                     maxCooldn = 50;
                     model.Scaling = new Vector3(0.75f, 0.75f, 0.75f);
                     element = elem;
-                    strength = (byte)(14 * Math.Pow(1.06f, level - 1));
+                    strength = (byte)Math.Min((10 * Math.Pow(1.06f, level - 1)), 255);
                     break;
                 default:
                     speed = 0.001f;
@@ -265,7 +265,7 @@ namespace TestsubjektV1
 
             
 
-            if (!move())
+            if (!moving || !move())
             {
                 {
                     pathFinder.setup(new Point((int)Math.Round((-1 * position.X + world.size - 1)), (int)Math.Round((-1 * position.Z + world.size - 1))), p);
@@ -311,6 +311,11 @@ namespace TestsubjektV1
             return true;
         }
 
+        public void clearDmgNums()
+        {
+            dmgNumbers.Clear();
+        }
+
         #region move
         private bool move()
         {
@@ -324,7 +329,7 @@ namespace TestsubjektV1
             //    return;
             //}
 
-            int factor = (int)Math.Ceiling(speed / .025f);
+            int factor = (int)Math.Ceiling(speed / .02f);
 
             float remainingSpeed = speed;
             for (int i = 0; i < factor; i++)
@@ -356,14 +361,14 @@ namespace TestsubjektV1
         {
             //if (float.IsNaN(position.X)) Console.WriteLine("X is NaN cause direction is");
 
-            //if ((this.position - target).Length() < 0.02f)
-            //{
-            //    this.position = target;
-            //    //if (float.IsNaN(position.X)) Console.WriteLine("X is NaN cause target is");
-            //    //moving = false;
-            //    return false;
-            //    //Console.WriteLine("done: " + position.X + "/" + position.Z);
-            //}
+            if ((this.position - target).Length() < 0.02f)
+            {
+                this.position = target;
+                //if (float.IsNaN(position.X)) Console.WriteLine("X is NaN cause target is");
+                moving = false;
+                return false;
+                //Console.WriteLine("done: " + position.X + "/" + position.Z);
+            }
 
             this.position += spd * direction;
             model.Position = this.position;

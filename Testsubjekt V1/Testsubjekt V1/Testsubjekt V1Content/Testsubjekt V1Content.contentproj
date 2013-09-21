@@ -132,10 +132,6 @@
       <Name>map7</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="map8.map">
-      <Name>map8</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <Compile Include="Models\enemy2.fbx">
       <Name>enemy2</Name>
       <Importer>FbxImporter</Importer>
@@ -572,6 +568,13 @@
   <ItemGroup>
     <Compile Include="credits.png">
       <Name>credits</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Icons\new.png">
+      <Name>new</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

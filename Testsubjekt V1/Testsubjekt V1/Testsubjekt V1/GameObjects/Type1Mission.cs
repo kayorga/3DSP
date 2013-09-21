@@ -123,8 +123,6 @@ namespace TestsubjektV1
                     countXPGained += exp;
                 }
 
-                
-
             if (startLv < player.level)
             {
                 mods.generate(Math.Min(player.level, level));

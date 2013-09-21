@@ -2,7 +2,7 @@
 {
     static class Constants
     {
-        public const bool DEBUG = false;
+        public const bool DEBUG = true;
 
         public const int RES_X = 1024;
         public const int RES_Y = 768;
@@ -43,7 +43,7 @@
         public const byte TYP_WAV = 3;
 
         //Mod types
-        public const byte MOD_NIL = 0;
+        public const byte MOD_NIL = 255;
         public const byte MOD_ELM = 1;
         public const byte MOD_TYP = 2;
         public const byte MOD_STR = 3;

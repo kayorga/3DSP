@@ -17,7 +17,7 @@ namespace TestsubjektV1
         AStar pathFinder;
         public AStar PathFinder { get { return pathFinder; } }
 
-        static string[] labels = { "NIL", "PLA", "HEA", "ICE", "Boss"};
+        static string[] labels = { "CLOUD", "SEED", "SUN", "SPYKE", "COBRA"};
         public string[] Labels { get { return labels; } }
 
         private BillboardEngine billboardEngine;
@@ -126,8 +126,12 @@ namespace TestsubjektV1
         public override void clear()
         {
             foreach (NPC n in _content)
+            {
                 n.active = false;
+                n.clearDmgNums();
+            }
             queue.Clear();
+            clearMoveData();
         }
 
         public void generate(byte k, Vector3 p, Vector3 d, int l)

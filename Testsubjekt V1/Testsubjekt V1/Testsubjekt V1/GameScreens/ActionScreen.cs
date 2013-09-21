@@ -40,9 +40,10 @@ namespace TestsubjektV1
         private SpriteFont font;
         private bool spawnNewEnemies;
         private TimeSpan timeInMission;
-        private Skybox skybox;
         private BlurEffect blurEffect;
         Map miniMap;
+
+        public bool canShoot;
 
         public ActionScreen(ContentManager content, GraphicsDevice device, AudioManager audio, GameData data, Camera cam, World w)
             : base(content, device, audio, data)
@@ -88,11 +89,10 @@ namespace TestsubjektV1
             timeInMission = new TimeSpan(0);
             data.missions.activeMission.timeSpent = timeInMission;
 
-            skybox = new Skybox(device, content, 1);
-
             blurEffect = new BlurEffect(device, content);
 
             miniMap = new Map(data, world, device, content, new Point(750, 500));
+            canShoot = true;
         }
 
         public void reset()
@@ -103,11 +103,14 @@ namespace TestsubjektV1
             timeInMission = new TimeSpan(0);
             data.missions.activeMission.timeSpent = timeInMission;
             blurEffect = new BlurEffect(device, content);
+            canShoot = false;
         }
 
         public override int update(GameTime gameTime)
         {
-            //TODO
+            if (!canShoot && Mouse.GetState().LeftButton == ButtonState.Released)
+                canShoot = true;
+
             if (data.player.gotHit)
             {
                 blurEffect.AddBlur();
@@ -118,9 +121,10 @@ namespace TestsubjektV1
             if (world.mapID != 0)
                 timeInMission+=gameTime.ElapsedGameTime;
             camera.Update(gameTime, data.player.Position);
-            if (!data.player.update(data.npcs, data.bullets, camera))
+            if (!data.player.update(data.npcs, data.bullets, camera, canShoot))
             {
-                world.warp(0, 0);
+                //TODO: DEATH SCREAM
+                prepareWarp(0, 0);
                 camera.reset();
                 data.npcs.clear();
                 data.bullets.clear();
@@ -198,7 +202,7 @@ namespace TestsubjektV1
                     //data.missions.mainMission.level = 0;
                     //data.missions.generate(1);
                 }
-                if (Mouse.GetState().RightButton == ButtonState.Pressed)
+                if (Keyboard.GetState().IsKeyDown(Keys.F))
                 {
                     data.player.health = data.player.maxHealth;
                     data.player.myWeapon.reload();
@@ -237,7 +241,6 @@ namespace TestsubjektV1
 
         public override void draw()
         {
-            //TODO
             skybox.Draw(device, camera, data.player.Position);
             world.draw(camera, device);
             data.player.draw(camera);

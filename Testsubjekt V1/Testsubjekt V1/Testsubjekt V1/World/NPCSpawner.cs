@@ -5,9 +5,9 @@ namespace TestsubjektV1
 {
     class NPCSpawner
     {
+        public bool active;
         private int x;
         private int z;
-        private bool active;
         private byte kind;
         private bool rate;
         private int cooldown;

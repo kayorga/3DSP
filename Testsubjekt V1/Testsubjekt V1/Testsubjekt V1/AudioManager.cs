@@ -21,6 +21,7 @@ namespace TestsubjektV1
         private SoundEffectInstance currentBackground;
 
         private SoundEffect clickSound;
+        private byte clickDelay;
 
         public AudioManager(ContentManager Content)
         {
@@ -40,6 +41,14 @@ namespace TestsubjektV1
             backgroundSound3 = Content.Load<SoundEffect>("Audio/shoot1");
 
             backgroundSounds = new SoundEffect[] {backgroundSound0, backgroundSound1, backgroundSound2, backgroundSound3};
+
+            clickDelay = 0;
+        }
+
+        public void update()
+        {
+            if (clickDelay > 0)
+                clickDelay--;
         }
 
         public void playBackground(byte theme)
@@ -75,7 +84,11 @@ namespace TestsubjektV1
 
         public void playClick()
         {
-            clickSound.CreateInstance().Play();
+            if (clickDelay == 0)
+            {
+                clickSound.CreateInstance().Play();
+                clickDelay = 10;
+            }
         }
     }
 }

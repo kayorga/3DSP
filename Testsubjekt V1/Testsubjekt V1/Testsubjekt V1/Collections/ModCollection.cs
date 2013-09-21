@@ -11,6 +11,7 @@ namespace TestsubjektV1
         private Mod lastGenerated;
         public Mod firstMod;
         public string lastMod { get { return lastGenerated.getLabel(); } }
+    
         public ModCollection()
             : base(Constants.CAP_MODS)
         {
@@ -59,14 +60,9 @@ namespace TestsubjektV1
             }
         }
 
-        public void update(int level)
-        {
-            //TODO
-        }
-
         public override void clear()
         {
-            //TODO
+            _content.Clear();
         }
 
         public void add(byte lv)
@@ -74,6 +70,11 @@ namespace TestsubjektV1
             lv -= 2;
             if (lv > 24) return;
             generate(specials[lv / 4 - 1].value, specials[lv / 4 - 1].type);
+        }
+
+        public void sort()
+        {
+            _content = _content.OrderBy(x => x.type).ThenBy(x => x.value).ToList<Mod>();
         }
 
         public void generate(int level, int t = 0)
@@ -116,7 +117,7 @@ namespace TestsubjektV1
                     }
                 }
             }
-            _content.OrderBy(x => x.type);
+            sort();
         }
     }
 }
