@@ -41,9 +41,11 @@ namespace TestsubjektV1
         private bool spawnNewEnemies;
         private TimeSpan timeInMission;
         private BlurEffect blurEffect;
+
         Map miniMap;
 
         public bool canShoot;
+        private bool lowHP;
 
         public ActionScreen(ContentManager content, GraphicsDevice device, AudioManager audio, GameData data, Camera cam, World w)
             : base(content, device, audio, data)
@@ -93,6 +95,7 @@ namespace TestsubjektV1
 
             miniMap = new Map(data, world, device, content, new Point(750, 500));
             canShoot = true;
+            lowHP = false;
         }
 
         public void reset()
@@ -104,10 +107,14 @@ namespace TestsubjektV1
             data.missions.activeMission.timeSpent = timeInMission;
             blurEffect = new BlurEffect(device, content);
             canShoot = false;
+            lowHP = false;
         }
 
         public override int update(GameTime gameTime)
         {
+            if (data.player.health <= 0.40f * data.player.maxHealth) lowHP = true;
+            else lowHP = false;
+
             if (!canShoot && Mouse.GetState().LeftButton == ButtonState.Released)
                 canShoot = true;
 
@@ -246,8 +253,29 @@ namespace TestsubjektV1
             data.npcs.draw(camera, spriteBatch, font);
             data.bullets.draw(camera);
             blurEffect.Draw(spriteBatch);
+            if (lowHP) drawFade();
             drawHUD();
             miniMap.Draw();
+        }
+
+        private void drawFade()
+        {
+            spriteBatch.Begin();
+
+            device.BlendState = BlendState.NonPremultiplied;
+            Texture2D texture = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
+            float interpolation = 1 - ((float)data.player.health / (float)data.player.maxHealth) ;
+            Int32 alpha = (int)((float)(MathHelper.Lerp(30, 130 , interpolation)));
+            Color[] color = { Color.FromNonPremultiplied(196, 60, 53, alpha) };
+            texture.SetData<Color>(color);
+            spriteBatch.Draw(texture, hudRectangle, Color.White);
+            
+            spriteBatch.End();
+            
+            device.BlendState = BlendState.Opaque;
+            device.DepthStencilState = DepthStencilState.Default;
+            device.SamplerStates[0] = SamplerState.LinearWrap;
+            device.RasterizerState = RasterizerState.CullNone;
         }
 
         private void drawHUD()

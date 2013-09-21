@@ -112,6 +112,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameScreens\CharScreen.cs" />
+    <Compile Include="GameScreens\GameOverScreen.cs" />
     <Compile Include="Particles\Charge.cs" />
     <Compile Include="Particles\ChargeParticleEffect.cs" />
     <Compile Include="Pathfinder\AStar.cs" />

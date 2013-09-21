@@ -21,6 +21,8 @@ namespace TestsubjektV1
         private Texture2D userInterface;
         private Texture2D frame;
         private Texture2D forestImg;
+        private Texture2D wasteImg;
+        private Texture2D arcticImg;
 
         private SpriteBatch spriteBatch;
 
@@ -42,6 +44,8 @@ namespace TestsubjektV1
             userInterface = content.Load<Texture2D>("missionCompleteInterface");
             frame = content.Load<Texture2D>("briefing_frame");
             forestImg = content.Load<Texture2D>("Icons/forrest");
+            wasteImg = content.Load<Texture2D>("Icons/wasteland");
+            arcticImg = content.Load<Texture2D>("Icons/artic");
             
             interfaceRectangle = new Rectangle(0, 0, 1024, 768);
             exitRectangle = new Rectangle(891, 78, 63, 55);
@@ -135,6 +139,10 @@ namespace TestsubjektV1
             spriteBatch.DrawString(menuFont1, data.missions.activeMission.Reward, new Vector2(693, 385), Color.LemonChiffon);
             if (world.theme == 1)
                 spriteBatch.Draw(forestImg, imageRectangle, Color.White);
+            else if (world.theme == 2)
+                spriteBatch.Draw(wasteImg, imageRectangle, Color.White);
+            else if (world.theme == 3)
+                spriteBatch.Draw(arcticImg, imageRectangle, Color.White);
 
         }
 
