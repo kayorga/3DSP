@@ -63,7 +63,7 @@ namespace TestsubjektV1
 
                     if (data.npcs.npcMoveData[Constants.MAP_SIZE * 2 - i - 1][Constants.MAP_SIZE * 2 - j - 1] != 0 && data.npcs.npcMoveData[Constants.MAP_SIZE * 2 - i - 1][Constants.MAP_SIZE * 2 - j - 1] != 255) spriteBatch.Draw(enemy, mapRectangle[i][j], Color.White);
 
-                    if (data.npcs.npcMoveData[Constants.MAP_SIZE * 2 - i - 1][Constants.MAP_SIZE * 2 - j - 1] == 255) spriteBatch.Draw(enemy, mapRectangle[i][j], Color.Black);
+                    if (Constants.DEBUG && data.npcs.npcMoveData[Constants.MAP_SIZE * 2 - i - 1][Constants.MAP_SIZE * 2 - j - 1] == 255) spriteBatch.Draw(enemy, mapRectangle[i][j], Color.Black);
                 }
             }
 

@@ -55,7 +55,7 @@ namespace TestsubjektV1
                 if (rate == Constants.SPAWN_ONCE)
                     active = false;
                 else
-                    cooldown = new Random().Next((int)(maxCooldown * 0.8f), (int)(maxCooldown * 1.2f));
+                    cooldown = new Random().Next((int)(maxCooldown * 0.6f), (int)(maxCooldown * 1.0f));
             }
             else cooldown = Math.Max(cooldown - 1, 0);
         }
