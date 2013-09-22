@@ -12,34 +12,46 @@ namespace TestsubjektV1
         int lastMapID;
 
         byte invincibleTimer;
-        byte maxInvincibility;
 
         byte restore;
         byte maxRest;
+        byte hitDelay;
+        byte maxHitDelay;
+        bool rightButton;
 
         public byte xTile { get { return (byte)Math.Round(-1 * (position.X) + (Constants.MAP_SIZE - 1)); } }
         public byte zTile { get { return (byte)Math.Round(-1 * (position.Z) + (Constants.MAP_SIZE - 1)); } }
 
         public bool gotHit { get; set; }
 
+        public bool charging;
+
         Weapon weapon;
 
-        public Player(World world, ContentManager Content, AudioManager audio)
+        private Charge charge;
+
+        public Player(World world, ContentManager Content, AudioManager audio, GraphicsDevice graphicsDevice)
             : base()
         {
             this.world = world;
             this.model = new ModelObject(Content.Load<Model>("Models\\T"));
-            this.speed=0.2f;
+            this.speed=0.15f;
             this.level=1;
             this.maxHealth=100;
             this.health=100;
-            maxRest = 6;
+            maxRest = 15;
             restore = 0;
+            maxHitDelay = Constants.PLAYER_HIT_DELAY;
+            hitDelay = 0;
+
+            charging = false;
+
             weapon = new Weapon(audio);
             exp = 0;
 
             invincibleTimer = 0;
-            maxInvincibility = Constants.PLAYER_INVINCIBILITY;
+
+            this.charge = new Charge(this.position, graphicsDevice, Content);
 
             reset();
         }
@@ -58,6 +70,7 @@ namespace TestsubjektV1
             health = maxHealth;
             weapon.reload();
             gotHit = false;
+            charging = false;
         }
 
         public void setPosition(Vector3 X) { this.position = X; }
@@ -74,8 +87,11 @@ namespace TestsubjektV1
             set { exp = value; }
         }
 
-        public bool update(NPCCollection npcs, BulletCollection bullets, Camera camera)
+        public bool update(GameTime gameTime, NPCCollection npcs, BulletCollection bullets, Camera camera, bool canShoot)
         {
+            if (Mouse.GetState().RightButton == ButtonState.Released && rightButton) charge.Clear();
+            rightButton = (Mouse.GetState().RightButton == ButtonState.Pressed);
+
             if (lastMapID != world.mapID)
             {
                 reset();
@@ -85,12 +101,27 @@ namespace TestsubjektV1
             if (health <= 0) return false;
 
             restore = (byte) Math.Max(restore - 1, 0);
+            hitDelay = (byte) Math.Max(hitDelay - 1, 0);
 
-            if (health < maxHealth && restore <= 0)
+            if (health < maxHealth && hitDelay == 0
+                && Mouse.GetState().RightButton == ButtonState.Pressed)
             {
-                    health++;
+                charging = true;
+                charge.Update(gameTime, camera, this.Position);
+                if (restore <= 0)
+                {
+                    int h = Math.Max((int)(maxHealth * .01f), 1);
+                    health = Math.Min(health + h, maxHealth);
                     restore = maxRest;
+                }
             }
+            else charging = false;
+
+            /*if (Mouse.GetState().RightButton == ButtonState.Pressed)
+            {
+                charging = true;
+                charge.Update(gameTime, camera, this.Position);
+            }*/
 
             model.Rotation = new Vector3(0, -camera.Phi,0);
 
@@ -110,7 +141,7 @@ namespace TestsubjektV1
                 invincibleTimer--;
 
             if (world.mapID != 0) 
-                weapon.update(bullets, position, front);
+                weapon.update(bullets, position, front, canShoot);
             return true;
         }
 
@@ -135,27 +166,39 @@ namespace TestsubjektV1
             weapon.reload();
         }
 
+        public void setupStats()
+        {
+            for (int i = 1; i < level; i++)
+            {
+                int d = (int)(maxHealth * .05f);
+                maxHealth += d;
+                health = maxHealth;
+            }
+        }
+
         public void getHit(Bullet b, Mission m)
         {
             if (invincibleTimer > 0)
                 return;
-            //TODO///////
+            //RAW DAMAGE//
             int dmg = b.Strength;
-            /////////////
+            //////////////
             gotHit = true;
             health = Math.Max(health - dmg, 0);
             m.dmgIn += dmg;
-            invincibleTimer = maxInvincibility;
+            invincibleTimer = Constants.PLAYER_BULLET_INVINCIBILITY;
+            hitDelay = maxHitDelay;
         }
 
         private void getHit(NPC npc)
         {
-            //TODO/////
+            //RAW DAMAGE//
             int dmg = 1 + (int)(npc.lv * npc.speed * 50);
-            ///////////
+            //////////////
             gotHit = true;
             health = Math.Max(health - dmg, 0);
-            invincibleTimer = maxInvincibility;
+            invincibleTimer = Constants.PLAYER_NPC_INVINCIBILITY;
+            hitDelay = maxHitDelay;
         }
 
         //public void moveAndCollide1(NPCCollection npcs)
@@ -312,6 +355,24 @@ namespace TestsubjektV1
                 getHit(npcs[tile - 1]);
                 npcs[tile - 1].getHit(this);
             }
+        }
+
+        internal Weapon Weapon
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
+
+        public override void draw(Camera camera)
+        {
+            base.draw(camera);
+            if (charging) charge.Draw(camera);
         }
 
     }

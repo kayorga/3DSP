@@ -2,7 +2,7 @@
 {
     static class Constants
     {
-        public const bool DEBUG = false;
+        public const bool DEBUG = true;
 
         public const int RES_X = 1024;
         public const int RES_Y = 768;
@@ -29,6 +29,9 @@
         public const int CMD_DEX = 12;
         public const int CMD_CREDITS = 13;
         public const int CMD_TITLE = 14;
+        public const int CMD_GAMEOVER = 15;
+        public const int CMD_CHARINFO = 16;
+        public const int CMD_HELP = 17;
 
         //NPC and Bullet elements
         public const byte ELM_NIL = 0;
@@ -43,7 +46,7 @@
         public const byte TYP_WAV = 3;
 
         //Mod types
-        public const byte MOD_NIL = 0;
+        public const byte MOD_NIL = 255;
         public const byte MOD_ELM = 1;
         public const byte MOD_TYP = 2;
         public const byte MOD_STR = 3;
@@ -62,7 +65,9 @@
         public const byte NPC_ICE = 3;
         public const byte NPC_BOSS = 4;
 
-        public const byte PLAYER_INVINCIBILITY = 45;
+        public const byte PLAYER_NPC_INVINCIBILITY = 45;
+        public const byte PLAYER_BULLET_INVINCIBILITY = 15;
+        public const byte PLAYER_HIT_DELAY = 45;
 
         //Map sizes
         public const byte MAP_SIZE = 25;

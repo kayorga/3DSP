@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace TestsubjektV1
 {
@@ -11,6 +12,7 @@ namespace TestsubjektV1
         private World world;
         private NPCCollection npcs;
         public byte nextModLevel;
+        public bool[] isNew;
 
         public MissionCollection(World w, NPCCollection n)
             : base(4)
@@ -27,6 +29,8 @@ namespace TestsubjektV1
             mainMission = this[3];
 
             nextModLevel = 6;
+
+            isNew = new bool[4];
         }
 
         //generate new missions to replace completed/inactive ones
@@ -55,8 +59,8 @@ namespace TestsubjektV1
                     for (int j = 1; j < kinds.Length; j++)
                         kinds[j] = (byte)(ran.Next(Constants.NPC_BOSS));
 
-
                     m.setup(mislv, kind, count, (byte)(i + 1), area, kinds, npcs.Labels, world.Labels);
+                    isNew[i] = true;
                 }
             }
 
@@ -73,10 +77,10 @@ namespace TestsubjektV1
                 for (int j = 1; j < kinds.Length; j++)
                     kinds[j] = (byte)(ran.Next(Constants.NPC_BOSS));
 
-                this[3].setup((byte)(this[3].level+12), kind, 1, zone, area, kinds, npcs.Labels, world.Labels);
+                this[3].setup((byte)Math.Min(this[3].level+12, 60), kind, 1, zone, area, kinds, npcs.Labels, world.Labels);
+                isNew[3] = true;
             }
         }
-
 
         /// <summary>
         /// blocks Missions with a too high level or unblocks them

@@ -24,7 +24,7 @@
 
         public Mod()
         {
-            setup(0, 0);
+            setup(Constants.MOD_NIL);
         }
 
         public void setup(int t, int v = 0)

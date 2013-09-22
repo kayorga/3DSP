@@ -28,6 +28,17 @@ namespace TestsubjektV1
             setup(origin, p);
         }
 
+        internal PathNode PathNode
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
         public void setup(Point o, Player p)
         {
             origin = o;

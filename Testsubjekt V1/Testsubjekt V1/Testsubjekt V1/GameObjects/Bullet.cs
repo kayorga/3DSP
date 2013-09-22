@@ -23,7 +23,6 @@ namespace TestsubjektV1
         byte type;
         public byte Type { get { return type; } }
 
-        private bool waving;
         private bool mirror;
         TimeSpan waveTime;
 
@@ -48,7 +47,6 @@ namespace TestsubjektV1
             maxDist = 0;
             strength = 1;
             type = 0;
-            waving = false;
             mirror = false;
             waveTime = new TimeSpan(0);
             element = Constants.ELM_NIL;
@@ -72,14 +70,20 @@ namespace TestsubjektV1
             maxDist = mdist;
             strength = str;
             type = t;
+
+            if (type == Constants.TYP_BLA)
+            {
+                particleEffect.SizeScaling = 2.5f;
+            }
+            else particleEffect.SizeScaling = 0.8f;
+            
             if (type == Constants.TYP_WAV)
             {
                 this.mirror = mirror;
-                waving = true;
                 waveTime = new TimeSpan(0);
             }
-
             element = elem;
+            
             switch (elem)
             {
                 default: break;
@@ -141,7 +145,6 @@ namespace TestsubjektV1
             if (collision(world) || collision(npcs, m) || collision(p, m) || distance > maxDist)
             {
                 active = false;
-                waving = false;
                 particleEffect.Clear();
                 return false;
             }

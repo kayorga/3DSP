@@ -18,9 +18,13 @@ namespace TestsubjektV1
         private SamplerState clampState;
         private SamplerState backupState;
 
+        private ContentManager Content;
+
         // constructor
         public Skybox(GraphicsDevice graphics, ContentManager contentManager, byte theme)
         {
+            Content = contentManager;
+
             // create basic effect
             effect = new BasicEffect(graphics);
 
@@ -102,9 +106,20 @@ namespace TestsubjektV1
             skyboxBuffer.SetData(skyboxModel);
         }
 
-        public void Draw(GraphicsDevice graphics, Camera camera, Vector3 center)
+        public void changeTheme(byte theme)
         {
-            Draw(graphics, camera.ViewMatrix, camera.ProjectionMatrix, Matrix.CreateTranslation(new Vector3(size / 2 -10.0f, 0, size / 2-10.0f)));
+            skyboxTextures = new Texture2D[6];
+            skyboxTextures[0] = Content.Load<Texture2D>("Skybox/theme" + theme + "_Top");
+            skyboxTextures[1] = Content.Load<Texture2D>("Skybox/theme" + theme + "_Bottom");
+            skyboxTextures[2] = Content.Load<Texture2D>("Skybox/theme" + theme + "_Left");
+            skyboxTextures[3] = Content.Load<Texture2D>("Skybox/theme" + theme + "_Right");
+            skyboxTextures[4] = Content.Load<Texture2D>("Skybox/theme" + theme + "_Front");
+            skyboxTextures[5] = Content.Load<Texture2D>("Skybox/theme" + theme + "_Back");
+        }
+
+        public void Draw(GraphicsDevice graphics, Camera camera)
+        {
+            Draw(graphics, camera.ViewMatrix, camera.ProjectionMatrix, Matrix.CreateTranslation(new Vector3(size / 2 -10.0f, 3, size / 2-10.0f)));
         }
 
         private void Draw(GraphicsDevice graphics, Matrix viewMatrix, Matrix projectionMatrix, Matrix WorldMatrix)

@@ -70,7 +70,7 @@ namespace TestsubjektV1
             frameRectangle = bossRectangle;
             activeEnemyTexture = bossEnemy;
 
-            descriptionString = "Boss\nSpecific\n++++\n+++\n+";
+            descriptionString = "Cobra Commander\n???\n+++++\n+++++\n+";
             frameworkString = "Name:\nType:\nHealth:\nStrength:\nSpeed:";
             
             
@@ -83,7 +83,7 @@ namespace TestsubjektV1
             {
                 frameRectangle = bossRectangle;
                 activeEnemyTexture = bossEnemy;
-                descriptionString = "Boss\nSpecific\n++++\n+++\n+";
+                descriptionString = "Cobra Commander\n???\n+++++\n+++++\n+";
             }
         }
 
@@ -93,7 +93,7 @@ namespace TestsubjektV1
             {
                 frameRectangle = heatRectangle;
                 activeEnemyTexture = heatEnemy;
-                descriptionString = "Heat\nHeat\n+\n++\n+++";
+                descriptionString = "Sun Andreas\nHeat\n+\n++++\n+++";
             }
         }
 
@@ -103,7 +103,7 @@ namespace TestsubjektV1
             {
                 frameRectangle = iceRectangle;
                 activeEnemyTexture = iceEnemy;
-                descriptionString = "Ice\nIce\n+++\n+++\n++";
+                descriptionString = "Spyke Spykleton\nIce\n++++\n+\n++";
             }
         }
 
@@ -113,7 +113,7 @@ namespace TestsubjektV1
             {
                 frameRectangle = plasmaRectangle;
                 activeEnemyTexture = plasmaEnemy;
-                descriptionString = "Plasma\nPlasma\n+\n++\n+++";
+                descriptionString = "Doom Seed\nPlasma\n++\n+++\n+++";
             }
         }
 
@@ -123,7 +123,7 @@ namespace TestsubjektV1
             {
                 frameRectangle = neutralRectangle;
                 activeEnemyTexture = neutralEnemy;
-                descriptionString = "Neutral\nNormal\n+\n++\n+++";
+                descriptionString = "Fogs McCloud\nNeutral\n+++\n++\n+++";
             }
         }
 
@@ -145,7 +145,6 @@ namespace TestsubjektV1
 
             if (Keyboard.GetState().IsKeyDown(Keys.Q))
             {
-                
                 audio.playClick();
                 return Constants.CMD_MOD;
             }
@@ -155,13 +154,18 @@ namespace TestsubjektV1
                 audio.playClick();
                 return Constants.CMD_JOURNAL;
             }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                audio.playClick();
+                return Constants.CMD_BACK;
+                
+            }
             return Constants.CMD_NONE;
         }
 
-
         public override void draw()
         {
-            //TODO
             world.draw(camera, device);
             data.player.draw(camera);
 

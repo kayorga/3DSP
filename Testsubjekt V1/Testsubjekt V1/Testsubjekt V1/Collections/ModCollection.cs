@@ -11,6 +11,7 @@ namespace TestsubjektV1
         private Mod lastGenerated;
         public Mod firstMod;
         public string lastMod { get { return lastGenerated.getLabel(); } }
+    
         public ModCollection()
             : base(Constants.CAP_MODS)
         {
@@ -22,7 +23,7 @@ namespace TestsubjektV1
             count = new int[4];
             count.Initialize();
 
-            specials = new Mod[6];
+            specials = new Mod[5];
 
             specials[0] = new Mod(Constants.MOD_TYP, Constants.TYP_WAV);
             specials[2] = new Mod(Constants.MOD_TYP, Constants.TYP_BLA);
@@ -37,6 +38,12 @@ namespace TestsubjektV1
                 generate((int)Constants.TYP_BLA, Constants.MOD_TYP);
                 generate((int)Constants.TYP_WAV, Constants.MOD_TYP);
                 generate((int)Constants.TYP_TRI, Constants.MOD_TYP);
+
+                generate(1, Constants.MOD_ACP);
+                generate(2, Constants.MOD_ACP);
+                generate(3, Constants.MOD_ACP);
+                generate(4, Constants.MOD_ACP);
+                generate(5, Constants.MOD_ACP);
             }
         }
 
@@ -59,14 +66,9 @@ namespace TestsubjektV1
             }
         }
 
-        public void update(int level)
-        {
-            //TODO
-        }
-
         public override void clear()
         {
-            //TODO
+            _content.Clear();
         }
 
         public void add(byte lv)
@@ -74,6 +76,11 @@ namespace TestsubjektV1
             lv -= 2;
             if (lv > 24) return;
             generate(specials[lv / 4 - 1].value, specials[lv / 4 - 1].type);
+        }
+
+        public void sort()
+        {
+            _content = _content.OrderBy(x => x.type).ThenBy(x => x.value).ToList<Mod>();
         }
 
         public void generate(int level, int t = 0)
@@ -94,9 +101,9 @@ namespace TestsubjektV1
 
                 for (int i = 0; i < Constants.CAP_MODS; i++)
                 {
-                    if (_content[i].type == Constants.MOD_NIL)
+                    if ((m == 2 && _content[i].type == types[ntype] + 3) || _content[i].type == Constants.MOD_NIL)
                     {
-                        count[types[ntype]]++;
+                        count[types[ntype]] = Math.Min(count[types[ntype]] + 1, 2);
                         _content[i].setup(types[ntype] + 3, level);
                         lastGenerated = _content[i];
                         break;
@@ -107,16 +114,16 @@ namespace TestsubjektV1
             {
                 for (int i = 0; i < Constants.CAP_MODS; i++)
                 {
-                    if (_content[i].type == Constants.MOD_NIL)
+                    if ((t > 2 && count[t - 3] == 2 && _content[i].type == t) || _content[i].type == Constants.MOD_NIL)
                     {
-                        if (t > 2) count[t - 3]++;
+                        if (t > 2) count[t - 3] = Math.Min(count[t - 3] + 1, 2);
                         _content[i].setup(t, level);
                         lastGenerated = _content[i];
                         break;
                     }
                 }
             }
-            _content.OrderBy(x => x.type);
+            sort();
         }
     }
 }

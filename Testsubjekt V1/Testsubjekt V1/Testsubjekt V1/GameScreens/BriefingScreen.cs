@@ -18,10 +18,16 @@ namespace TestsubjektV1
         private Rectangle bossRectangle;
         private Rectangle frameRectangle;
         private Rectangle startRectangle;
+        private Rectangle new0Rectangle;
+        private Rectangle new1Rectangle;
+        private Rectangle new2Rectangle;
+        private Rectangle new3Rectangle;
+        private Rectangle[] newRectangles;
 
         private Texture2D cursor;
         private Texture2D userInterface;
         private Texture2D frame;
+        private Texture2D newIcon;
 
         private SpriteBatch spriteBatch;
         private int screenReturnValue = Constants.CMD_NONE;
@@ -45,6 +51,7 @@ namespace TestsubjektV1
             cursor = content.Load<Texture2D>("cursor");
             userInterface = content.Load<Texture2D>("briefing_interface");
             frame = content.Load<Texture2D>("briefing_frame");
+            newIcon = content.Load<Texture2D>("Icons/new");
             interfaceRectangle = new Rectangle(0, 0, 1024, 768);
             forestRectangle = new Rectangle(145, 173, 200, 144);
             arcticRectangle = new Rectangle(145, 329, 200, 144);
@@ -52,6 +59,11 @@ namespace TestsubjektV1
             bossRectangle = new Rectangle(379, 543, 542, 111);
             frameRectangle = new Rectangle(144, 171, 203, 149);
             startRectangle = new Rectangle(563, 464, 232, 47);
+            new0Rectangle = new Rectangle(155, 170, 80, 45);
+            new1Rectangle = new Rectangle(155, 326, 80, 45);
+            new2Rectangle = new Rectangle(155, 483, 80, 45);
+            new3Rectangle = new Rectangle(390, 543, 80, 45);
+            newRectangles = new Rectangle[] {new0Rectangle, new1Rectangle, new2Rectangle, new3Rectangle};
 
             data.missions.generate((byte)data.player.level);
             data.missions.update();
@@ -83,6 +95,7 @@ namespace TestsubjektV1
                 activeStage = 0;
                 frameRectangle = new Rectangle(144, 171, 203, 149);
                 audio.playClick();
+                data.missions.isNew[0] = false;
             }
         }
         private void onArcticClick()
@@ -92,6 +105,7 @@ namespace TestsubjektV1
                 activeStage = 1;
                 frameRectangle = new Rectangle(144, 327, 203, 149);
                 audio.playClick();
+                data.missions.isNew[1] = false;
             }
         }
         private void onCaveClick()
@@ -101,6 +115,7 @@ namespace TestsubjektV1
                 activeStage = 2;
                 frameRectangle = new Rectangle(144, 483, 203, 149);
                 audio.playClick();
+                data.missions.isNew[2] = false;
             }
         }
         private void onBossClick()
@@ -110,6 +125,7 @@ namespace TestsubjektV1
                 activeStage = 3;
                 frameRectangle = new Rectangle(378, 542, 544, 113);
                 audio.playClick();
+                data.missions.isNew[3] = false;
             }
         }
         private void onStartClick()
@@ -121,9 +137,9 @@ namespace TestsubjektV1
                 m.reset();
                 data.missions.activeMission = m;
 
-                camera.reset(); 
-                world.warp(m.Area, m.Zone);
-                world.setupSpawners(m);
+                //camera.reset(); 
+                prepareWarp(m.Area, m.Zone);
+                //world.setupSpawners(m);
                 data.npcs.clear();
                 data.bullets.clear();
                 data.player.myWeapon.reload();
@@ -146,12 +162,16 @@ namespace TestsubjektV1
                 screenReturnValue = Constants.CMD_DEX;
                 audio.playClick();
             }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                screenReturnValue = Constants.CMD_BACK;
+                audio.playClick();
+            }
         }
 
         public override int update(GameTime gameTime)
         {
-            //TODO
-
             onExitClick();
             onForestClick();
             onCaveClick();
@@ -165,7 +185,6 @@ namespace TestsubjektV1
 
         public override void draw()
         {
-            //TODO
             world.draw(camera, device);
             data.player.draw(camera);
             data.npcs.draw(camera);
@@ -189,6 +208,11 @@ namespace TestsubjektV1
             spriteBatch.Draw(userInterface, interfaceRectangle, Color.White);
             spriteBatch.Draw(frame, frameRectangle, Color.White);
             spriteBatch.DrawString(menuFont1, data.missions[activeStage].getLabel(), new Vector2(410, 200), Color.LemonChiffon);
+            for (int i = 0; i < 4; i++)
+            {
+                if (data.missions.isNew[i])
+                    spriteBatch.Draw(newIcon, newRectangles[i], Color.White);
+            }
 
         }
 

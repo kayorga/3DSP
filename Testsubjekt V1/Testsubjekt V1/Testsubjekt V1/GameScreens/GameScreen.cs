@@ -13,12 +13,24 @@ namespace TestsubjektV1
         protected AudioManager audio;
         protected GameData data;
 
+        public byte nextZone;
+        public byte nextTheme;
+        
+
         public GameScreen(ContentManager content, GraphicsDevice device, AudioManager audio, GameData data)
         {
             this.content = content;
             this.device = device;
             this.audio = audio;
             this.data = data;
+            nextTheme = 0;
+            nextZone = 0;
+        }
+
+        public virtual void prepareWarp(byte id, byte th)
+        {
+            nextZone = id;
+            nextTheme = th;
         }
 
         public virtual int update(GameTime gameTime)

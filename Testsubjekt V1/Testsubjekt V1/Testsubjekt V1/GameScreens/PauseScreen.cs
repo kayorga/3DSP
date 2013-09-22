@@ -11,7 +11,7 @@ namespace TestsubjektV1
         private Rectangle resumeRectangle;
         private Rectangle saveRectangle;
         private Rectangle exitRectangle;
-        private Rectangle modRectangle;
+        private Rectangle titleRectangle;
         private Rectangle charRectangle;
         private Rectangle missionRectangle;
         private Rectangle fadeRectangle;
@@ -41,10 +41,10 @@ namespace TestsubjektV1
             resumeRectangle = new Rectangle(725, 76, 63, 58);
             saveRectangle = new Rectangle(402, 225, 228, 43);
             exitRectangle = new Rectangle(402, 505, 228, 43);
-            modRectangle = new Rectangle(402, 393, 228, 43);
+            baseRectangle = new Rectangle(402, 393, 228, 43);
             charRectangle = new Rectangle(402, 281, 228, 43);
             missionRectangle = new Rectangle(402, 337, 228, 43);
-            baseRectangle = new Rectangle(402, 449, 228, 43);
+            titleRectangle = new Rectangle(402, 449, 228, 43);
             frameRectangle = saveRectangle;
             
             spriteBatch = new SpriteBatch(device);
@@ -95,21 +95,22 @@ namespace TestsubjektV1
                 frameRectangle = baseRectangle;
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed)
                 {
-                    world.warp(0, 0);
+                    //world.warp(0, 0);
+                    prepareWarp(0, 0);
                     data.npcs.clear();
                     data.bullets.clear();
-                    camera.reset();
+                    //camera.reset();
                     screenReturnValue = Constants.CMD_NEW;
                 }
             }
         }
-        private void onModClick()
+        private void onTitleClick()
         {
-            if (modRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y))
+            if (titleRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y))
             {
-                frameRectangle = modRectangle;
+                frameRectangle = titleRectangle;
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                    screenReturnValue = Constants.CMD_MOD;
+                    screenReturnValue = Constants.CMD_TITLE;
             }
         }
         private void onCharClick()
@@ -118,7 +119,7 @@ namespace TestsubjektV1
             {
                 frameRectangle = charRectangle;
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                    screenReturnValue = Constants.CMD_NEW;
+                    screenReturnValue = Constants.CMD_CHARINFO;
             }
         }
         private void onMissionClick()
@@ -139,14 +140,13 @@ namespace TestsubjektV1
             onBaseClick();
             onCharClick();
             onMissionClick();
-            onModClick();
+            onTitleClick();
             return screenReturnValue;
         }
 
 
         public override void draw()
         {
-            //TODO
             world.draw(camera, device);
             data.player.draw(camera);
             data.npcs.draw(camera);
@@ -171,7 +171,6 @@ namespace TestsubjektV1
             Color[] color = {Color.FromNonPremultiplied(255, 255, 255, 180)};
             texture.SetData<Color>(color);
             spriteBatch.Draw(texture, fadeRectangle, Color.Black);
-            
         }
 
     }

@@ -17,6 +17,17 @@ namespace TestsubjektV1
                 _content.Add(new Bullet(Content, graphicsDevice));
         }
 
+        internal Bullet Bullet
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
         public void update(GameTime gameTime, Camera camera, World world, NPCCollection npcs, Player p, Mission m)
         {
             for (int i = 0; i < Constants.CAP_BULLETS; i++)

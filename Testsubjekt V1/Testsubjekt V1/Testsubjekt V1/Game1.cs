@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace TestsubjektV1
 {
@@ -15,10 +16,17 @@ namespace TestsubjektV1
         World world;
         GameData data;
         GameScreen screen;
+        GameScreen nextScreen;
         ActionScreen myAction;
         AudioManager audio;
 
         Camera camera;
+
+        bool fading;
+        bool fadeOut;
+        byte fadeFrames;
+        byte maxFadeFrames;
+        Rectangle fadeRectangle;
 
         public Game1()
         {
@@ -26,6 +34,8 @@ namespace TestsubjektV1
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1024;
+
+            graphics.IsFullScreen = true;
         }
 
         /// <summary>
@@ -44,6 +54,12 @@ namespace TestsubjektV1
             data = new GameData(Content, GraphicsDevice, audio, world);
             screen = new TitleScreen(Content, GraphicsDevice, audio, data);
             myAction = new ActionScreen(Content, GraphicsDevice, audio, data, camera, world);
+
+            fading = false;
+            fadeOut = true;
+            fadeFrames = 0;
+            maxFadeFrames = 30;
+            fadeRectangle = new Rectangle(0, 0, 1024, 768);
             
             base.Initialize();
         }
@@ -69,6 +85,12 @@ namespace TestsubjektV1
             // TODO: Unload any non ContentManager content here
         }
 
+        private bool fade()
+        {
+            fadeFrames = (byte)Math.Max(fadeFrames - 1, 0);
+            return (fadeFrames == 0);
+        }
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -77,46 +99,96 @@ namespace TestsubjektV1
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Tab))
+            if (Constants.DEBUG && (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Tab)))
                 this.Exit();
-            
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape)) screen = myAction;
 
-            int updateState = screen.update(gameTime);
-            switch (updateState)
+            if (fading) //is fading at the moment
             {
-                case Constants.CMD_EXIT: Exit(); break;
-                case Constants.CMD_NONE: break;
-                case Constants.CMD_NEW:
-                    screen = myAction; myAction.reset(); break;
-                case Constants.CMD_PAUSE: 
-                    screen = new PauseScreen(Content, GraphicsDevice, audio, data, world, camera); break;
-                case Constants.CMD_JOURNAL: 
-                    screen = new BriefingScreen(Content, GraphicsDevice, audio, data, world, camera); break;
-                case Constants.CMD_MOD: 
-                    screen = new ModificationScreen(Content, GraphicsDevice, audio, data, world, camera); break;
-                case Constants.CMD_MISSIONCOMPLETE: 
-                    screen = new MissionCompleteScreen(Content, GraphicsDevice, audio, data, world, camera); break;
-                case Constants.CMD_BACK: 
-                    screen = myAction; break;
-                case Constants.CMD_MISSIONINFO: 
-                    screen = new MissionInfoScreen(Content, GraphicsDevice, audio, data, world, camera); break;
-                case Constants.CMD_INTRO:
-                    screen = new IntroductionScreen(Content, GraphicsDevice, audio, data, spriteBatch); break;
-                case Constants.CMD_DEX:
-                    screen = new DexScreen(Content, GraphicsDevice, data, audio, world, camera); break;
-                case Constants.CMD_CREDITS:
-                    screen = new CreditsScreen(Content, GraphicsDevice, audio, data); break;
-                case Constants.CMD_TITLE:
-                    screen = new TitleScreen(Content, GraphicsDevice, audio, data); break;
-                default: break;
+                if (fade()) //if fade ends
+                {
+                    if (fadeOut)    //if fading out
+                    {
+                        if (nextScreen == myAction)
+                        {
+                            if (screen.nextZone != world.mapID)
+                            {
+                                world.warp(screen.nextZone, screen.nextTheme);
+                                world.setupSpawners(data.missions.activeMission);
+                            }
+                            myAction.reset();
+                            camera.reset();
+                            myAction.update(gameTime);
+                            data.player.update(gameTime, data.npcs, data.bullets, camera, false);
+                        }
+                        screen = nextScreen;
+
+                        fadeFrames = maxFadeFrames;
+                        fadeOut = false;
+                    }
+                    else            //if fading in
+                        fading = false;
+                }
             }
+            else
+            {
+                int updateState = screen.update(gameTime);
+                switch (updateState)
+                {
+                    case Constants.CMD_EXIT: Exit(); break;
+                    case Constants.CMD_NONE: break;
+                    case Constants.CMD_NEW:
+                        {
+                            nextScreen = myAction;
+                            fading = true;
+                            fadeFrames = maxFadeFrames;
+                            fadeOut = true;
+                            //myAction.reset();
+                            break;
+                        }
+                    case Constants.CMD_PAUSE:
+                        screen = new PauseScreen(Content, GraphicsDevice, audio, data, world, camera); break;
+                    case Constants.CMD_JOURNAL:
+                        screen = new BriefingScreen(Content, GraphicsDevice, audio, data, world, camera); break;
+                    case Constants.CMD_MOD:
+                        screen = new ModificationScreen(Content, GraphicsDevice, audio, data, world, camera); break;
+                    case Constants.CMD_MISSIONCOMPLETE:
+                        screen = new MissionCompleteScreen(Content, GraphicsDevice, audio, data, world, camera); break;
+                    case Constants.CMD_BACK:
+                        {
+                            screen = myAction;
+                            myAction.canShoot = false;
+                            break;
+                        }
+                    case Constants.CMD_MISSIONINFO:
+                        screen = new MissionInfoScreen(Content, GraphicsDevice, audio, data, world, camera); break;
+                    case Constants.CMD_INTRO:
+                        screen = new IntroductionScreen(Content, GraphicsDevice, audio, data, spriteBatch); break;
+                    case Constants.CMD_DEX:
+                        screen = new DexScreen(Content, GraphicsDevice, data, audio, world, camera); break;
+                    case Constants.CMD_CREDITS:
+                        screen = new CreditsScreen(Content, GraphicsDevice, audio, data); break;
+                    case Constants.CMD_TITLE:
+                        screen = new TitleScreen(Content, GraphicsDevice, audio, data); break;
+                    case Constants.CMD_GAMEOVER:
+                        screen = new GameOverScreen(Content, GraphicsDevice, audio, data, world, camera); break;
+                    case Constants.CMD_CHARINFO:
+                        screen = new CharScreen(Content, GraphicsDevice, audio, data, world, camera); break;
+                    case Constants.CMD_HELP:
+                        {
+                            if (screen is TitleScreen)
+                                screen = new HelpScreen(Content, GraphicsDevice, audio, data, Constants.CMD_TITLE);
+                            else
+                                screen = new HelpScreen(Content, GraphicsDevice, audio, data, Constants.CMD_PAUSE);
+                            break;
+                        }
+                    default: break;
+                }
 
-            if (updateState != Constants.CMD_NONE)
-                Mouse.SetPosition(512, 384); 
+                if (updateState != Constants.CMD_NONE)
+                    Mouse.SetPosition(512, 384);
 
-            // TODO: Add your update logic here
-
+                audio.update();
+            }
             base.Update(gameTime);
         }
 
@@ -138,7 +210,18 @@ namespace TestsubjektV1
             GraphicsDevice.Clear(clear);
             screen.draw();
 
-            // TODO: Add your drawing code here
+            if (fading) 
+            {
+                byte alpha = (byte)((float)fadeFrames/(float)maxFadeFrames * 255);
+                alpha = (fadeOut)? (byte)(255 - alpha) : alpha;
+                Texture2D texture = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+                Color[] color = { Color.FromNonPremultiplied(255, 255, 255, alpha) };
+                texture.SetData<Color>(color);
+                spriteBatch.Begin();
+                spriteBatch.Draw(texture, fadeRectangle, Color.Black);
+                spriteBatch.End();
+            }
+
             // reset render states that were manipulated from the sprite batch
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
