@@ -54,6 +54,7 @@ namespace TestsubjektV1
             data = new GameData(Content, GraphicsDevice, audio, world);
             screen = new TitleScreen(Content, GraphicsDevice, audio, data);
             myAction = new ActionScreen(Content, GraphicsDevice, audio, data, camera, world);
+            audio.playBackground(0);
 
             fading = false;
             fadeOut = true;
@@ -114,11 +115,14 @@ namespace TestsubjektV1
                             {
                                 world.warp(screen.nextZone, screen.nextTheme);
                                 world.setupSpawners(data.missions.activeMission);
+                                audio.playBackground(screen.nextTheme);
                             }
                             myAction.reset();
-                            camera.reset();
+                            
                             myAction.update(gameTime);
+                            camera.reset();
                             data.player.update(gameTime, data.npcs, data.bullets, camera, false);
+                            camera.Update(gameTime, data.player.position);
                         }
                         screen = nextScreen;
 
@@ -177,10 +181,22 @@ namespace TestsubjektV1
                         {
                             if (screen is TitleScreen)
                                 screen = new HelpScreen(Content, GraphicsDevice, audio, data, Constants.CMD_TITLE);
-                            else
+                            else if (screen is PauseScreen)
                                 screen = new HelpScreen(Content, GraphicsDevice, audio, data, Constants.CMD_PAUSE);
+                            else if (screen is DexScreen)
+                                screen = new HelpScreen(Content, GraphicsDevice, audio, data, Constants.CMD_DEX);
+                            else if (screen is MissionCompleteScreen)
+                                screen = new HelpScreen(Content, GraphicsDevice, audio, data, Constants.CMD_MISSIONCOMPLETE);
+                            else if (screen is MissionInfoScreen)
+                                screen = new HelpScreen(Content, GraphicsDevice, audio, data, Constants.CMD_MISSIONINFO);
+                            else if (screen is CharScreen)
+                                screen = new HelpScreen(Content, GraphicsDevice, audio, data, Constants.CMD_CHARINFO);
+                            else if (screen is BriefingScreen)
+                                screen = new HelpScreen(Content, GraphicsDevice, audio, data, Constants.CMD_JOURNAL);
                             break;
                         }
+                    case Constants.CMD_STORY:
+                        screen = new StoryScreen(Content, GraphicsDevice, audio, data, spriteBatch); break;
                     default: break;
                 }
 

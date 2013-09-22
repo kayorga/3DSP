@@ -47,7 +47,7 @@ namespace TestsubjektV1
         {
             if (exitRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                screenReturnValue = Constants.CMD_HELP;
+                screenReturnValue = Constants.CMD_EXIT;
                 audio.playClick();
             }
         }

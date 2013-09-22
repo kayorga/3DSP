@@ -70,8 +70,7 @@ namespace TestsubjektV1
             voice[4] = "select an element of your choice";
             voice[5] = "heat element \nclick here to start training program";
             voice[6] = "plasma element \nclick here to start training program";
-            voice[7] = "ice element. \nclick here to start training program";
-
+            voice[7] = "ice element \nclick here to start training program";
         }
 
         private void onHeatClick()
@@ -120,7 +119,7 @@ namespace TestsubjektV1
                 data.mods.setupESpecials();
 
                 saveGame(data);
-                return Constants.CMD_NEW;
+                return Constants.CMD_STORY;
             }
             return Constants.CMD_NONE;
         }
@@ -142,7 +141,7 @@ namespace TestsubjektV1
                 onPlasmaClick();
                 if (isElementSelected)
                 {
-                    if (onStartClick() == Constants.CMD_NEW) return Constants.CMD_NEW;
+                    if (onStartClick() == Constants.CMD_STORY) return Constants.CMD_STORY;
                 }
             }
 

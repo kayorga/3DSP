@@ -19,6 +19,7 @@ namespace TestsubjektV1
         private Rectangle Mod3Rectangle;
         private Rectangle Mod4Rectangle;
         private Rectangle[] ModRectangles;
+        private Rectangle helpRectangle;
 
         private SpriteBatch spriteBatch;
 
@@ -37,6 +38,10 @@ namespace TestsubjektV1
         private Texture2D orange;
         private Texture2D cursor;
         private Texture2D userInterface;
+
+        int[] modStats;
+        string weaponLabel;
+        string modStatLabel;
 
         public CharScreen(ContentManager content, GraphicsDevice device, AudioManager audio, GameData data, World w, Camera cam)
             : base(content, device, audio, data)
@@ -75,7 +80,50 @@ namespace TestsubjektV1
             Mod3Rectangle = new Rectangle(378, 538, 40, 39);
             Mod4Rectangle = new Rectangle(337, 565, 40, 39);
             ModRectangles = new Rectangle[] { Mod1Rectangle, Mod2Rectangle, Mod3Rectangle, Mod4Rectangle };
+            helpRectangle = new Rectangle(671, 81, 56, 47);
 
+            weaponLabel = "";
+            modStatLabel = "";
+
+            modStats = data.player.myWeapon.modStats;
+
+            generateLabels();
+        }
+
+        private void generateLabels()
+        {
+            switch (modStats[0])
+            {
+                case Constants.ELM_NIL:
+                    break;
+                case Constants.ELM_HEA:
+                    weaponLabel = "Heat "; break;
+                case Constants.ELM_PLA:
+                    weaponLabel = "Plasma "; break;
+                case Constants.ELM_ICE:
+                    weaponLabel = "Ice "; break;
+            }
+
+            switch (modStats[1])
+            {
+                case Constants.TYP_NIL:
+                    weaponLabel += "Beam"; break;
+                case Constants.TYP_BLA:
+                    weaponLabel += "Blast"; break;
+                case Constants.TYP_WAV:
+                    weaponLabel += "Wave"; break;
+                case Constants.TYP_TRI:
+                    weaponLabel += "Triplet"; break;
+            }
+
+            if (modStats[2] > 0)
+                modStatLabel += "Strength + " + modStats[2] + "\n";
+            if (modStats[3] > 0)
+                modStatLabel += "Speed + " + modStats[3] + "\n";
+            if (modStats[4] > 0)
+                modStatLabel += "Recharge + " + modStats[4] + "\n";
+            if (modStats[5] > 0)
+                modStatLabel += "Ammo + " + modStats[5] + "\n";
         }
 
         
@@ -89,20 +137,33 @@ namespace TestsubjektV1
         public override int update(GameTime gameTime)
         {
             if (onExitClick() == Constants.CMD_BACK) return Constants.CMD_BACK;
+            if (onHelpClick() == Constants.CMD_HELP) return Constants.CMD_HELP;
 
             return Constants.CMD_NONE;
+        }
+
+        private int onHelpClick()
+        {
+            if (helpRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                audio.playClick();
+                return Constants.CMD_HELP;
+            }
+            else return Constants.CMD_NONE;
         }
 
 
         public override void draw()
         {
-            //TODO
             world.draw(camera, device);
             data.player.draw(camera);
 
             spriteBatch.Begin();
             //Draw Interface
             drawInterface();
+
+            drawCharInfo();
+            drawModInfo();
 
             //Draw Cursor
             spriteBatch.Draw(cursor, new Rectangle(Mouse.GetState().X, Mouse.GetState().Y, 38, 50), Color.White);
@@ -112,10 +173,21 @@ namespace TestsubjektV1
 
         private void drawInterface()
         {
-
             spriteBatch.Draw(userInterface, interfaceRectangle, Color.White);
             drawMods();
+        }
 
+        private void drawCharInfo()
+        {
+            spriteBatch.DrawString(menuFont1, data.player.lv.ToString(), new Vector2(590, 227), Color.White);
+            spriteBatch.DrawString(menuFont1, data.player.XP + "/100", new Vector2(590, 277), Color.White);
+            spriteBatch.DrawString(menuFont1, data.player.health + "/" + data.player.maxHealth, new Vector2(590, 327), Color.White);
+        }
+
+        private void drawModInfo()
+        {
+            spriteBatch.DrawString(menuFont1, weaponLabel, new Vector2(485, 455), Color.White);
+            spriteBatch.DrawString(menuFont1, modStatLabel, new Vector2(530, 500), Color.White);
         }
 
         private void drawMods()

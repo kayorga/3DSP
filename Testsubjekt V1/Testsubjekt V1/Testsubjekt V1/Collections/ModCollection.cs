@@ -29,7 +29,7 @@ namespace TestsubjektV1
             specials[2] = new Mod(Constants.MOD_TYP, Constants.TYP_BLA);
             specials[4] = new Mod(Constants.MOD_TYP, Constants.TYP_TRI);
 
-            if (Constants.DEBUG)
+            //if (Constants.DEBUG)
             {
                 generate((int)Constants.ELM_HEA, Constants.MOD_ELM);
                 generate((int)Constants.ELM_ICE, Constants.MOD_ELM);
@@ -39,11 +39,10 @@ namespace TestsubjektV1
                 generate((int)Constants.TYP_WAV, Constants.MOD_TYP);
                 generate((int)Constants.TYP_TRI, Constants.MOD_TYP);
 
-                generate(1, Constants.MOD_ACP);
-                generate(2, Constants.MOD_ACP);
-                generate(3, Constants.MOD_ACP);
+                generate(1, Constants.MOD_RCG);
+                generate(2, Constants.MOD_STR);
+                generate(3, Constants.MOD_SPD);
                 generate(4, Constants.MOD_ACP);
-                generate(5, Constants.MOD_ACP);
             }
         }
 

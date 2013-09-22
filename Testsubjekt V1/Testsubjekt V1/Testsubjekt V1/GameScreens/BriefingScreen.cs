@@ -23,6 +23,7 @@ namespace TestsubjektV1
         private Rectangle new2Rectangle;
         private Rectangle new3Rectangle;
         private Rectangle[] newRectangles;
+        private Rectangle helpRectangle;
 
         private Texture2D cursor;
         private Texture2D userInterface;
@@ -64,6 +65,7 @@ namespace TestsubjektV1
             new2Rectangle = new Rectangle(155, 483, 80, 45);
             new3Rectangle = new Rectangle(390, 543, 80, 45);
             newRectangles = new Rectangle[] {new0Rectangle, new1Rectangle, new2Rectangle, new3Rectangle};
+            helpRectangle = new Rectangle(837, 81, 56, 47);
 
             data.missions.generate((byte)data.player.level);
             data.missions.update();
@@ -74,6 +76,15 @@ namespace TestsubjektV1
             if (resumeRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 screenReturnValue = Constants.CMD_BACK;
+                audio.playClick();
+            }
+        }
+
+        private void onHelpClick()
+        {
+            if (helpRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                screenReturnValue = Constants.CMD_HELP;
                 audio.playClick();
             }
         }
@@ -172,6 +183,7 @@ namespace TestsubjektV1
 
         public override int update(GameTime gameTime)
         {
+            onHelpClick();
             onExitClick();
             onForestClick();
             onCaveClick();

@@ -45,6 +45,8 @@ namespace TestsubjektV1
         public string[] Labels { get { return labels; } }
 
         Model[] groundObs;
+        Model[] ground2Obs;
+        Model[] ground3Obs;
         Model[] wallObs;
         Model[] wall2Obs;
 
@@ -80,30 +82,40 @@ namespace TestsubjektV1
                 ground[i] = new ModelObject[SIZE];
             }
 
-            groundObs = new Model[4];
-            wallObs = new Model[4];
-            wall2Obs = new Model[4];
+            groundObs   = new Model[4];
+            ground2Obs  = new Model[4];
+            ground3Obs  = new Model[4];
+            wallObs     = new Model[4];
+            wall2Obs    = new Model[4];
 
             #region Objects theme 0
             groundObs[0] = content.Load<Model>("Models\\floor_sim");
+            ground2Obs[0] = content.Load<Model>("Models\\floor_sim");
+            ground3Obs[0] = content.Load<Model>("Models\\floor_sim");
             wallObs[0] = content.Load<Model>("Models\\wall_sim");
             wall2Obs[0] = content.Load <Model>("Models\\mainframe");
             #endregion
 
             #region Objects theme 1
             groundObs[1] = content.Load<Model>("Models\\grass");
+            ground2Obs[1] = content.Load<Model>("Models\\grass2");
+            ground3Obs[1] = content.Load<Model>("Models\\grass3");
             wallObs[1] = content.Load<Model>("Models\\stone");
             wall2Obs[1] = content.Load<Model>("Models\\tree1");
             #endregion
 
             #region Objects theme 2
             groundObs[2] = content.Load<Model>("Models\\wasted");
+            ground2Obs[2] = content.Load<Model>("Models\\wasted2");
+            ground3Obs[2] = content.Load<Model>("Models\\wasted3");
             wallObs[2] = content.Load<Model>("Models\\rock_w");
             wall2Obs[2] = content.Load<Model>("Models\\cactus");
             #endregion
 
             #region Objects theme 3
             groundObs[3] = content.Load<Model>("Models\\arctical");
+            ground2Obs[3] = content.Load<Model>("Models\\arctical2");
+            ground3Obs[3] = content.Load<Model>("Models\\arctical3");
             wallObs[3] = content.Load<Model>("Models\\stone");
             wall2Obs[3] = content.Load<Model>("Models\\stalagmit");
             #endregion
@@ -176,7 +188,20 @@ namespace TestsubjektV1
             {
                 for (int j = 0; j < SIZE; j++)
                 {
-                    ground[i][j] = new ModelObject(groundObs[th]);
+                    switch (mapData[i][j])
+                    {
+                        case '0':
+                            ground[i][j] = new ModelObject(groundObs[th]); break;
+                        case '-':
+                            ground[i][j] = null; break;
+                        case 'o':
+                            ground[i][j] = new ModelObject(ground2Obs[th]); break;
+                        case 'q':
+                            ground[i][j] = new ModelObject(ground3Obs[th]); break;
+                        default:
+                            ground[i][j] = new ModelObject(groundObs[th]); break;
+                    }
+                    if (ground[i][j] == null) continue;
                     ground[i][j].Position = new Vector3(i * -2.0f + SIZE - 1, -0.5f, -2.0f * j + SIZE - 1);
                     ground[i][j].Scaling = new Vector3(2.0f, 1, 2.0f);
                 }
@@ -218,6 +243,12 @@ namespace TestsubjektV1
                     {
                         #region tile cases
                         case '0':
+                            mapObjects[i][j] = null;
+                            moveData[i][j] = 0; break;
+                        case 'o':
+                            mapObjects[i][j] = null;
+                            moveData[i][j] = 0; break;
+                        case 'q':
                             mapObjects[i][j] = null;
                             moveData[i][j] = 0; break;
                         case '1': 

@@ -297,7 +297,8 @@ namespace TestsubjektV1
             //Rotate Model
             double rotationAngle = Math.Acos((Vector3.Dot(direction, -1 * Vector3.UnitX)) / (direction.Length()));
             rotationAngle = (p.Position.Z < this.Position.Z) ? rotationAngle * -1.0f : rotationAngle;
-            model.Rotation = new Vector3(0, (float)rotationAngle, 0);
+            rotationAngle += (this.kind == Constants.NPC_BOSS) ? Math.PI / 2 : -Math.PI / 2;
+            model.Rotation = new Vector3(0, (float)(rotationAngle), 0);
 
             //Update PlayerDistance
             playerDistance = (p.Position - this.Position).Length();

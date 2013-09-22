@@ -21,6 +21,7 @@ namespace TestsubjektV1
         private Rectangle neutralRectangle;
         private Rectangle frameRectangle;
         private Rectangle activeEnemyRectangle;
+        private Rectangle helpRectangle;
 
         private Texture2D cursor;
         private Texture2D userInterface;
@@ -66,6 +67,7 @@ namespace TestsubjektV1
             neutralRectangle = new Rectangle(762, 495, 154, 156);
             activeEnemyRectangle = new Rectangle(153, 196, 223, 223);
             exitRectangle = new Rectangle(891, 78, 63, 55);
+            helpRectangle = new Rectangle(837, 81, 56, 47);
 
             frameRectangle = bossRectangle;
             activeEnemyTexture = bossEnemy;
@@ -133,10 +135,21 @@ namespace TestsubjektV1
                 return Constants.CMD_BACK;
             else return Constants.CMD_NONE;
         }
+
+        private int onHelpClick()
+        {
+            if (helpRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                audio.playClick();
+                return Constants.CMD_HELP;
+            }
+            else return Constants.CMD_NONE;
+        }
         
         public override int update(GameTime gameTime)
         {
             if (onExitClick() == Constants.CMD_BACK) return Constants.CMD_BACK;
+            if (onHelpClick() == Constants.CMD_HELP) return Constants.CMD_HELP;
             onBossClick();
             onHeatClick();
             onIceClick();

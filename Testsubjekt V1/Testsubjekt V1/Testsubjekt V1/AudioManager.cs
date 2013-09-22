@@ -35,10 +35,10 @@ namespace TestsubjektV1
 
             clickSound = Content.Load<SoundEffect>("Audio/click");
 
-            backgroundSound0 = Content.Load<SoundEffect>("Audio/shoot1");
-            backgroundSound1 = Content.Load<SoundEffect>("Audio/shoot1");
-            backgroundSound2 = Content.Load<SoundEffect>("Audio/shoot1");
-            backgroundSound3 = Content.Load<SoundEffect>("Audio/shoot1");
+            backgroundSound0 = Content.Load<SoundEffect>("Audio/loop1");
+            backgroundSound1 = Content.Load<SoundEffect>("Audio/loop2");
+            backgroundSound2 = Content.Load<SoundEffect>("Audio/loop3");
+            backgroundSound3 = Content.Load<SoundEffect>("Audio/loop4");
 
             backgroundSounds = new SoundEffect[] {backgroundSound0, backgroundSound1, backgroundSound2, backgroundSound3};
 
@@ -53,8 +53,7 @@ namespace TestsubjektV1
 
         public void playBackground(byte theme)
         {
-            return;
-            currentBackground.Stop();
+            if (currentBackground != null) currentBackground.Stop();
             currentBackground = backgroundSounds[theme].CreateInstance();
             currentBackground.IsLooped = true;
             currentBackground.Play();

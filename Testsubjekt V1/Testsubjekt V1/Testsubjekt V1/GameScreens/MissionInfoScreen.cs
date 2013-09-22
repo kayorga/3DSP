@@ -15,6 +15,7 @@ namespace TestsubjektV1
         private Rectangle baseRectangle;
         private Rectangle missionRectangle;
         private Rectangle imageRectangle;
+        private Rectangle helpRectangle;
 
         private Texture2D cursor;
         private Texture2D userInterface;
@@ -51,6 +52,7 @@ namespace TestsubjektV1
             baseRectangle = new Rectangle(412, 579, 228, 43);
             missionRectangle = new Rectangle(664, 579, 228, 43);
             imageRectangle = new Rectangle(135, 474, 191, 137);
+            helpRectangle = new Rectangle(837, 81, 56, 47);
             frameRectangle = baseRectangle;
         }
 
@@ -58,6 +60,15 @@ namespace TestsubjektV1
         {
             if (exitRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
                 screenReturnValue = Constants.CMD_BACK;
+        }
+
+        private void onHelpClick()
+        {
+            if (helpRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                screenReturnValue = Constants.CMD_HELP;
+                audio.playClick();
+            }
         }
 
         private void onBaseClick()
@@ -90,6 +101,7 @@ namespace TestsubjektV1
 
         public override int update(GameTime gameTime)
         {
+            onHelpClick();
             onExitClick();
             onBaseClick();
             onMissionClick();

@@ -33,6 +33,7 @@ namespace TestsubjektV1
             this.player.myWeapon.mods = loadedWeaponMods;
             this.mods._content = loadedMods;
             this.mods.firstMod = new Mod(Constants.MOD_ELM, firstModValue);
+            this.mods.setupESpecials();
             this.player.myWeapon.setup();
 
             for (int i = 0; i < 4; i++)

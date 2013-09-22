@@ -21,6 +21,7 @@ namespace TestsubjektV1
         private Rectangle slot3Rectangle;
         private Rectangle slot4Rectangle;
         private Rectangle dragDropRectangle;
+        private Rectangle helpRectangle;
         private Rectangle[][] inventoryRectangle=new Rectangle[4][];
         private ModItem[][] inventoryItems = new ModItem[4][];
         private ModItem slot1Item;
@@ -111,6 +112,7 @@ namespace TestsubjektV1
             activeModRectangle=new Rectangle(264,186,60,60);
             activeModTextRectangle = new Rectangle(234, 258, 117, 49);
             dragDropRectangle = new Rectangle(174, 334, 40, 40);
+            helpRectangle = new Rectangle(837, 81, 56, 47);
             #region Inventory Rectangles
             inventoryRectangle[0] = new Rectangle[5];
             inventoryRectangle[1] = new Rectangle[5];
@@ -508,8 +510,18 @@ namespace TestsubjektV1
             }
         }
 
+        private void onHelpClick()
+        {
+            if (helpRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                screenReturnValue = Constants.CMD_HELP;
+                audio.playClick();
+            }
+        }
+
         public override int update(GameTime gameTime)
-        {                      
+        {
+            onHelpClick();
             onExitClick();
             onStartClick();
             onInventoryClick();

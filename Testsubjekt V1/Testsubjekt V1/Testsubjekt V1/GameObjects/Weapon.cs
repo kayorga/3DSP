@@ -22,6 +22,7 @@ namespace TestsubjektV1
         int mod_rcg;
         int mod_str;
         int mod_acp;
+        public int[] modStats;
 
         private AudioManager audio;
 
@@ -81,6 +82,8 @@ namespace TestsubjektV1
             {
                 applyMod(i);
             }
+
+            modStats = new int[] { mod_elm, mod_typ, mod_str, (int)(mod_spd * 10), mod_rcg, mod_acp };
         }
 
         private void resetMods()
@@ -92,6 +95,7 @@ namespace TestsubjektV1
             mod_elm = 0;
             mod_cdn = 0;
             mod_acp = 0;
+            modStats = new int[] { 0, 0, 0, 0, 0, 0 };
         }
 
         private void applyMod(int index)
@@ -103,10 +107,10 @@ namespace TestsubjektV1
                 case Constants.MOD_NIL: break;
                 case Constants.MOD_ELM: mod_elm  = m.value; break;
                 case Constants.MOD_TYP: mod_typ  = m.value; break;
-                case Constants.MOD_STR: mod_str += m.value * 2; break;
+                case Constants.MOD_STR: mod_str += m.value; break;//* 2; break;
                 case Constants.MOD_SPD: mod_spd += m.value * .1f; break;
-                case Constants.MOD_RCG: mod_rcg += m.value * 4; break;
-                case Constants.MOD_ACP: mod_acp += m.value * 2; break;
+                case Constants.MOD_RCG: mod_rcg += m.value; break; //* 4; break;
+                case Constants.MOD_ACP: mod_acp += m.value; break; //* 2; break;
             }
         }
     }

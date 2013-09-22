@@ -18,6 +18,7 @@ namespace TestsubjektV1
         private Rectangle baseRectangle;
         private Rectangle interfaceRectangle;
         private Rectangle frameRectangle;
+        private Rectangle helpRectangle;
 
 
         Texture2D cursor;
@@ -45,6 +46,7 @@ namespace TestsubjektV1
             charRectangle = new Rectangle(402, 281, 228, 43);
             missionRectangle = new Rectangle(402, 337, 228, 43);
             titleRectangle = new Rectangle(402, 449, 228, 43);
+            helpRectangle = new Rectangle(671, 81, 56, 47);
             frameRectangle = saveRectangle;
             
             spriteBatch = new SpriteBatch(device);
@@ -72,6 +74,15 @@ namespace TestsubjektV1
                 frameRectangle = exitRectangle;
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed)
                     screenReturnValue = Constants.CMD_EXIT;
+            }
+        }
+
+        private void onHelpClick()
+        {
+            if (helpRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                screenReturnValue = Constants.CMD_HELP;
+                audio.playClick();
             }
         }
 
@@ -124,6 +135,7 @@ namespace TestsubjektV1
         }
         private void onMissionClick()
         {
+            if (world.mapID == 0) return;
             if (missionRectangle.Contains(Mouse.GetState().X, Mouse.GetState().Y))
             {
                 frameRectangle = missionRectangle;
@@ -134,6 +146,7 @@ namespace TestsubjektV1
        
         public override int update(GameTime gameTime)
         {
+            onHelpClick();
             onSaveClick();
             onExitClick();
             onNewGameClick();

@@ -32,6 +32,7 @@
         public const int CMD_GAMEOVER = 15;
         public const int CMD_CHARINFO = 16;
         public const int CMD_HELP = 17;
+        public const int CMD_STORY = 18;
 
         //NPC and Bullet elements
         public const byte ELM_NIL = 0;
