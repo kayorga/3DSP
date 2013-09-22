@@ -119,7 +119,7 @@ namespace TestsubjektV1
             {
                 frameRectangle = charRectangle;
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                    screenReturnValue = Constants.CMD_NEW;
+                    screenReturnValue = Constants.CMD_CHARINFO;
             }
         }
         private void onMissionClick()

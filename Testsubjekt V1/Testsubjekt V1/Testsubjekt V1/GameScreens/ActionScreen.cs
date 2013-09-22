@@ -135,7 +135,7 @@ namespace TestsubjektV1
                 camera.reset();
                 data.npcs.clear();
                 data.bullets.clear();
-                return Constants.CMD_NONE;
+                return Constants.CMD_GAMEOVER;
             }
 
             data.bullets.update(gameTime, camera, world, data.npcs, data.player, data.missions.activeMission);

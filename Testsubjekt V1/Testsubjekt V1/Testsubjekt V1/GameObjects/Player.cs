@@ -12,12 +12,12 @@ namespace TestsubjektV1
         int lastMapID;
 
         byte invincibleTimer;
-        byte maxInvincibility;
 
         byte restore;
         byte maxRest;
         byte hitDelay;
         byte maxHitDelay;
+        bool rightButton;
 
         public byte xTile { get { return (byte)Math.Round(-1 * (position.X) + (Constants.MAP_SIZE - 1)); } }
         public byte zTile { get { return (byte)Math.Round(-1 * (position.Z) + (Constants.MAP_SIZE - 1)); } }
@@ -41,7 +41,7 @@ namespace TestsubjektV1
             this.health=100;
             maxRest = 15;
             restore = 0;
-            maxHitDelay = 45;
+            maxHitDelay = Constants.PLAYER_HIT_DELAY;
             hitDelay = 0;
 
             charging = false;
@@ -50,7 +50,6 @@ namespace TestsubjektV1
             exp = 0;
 
             invincibleTimer = 0;
-            maxInvincibility = Constants.PLAYER_INVINCIBILITY;
 
             this.charge = new Charge(this.position, graphicsDevice, Content);
 
@@ -90,6 +89,9 @@ namespace TestsubjektV1
 
         public bool update(GameTime gameTime, NPCCollection npcs, BulletCollection bullets, Camera camera, bool canShoot)
         {
+            if (Mouse.GetState().RightButton == ButtonState.Released && rightButton) charge.Clear();
+            rightButton = (Mouse.GetState().RightButton == ButtonState.Pressed);
+
             if (lastMapID != world.mapID)
             {
                 reset();
@@ -99,7 +101,7 @@ namespace TestsubjektV1
             if (health <= 0) return false;
 
             restore = (byte) Math.Max(restore - 1, 0);
-            hitDelay = (byte)Math.Max(hitDelay - 1, 0);
+            hitDelay = (byte) Math.Max(hitDelay - 1, 0);
 
             if (health < maxHealth && hitDelay == 0
                 && Mouse.GetState().RightButton == ButtonState.Pressed)
@@ -178,24 +180,24 @@ namespace TestsubjektV1
         {
             if (invincibleTimer > 0)
                 return;
-            //TODO///////
+            //RAW DAMAGE//
             int dmg = b.Strength;
-            /////////////
+            //////////////
             gotHit = true;
             health = Math.Max(health - dmg, 0);
             m.dmgIn += dmg;
-            invincibleTimer = maxInvincibility;
+            invincibleTimer = Constants.PLAYER_BULLET_INVINCIBILITY;
             hitDelay = maxHitDelay;
         }
 
         private void getHit(NPC npc)
         {
-            //TODO/////
+            //RAW DAMAGE//
             int dmg = 1 + (int)(npc.lv * npc.speed * 50);
-            ///////////
+            //////////////
             gotHit = true;
             health = Math.Max(health - dmg, 0);
-            invincibleTimer = maxInvincibility;
+            invincibleTimer = Constants.PLAYER_NPC_INVINCIBILITY;
             hitDelay = maxHitDelay;
         }
 

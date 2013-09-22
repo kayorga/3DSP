@@ -37,8 +37,8 @@ namespace TestsubjektV1
         private Texture2D orange;
         private Texture2D cursor;
         private Texture2D userInterface;
-        
-        public CharScreen(ContentManager content, GraphicsDevice device, GameData data, AudioManager audio, World w, Camera cam)
+
+        public CharScreen(ContentManager content, GraphicsDevice device, AudioManager audio, GameData data, World w, Camera cam)
             : base(content, device, audio, data)
         {
             world = w;

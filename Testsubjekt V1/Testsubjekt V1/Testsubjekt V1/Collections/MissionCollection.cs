@@ -77,7 +77,7 @@ namespace TestsubjektV1
                 for (int j = 1; j < kinds.Length; j++)
                     kinds[j] = (byte)(ran.Next(Constants.NPC_BOSS));
 
-                this[3].setup((byte)(this[3].level+12), kind, 1, zone, area, kinds, npcs.Labels, world.Labels);
+                this[3].setup((byte)Math.Min(this[3].level+12, 60), kind, 1, zone, area, kinds, npcs.Labels, world.Labels);
                 isNew[3] = true;
             }
         }

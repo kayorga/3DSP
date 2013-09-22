@@ -70,7 +70,7 @@ namespace TestsubjektV1
             frameRectangle = bossRectangle;
             activeEnemyTexture = bossEnemy;
 
-            descriptionString = "Boss\nSpecific\n++++\n+++\n+";
+            descriptionString = "Cobra Commander\n???\n+++++\n+++++\n+";
             frameworkString = "Name:\nType:\nHealth:\nStrength:\nSpeed:";
             
             

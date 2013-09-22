@@ -34,6 +34,8 @@ namespace TestsubjektV1
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1024;
+
+            graphics.IsFullScreen = true;
         }
 
         /// <summary>
@@ -97,7 +99,7 @@ namespace TestsubjektV1
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Tab))
+            if (Constants.DEBUG && (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Tab)))
                 this.Exit();
 
             if (fading) //is fading at the moment
@@ -167,6 +169,18 @@ namespace TestsubjektV1
                         screen = new CreditsScreen(Content, GraphicsDevice, audio, data); break;
                     case Constants.CMD_TITLE:
                         screen = new TitleScreen(Content, GraphicsDevice, audio, data); break;
+                    case Constants.CMD_GAMEOVER:
+                        screen = new GameOverScreen(Content, GraphicsDevice, audio, data, world, camera); break;
+                    case Constants.CMD_CHARINFO:
+                        screen = new CharScreen(Content, GraphicsDevice, audio, data, world, camera); break;
+                    case Constants.CMD_HELP:
+                        {
+                            if (screen is TitleScreen)
+                                screen = new HelpScreen(Content, GraphicsDevice, audio, data, Constants.CMD_TITLE);
+                            else
+                                screen = new HelpScreen(Content, GraphicsDevice, audio, data, Constants.CMD_PAUSE);
+                            break;
+                        }
                     default: break;
                 }
 
